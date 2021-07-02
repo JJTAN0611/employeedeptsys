@@ -1,0 +1,18 @@
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="EmployeeWebApp">
+		<jta-data-source>java:/MyPostGresEmployees</jta-data-source>
+		<class>model.entity.Department</class>
+		<class>model.entity.DepartmentEmployee</class>
+		<class>model.entity.DepartmentEmployeePK</class>
+		<class>model.entity.DepartmentManager</class>
+		<class>model.entity.DepartmentManagerPK</class>
+		<class>model.entity.Employee</class>
+		<class>model.entity.Salary</class>
+		<class>model.entity.SalaryPK</class>
+		<class>model.entity.Title</class>
+		<class>model.entity.TitlePK</class>
+	</persistence-unit>
+</persistence>
