@@ -38,8 +38,8 @@
   </div>
   <!-- ***** Preloader End ***** -->
 
-  <!-- ***** Header Area Start ***** -->
-  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+   <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky wow slideInDown animated" data-wow-duration="0.75s" data-wow-delay="0s" style="visibility: visible;-webkit-animation-duration: 0.75s; -moz-animation-duration: 0.75s; animation-duration: 0.75s;-webkit-animation-delay: 0s; -moz-animation-delay: 0s; animation-delay: 0s;">
     <div class="container">
       <div class="row">
         <div class="col-12">
@@ -50,14 +50,14 @@
             </a>
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
-            <ul class="nav">
-              <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
-              <li ><a href="PaginationServlet?keyword=&currentPage=1&recordsPerPage=70&direction=ASC">Department</a></li>
-              <li ><a href="department_employee.html">Department_Employee</a></li>
-              <li ><a href="employee.html">Employee</a></li>
-              <li class="scroll-to-section"><div class="main-red-button"><a href="#contact">Contact me</a></div></li>
-            </ul>        
-            <a class='menu-trigger'>
+			<ul class="nav">
+			  <li><a href="DepartmentPaginationServlet?currentPage=1&recordsPerPage=100&direction=ASC&keyword=&table=Department" class="btn btn-warning">Department</a></li>
+              <li><a href="DepartmentPaginationServlet?currentPage=1&recordsPerPage=100&direction=ASC&keyword=&table=Department_Employee" class="btn btn-primary" >Department Employee</a></li>
+              <li><a href="EmployeePaginationServlet?currentPage=1&recordsPerPage=100&direction=ASC&keyword=&table=Employee" class="btn btn-success">Employee</a></li>
+              
+            </ul>  
+                  
+            <a class="menu-trigger">
                 <span>Menu</span>
             </a>
             
@@ -103,7 +103,7 @@
       </div>
       <div class="row">
         <div class="col-lg-3 col-sm-6">
-          <a href="department.html">
+          <a href="#" onclick='$("#department").trigger("click");'>
             <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.3s">
               <div class="hidden-content">
                 <h4>Department</h4>
@@ -116,7 +116,7 @@
           </a>
         </div>
         <div class="col-lg-3 col-sm-6">
-          <a href="department_employee.html">
+          <a href="#" onclick='$("#department_employee").trigger("click");'>
             <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.4s">
               <div class="hidden-content">
                 <h4>Department Employee</h4>
@@ -129,10 +129,10 @@
           </a>
         </div>
         <div class="col-lg-3 col-sm-6">
-          <a href="employee.html">
+          <a href="#" onclick='$("#employee").trigger("click");'>
             <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.5s">
               <div class="hidden-content">
-                <h4>Employee</h4>
+                <h4>To be develop</h4>
                 <p>Lorem ipsum dolor sit ameti ctetur aoi adipiscing eto.</p>
               </div>
               <div class="showed-content">
@@ -157,7 +157,6 @@
       </div>
     </div>
   </div>
-
   
   <div id="contact" class="contact-us section">
     <div class="container">

@@ -22,7 +22,7 @@ import javax.ejb.Local;
 public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 	// Write some codes here…
-	@PersistenceContext(unitName = "EmployeeWebApp")
+	@PersistenceContext(unitName = "DepartmentEmployeeWebApp")
 	EntityManager em;
 
 	/**

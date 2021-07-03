@@ -1,3 +1,4 @@
+package pagination;
 
 
 import java.io.IOException;
@@ -17,15 +18,15 @@ import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
 
 
-@WebServlet("/PaginationServlet")
-public class PaginationServlet extends HttpServlet {
+@WebServlet("/EmployeePaginationServlet")
+public class EmployeePaginationServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	
 	@EJB
 	private EmployeeSessionBeanLocal empbean;
 
-	public PaginationServlet() {
+	public EmployeePaginationServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -39,6 +40,7 @@ public class PaginationServlet extends HttpServlet {
 		int recordsPerPage = Integer.valueOf(request.getParameter("recordsPerPage"));
 		String keyword = request.getParameter("keyword");
 		String direction = request.getParameter("direction");
+		String table = request.getParameter("table");
 		
 		try {
 			int rows = empbean.getNumberOfRows(keyword);
@@ -49,7 +51,7 @@ public class PaginationServlet extends HttpServlet {
 			if (currentPage > nOfPages && nOfPages != 0) {
 				currentPage = nOfPages;
 			}
-			List<Employee> lists = empbean.readEmployee(currentPage, recordsPerPage,keyword,direction);
+			List<Employee> lists = empbean.readEmployee(currentPage, recordsPerPage,keyword,direction); //Ask bean to give list
 			request.setAttribute("staffs", lists);
 		} catch (EJBException ex) {
 		}
@@ -58,7 +60,8 @@ public class PaginationServlet extends HttpServlet {
 		request.setAttribute("recordsPerPage", recordsPerPage);
 		request.setAttribute("keyword", keyword);
 		request.setAttribute("direction", direction);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("employee.jsp");
+		request.setAttribute("table", table);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("employee_result.jsp");
 		dispatcher.forward(request, response);
 	}
 

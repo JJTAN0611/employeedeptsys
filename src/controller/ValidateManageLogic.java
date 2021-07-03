@@ -1,3 +1,4 @@
+package controller;
 
 
 import java.io.PrintWriter;
@@ -18,7 +19,7 @@ public class ValidateManageLogic {
 	public static void navigateJS(PrintWriter out) {
 		out.println("<SCRIPT type=\"text/javascript\">");
 		out.println("alert(\"Record has been updated and url will be redirected\")");
-		out.println("window.location.assign(\"PaginationServlet?currentPage=1&recordsPerPage=70&keyword=&direction=ASC\")");
+		out.println("window.location.assign(\"PaginationServlet?currentPage=1&recordsPerPage=70&keyword=&direction=DESC&table=Employee\")");
 		out.println("</SCRIPT>");
 	}
 }
