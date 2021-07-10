@@ -38,22 +38,11 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		return em.createNamedQuery("Department.findAll").getResultList();
 	}
 
-	public List<Department> readDepartment(int currentPage, int recordsPerPage, String keyword,String direction) throws EJBException {
+	public List<Department> readDepartment(String direction) throws EJBException {
 		// Write some codes here…
 		Query q = null;
-		int start = 0;
-		direction = " " + direction;
-		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.department order by id"+direction, Department.class);
-			start = currentPage * recordsPerPage - recordsPerPage;
-		} else {
-			q = em.createNativeQuery(
-					"SELECT * from employees.department WHERE concat(id,dept_name) LIKE ? order by id"+direction,
-					Department.class);
-			start = currentPage * recordsPerPage - recordsPerPage;
-			q.setParameter(1, "%" + keyword + "%");
-		}
-		List<Department> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
+		q = em.createNativeQuery("SELECT * FROM employees.department order by id "+direction, Department.class);
+		List<Department> results = q.getResultList();
 		return results;
 	}
 

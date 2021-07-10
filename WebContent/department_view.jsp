@@ -3,19 +3,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%	int currentPage=(int) request.getAttribute("currentPage"); 
-	int recordsPerPage=(int)request.getAttribute("recordsPerPage");
-	int nOfPages=(int) request.getAttribute("nOfPages"); 
-	String keyword=(String) request.getAttribute("keyword");
+
+<%	
 	 String direction=(String)request.getAttribute("direction"); 
-	 String table=(String)request.getAttribute("table"); 
-	 String colour[]=new String[2];
-	 switch(table){
-	 case "Department":colour[0]="warning";break;
-	 case "Department_Employee":colour[0]="primary";colour[1]="white";break;
-	 case "Employee":colour[0]="success";colour[1]="white";break;
-	 default: colour[0]="dark"; colour[1]="white";
-	 }
 %>		
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +56,7 @@
           <nav class="main-nav">
             <!-- ***** Logo Start ***** -->
             <a href="index.html" class="logo">
-              <h4>Department<span>Employee</span></h4>
+              <h4>O<span>ED</span>RS</h4>
             </a>
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
@@ -86,7 +76,35 @@
       </div>
     </div>
   </header>
-  <!-- ***** Header Area End ***** -->
+   <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky wow slideInDown animated" data-wow-duration="0.75s" data-wow-delay="0s" style="visibility: visible;-webkit-animation-duration: 0.75s; -moz-animation-duration: 0.75s; animation-duration: 0.75s;-webkit-animation-delay: 0s; -moz-animation-delay: 0s; animation-delay: 0s;">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="index.html" class="logo">
+              <h4>O<span>ED</span>RS</h4>
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+			<ul class="nav">
+			  <li><a href="MainServlet?table=department&action=view" class="btn btn-warning">Department</a></li>
+			  <li><a href="MainServlet?table=deptemp&action=view" class="btn btn-primary">Department-Employee</a></li>
+			  <li><a href="MainServlet?table=employee&action=view" class="btn btn-success">Employee</a></li>
+            </ul>  
+                  
+            <a class="menu-trigger">
+                <span>Menu</span>
+            </a>
+            
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->  
 
 	<br>
 	<br>
@@ -95,8 +113,8 @@
 	<br>
 	<div class="container">
 		<div class="row">
-			<div class='"badge bg-<%=colour[0]%> text-<%=colour[1] %> text-wrap large col-12 col-md"'>
-				<h1><%=table%></h1>
+			<div class='"badge bg-warning text-dark text-wrap large col-12 col-md"'>
+				<h1>Department Record</h1>
 			</div>
 			<br>
 			<br>
@@ -108,52 +126,11 @@
 
 	<div class="container">
 		<div class="row">
-			<form class="form-inline md-form mr-auto" action="DepartmentPaginationServlet"
-				method="get">
-				<div class="input-group col-sm">
-					<input class="form-control" type="text" aria-label="Search"
-						name="keyword" value="<%=keyword%>" />
-					<div class="input-group-append">
-						<button class="btn btn-primary btn-info" type="submit">Search</button>
-					</div>
-				</div>
-				<input type="hidden" name="currentPage" value="<%=currentPage%>" />
-				<input type="hidden" name="table" value="<%=table%>" />
-				<input type="hidden" name="recordsPerPage"
-					value="<%=recordsPerPage%>" /> <input type="hidden"
-					name="direction" value="<%=direction%>" />
-			</form>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col">
-				<form class="form-inline md-form mr-auto" action="DepartmentPaginationServlet">
-					<div class="input-group col-sm">
-						<select class="form-control" id="records" name="recordsPerPage">
-							<option value="20">20</option>
-							<option value="50" selected>50</option>
-							<option value="70" selected>70</option>
-							<option value="100">100</option>
-						</select>
-						<div class="input-group-append">
-							<button class="btn btn-primary btn-info" type="submit">Records
-								per page</button>
-						</div>
-					</div>
-					<input type="hidden" name="table" value="<%=table%>" />
-					<input type="hidden" name="currentPage" value="<%=currentPage%>" />
-					<input type="hidden" name="recordsPerPage"
-						value="<%=recordsPerPage%>" /> <input type="hidden"
-						name="direction" value="<%=direction%>" /> <input type="hidden"
-						class="form-control" type="text" aria-label="Search"
-						name="keyword" value="<%=keyword%>" />
-				</form>
-			</div>
-			<div class="col"></div>
-			<div class="col">
-				<form class="form-inline md-form mr-auto" action="DepartmentPaginationServlet"
+			<div class="col"></div><div class="col"></div>
+			<form class="form-inline md-form col" action="MainServlet"
 					method="get">
-					<div class="input-group col-sm">
+					<input type="hidden" name=table value="department"/>
+					<div class="input-group">
 						<select class="form-control custom-select" id="direction"
 							name="direction">
 							<% if (direction.compareTo("DESC")==0) {
@@ -165,21 +142,14 @@
 						}
 					%>
 						</select>
-
 						<div class="input-group-append">
 							<button class="btn btn-primary" type="submit">Sorting</button>
 						</div>
-						<fieldset>
-						<input type="hidden" name="table" value="<%=table%>" />
-						<input type="hidden" name="currentPage" value="<%=currentPage%>" />
-						<input type="hidden" name="recordsPerPage"
-							value="<%=recordsPerPage%>" /> <input type="hidden"
-							name="keyword" value="<%=keyword%>" />
-						</fieldset>
+						</div>
 				</form>
-			</div>
 		</div>
-		<br> <br>
+		<br>
+		<br>
 		<div class="card">
 			<div class="table-responsive">
 				<table class="table table-bordered table-striped table-hover">
@@ -189,15 +159,6 @@
 						<th  colspan=2 scope="col" ><center>Method</center></th>
 						</tr>
 					<tr class="table-info">
-					<form class="form-container" action="DepartmentaContoller" method="post">
-					<fieldset>
-						<td  scope="col"><input class="form-control" type="text" class="input-group" size="8"  /></td>
-						<td  scope="col"><input class="form-control" type="text" class="input-group" size="8" name="dname"/></td>
-						<td  colspan=2 scope="col" ><center><button type="submit" class="btn btn-primary btn-rounded">
-					<strong>+</strong> Add Record
-				</button></center></td>
-					</fieldset>
-				</form>
 						</tr>
 					<% List<Department> departments = (List<Department>) request.getAttribute("departments");
 							if (departments.size() != 0) {
@@ -221,42 +182,6 @@
 				</table>
 			</div>
 			</div>
-			<nav aria-label="Navigation for staffs">
-				<ul class="pagination">
-					<% if (currentPage !=1 && nOfPages !=0) { %>
-						<% out.println("<li class=\"page-item\">");
-							out.println("<a class=\"page-link bg-secondary text-light\" href=\"" + "DepartmentPaginationServlet?recordsPerPage=" +
-								recordsPerPage + "&currentPage=1" + "&keyword=" + keyword + "&direction=" + direction +  "&table="+table
-								+ "\">First</a>");
-							out.println("</li>");
-							%>
-							<li class="page-item">
-								<% out.println("<a class=\"page-link bg-success text-light\" href=\"" + "DepartmentPaginationServlet?recordsPerPage=" +
-									recordsPerPage + "&currentPage=" + (currentPage - 1) + "&keyword=" + keyword+ "&direction=" + direction + "&table="+table
-									+ "&direction=" + direction + "\">Previous</a>");
-									%>
-							</li>
-							<% } %>
-								<%%>
-									<%if (currentPage < nOfPages) {
-				out.println("<li class=\"page-item\">");
-				out.println("<a class=\"page-link bg-success text-light\" href=\"" + "DepartmentPaginationServlet?recordsPerPage=" + recordsPerPage
-						+ "&currentPage=" + (currentPage + 1) + "&keyword=" + keyword + "&direction=" + direction +  "&table="+table
-						+ "\">Next</a>");
-				out.println("</li>");
-				out.println("<li class=\"page-item\">");
-				out.println("<a class=\"page-link bg-secondary text-light\" href=\"" + "DepartmentPaginationServlet?recordsPerPage=" + recordsPerPage
-						+ "&currentPage=" + nOfPages + "&keyword=" + keyword + "&direction=" + direction + "&table=" +table
-						+ "\">Last</a>");
-				out.println("</li>");
-			}%>
-				</ul>
-			</nav>
-			<%if (nOfPages != 0) {
-				out.println("<p class=\"pageref\">");
-				out.println(currentPage + " of " + nOfPages);
-				out.println("</p>");
-			}%>
 		</div>
 	</div>
 
@@ -268,7 +193,7 @@
 			<div class="row">
 				<div class="col-lg-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.25s">
 					<p>
-						Â© Copyright 2021 <b>DEPARTMENTEMPLOYEE</b> All Rights Reserved.
+						© Copyright 2021 <b>DEPARTMENTEMPLOYEE</b> All Rights Reserved.
 					</p>
 				</div>
 			</div>

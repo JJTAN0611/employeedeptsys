@@ -14,7 +14,7 @@ public interface DepartmentSessionBeanLocal {
 
 	public Department findDepartment(String id) throws EJBException;
 
-	public List<Department> readDepartment(int currentPage, int recordsPerPage, String keyword,String direction) throws EJBException;
+	public List<Department> readDepartment(String direction) throws EJBException;
 
 	public int getNumberOfRows(String keyword) throws EJBException;
 

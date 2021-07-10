@@ -1,5 +1,3 @@
-package pagination;
-
 
 import java.io.IOException;
 import java.util.List;
@@ -19,16 +17,15 @@ import model.entity.Employee;
 import sessionbean.DepartmentSessionBeanLocal;
 import sessionbean.EmployeeSessionBeanLocal;
 
-
-@WebServlet("/DepartmentPaginationServlet")
-public class DepartmentPaginationServlet extends HttpServlet {
+@WebServlet("/MainServlet")
+public class MainServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@EJB
 	private DepartmentSessionBeanLocal empbean;
 
-	public DepartmentPaginationServlet() {
+	public MainServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -36,15 +33,31 @@ public class DepartmentPaginationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("404.html");
 
-		String direction=(String) request.getAttribute("direction");
+		String action = ServletForwardValidate.actionValidate(request, response);
+		String table = ServletForwardValidate.tableValidate(request, response);
 		
-		List<Department> lists = empbean.readDepartment(direction); //Ask bean to give list
-		request.setAttribute("departments", lists);
-		request.setAttribute("direction",direction);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("department_view.jsp");
+		if(action!=null && table!=null)
+		{
+			
+			switch (action) {
+			case "view":
+				if(ServletForwardValidate.departmentValidate(request,response))
+					dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
+				break;
+			case "edit":
+			case "remove":
+				dispatcher = request.getRequestDispatcher("DepartmentController");
+				break;
+			default:
+				break;
+			}
+		}
+
 		dispatcher.forward(request, response);
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -52,4 +65,6 @@ public class DepartmentPaginationServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	
+
 }
