@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Entity
 @NamedQuery(name="Department.findAll", query="SELECT d FROM Department d")
+@NamedQuery(name = "Department.findbyId", query = "SELECT d FROM Department d WHERE d.id = :id")
 @Table(name="department", schema="employees")
 public class Department implements Serializable {
 	private static final long serialVersionUID = 1L;

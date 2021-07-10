@@ -108,14 +108,13 @@
       });
   }
 
+  $(window).on("load", function(){
+	   $.ready.then(function(){
+	      // Both ready and loaded
+		   $('#js-preloader').addClass('loaded');
+	   });
+	})
 
-
-	// Page loading animation
-	 $(window).on('load', function() {
-
-        $('#js-preloader').addClass('loaded');
-
-    });
 
 	
 

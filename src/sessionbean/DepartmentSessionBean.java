@@ -64,7 +64,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	public Department findDepartment(String id) throws EJBException {
 		// Write some codes here…
 		Query q = em.createNamedQuery("Department.findbyId");
-		q.setParameter("id", Long.valueOf(id));
+		q.setParameter("id", String.valueOf(id));
 		return (Department) q.getSingleResult();
 	}
 

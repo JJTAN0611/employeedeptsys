@@ -15,13 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.entity.Department;
 import model.entity.Employee;
+import sessionbean.DepartmentSessionBeanLocal;
 import sessionbean.EmployeeSessionBeanLocal;
 
 @WebServlet("/DepartmentController")
 public class DepartmentController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@EJB
-	private EmployeeSessionBeanLocal empbean;
+	private DepartmentSessionBeanLocal deptbean;
 
 
 	public DepartmentController() {
@@ -33,43 +34,21 @@ public class DepartmentController extends HttpServlet {
 			throws ServletException, IOException {
 
 		String id = request.getParameter("id");
+
 		try {
-			RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
-			req.forward(request, response);
+			Department dept = deptbean.findDepartment(id);
+			request.setAttribute("dept", dept);
 		} catch (EJBException ex) {
 		}
+
+		RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
+		req.forward(request, response);
 	}
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String eid = request.getParameter("id");
-		String fname = request.getParameter("fname");
-		String lname = request.getParameter("lname");
-		String gender = request.getParameter("gender");
-		String dob = request.getParameter("dob");
-		String hiredate = request.getParameter("hdate");
-		PrintWriter out = response.getWriter();
-		// this line is to package the whole values into one array string variable -
-		// easier just pass one parameter object
-		String[] s = { eid, fname, lname, gender, dob, hiredate };
-		try {
-			if (ValidateManageLogic.validateManager(request).equals("UPDATE")) {
-				// call session bean updateEmployee method
-				empbean.updateEmployee(s);
-			} else if (ValidateManageLogic.validateManager(request).equals("DELETE")) {
-				// call session bean deleteEmployee method
-				empbean.deleteEmployee(eid);	
-				// if ADD button is clicked
-			} else {
-				// call session bean addEmployee method
-				empbean.addEmployee(s);
-			}
-			// this line is to redirect to notify record has been updated and redirect to
-			// another page
-			ValidateManageLogic.navigateJS(out);
-		} catch (EJBException ex) {
-		}
+		
 	}
 }

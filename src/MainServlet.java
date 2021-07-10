@@ -34,25 +34,44 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("404.html");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("404.jsp");
 
-		String action = ServletForwardValidate.actionValidate(request, response);
-		String table = ServletForwardValidate.tableValidate(request, response);
+		String action = ServletForwardValidate.action(request, response);
+		String table = ServletForwardValidate.table(request, response);
 		
+
 		if(action!=null && table!=null)
 		{
-			
+			if(table.compareTo("department")==0)
 			switch (action) {
 			case "view":
-				if(ServletForwardValidate.departmentValidate(request,response))
+				if(ServletForwardValidate.departmentView(request,response))
 					dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
 				break;
 			case "edit":
 			case "remove":
-				dispatcher = request.getRequestDispatcher("DepartmentController");
+					if(ServletForwardValidate.departmentUpdate(request, response)) {
+						dispatcher = request.getRequestDispatcher("DepartmentController");
+						System.out.print("On here"+request.getAttribute("id"));
+					}
 				break;
 			default:
 				break;
+			}
+			else if(table.compareTo("employee")==0) {
+				switch (action) {
+				case "view":
+					if(ServletForwardValidate.departmentView(request,response))
+						dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
+					break;
+				case "edit":
+				case "remove":
+						if(ServletForwardValidate.employeeUpdate(request, response))
+							dispatcher = request.getRequestDispatcher("EmployeeController");
+					break;
+				default:
+					break;
+				}
 			}
 		}
 

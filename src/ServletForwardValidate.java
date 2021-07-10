@@ -3,7 +3,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ServletForwardValidate {
 	
-	public static String actionValidate(HttpServletRequest request, HttpServletResponse response) {
+	public static String action(HttpServletRequest request, HttpServletResponse response) {
 
 		String action=request.getParameter("action");
 		
@@ -18,7 +18,7 @@ public class ServletForwardValidate {
 			return null; //abnormal value
 	}
 	
-	public static String tableValidate(HttpServletRequest request, HttpServletResponse response) {
+	public static String table(HttpServletRequest request, HttpServletResponse response) {
 
 		String action=request.getParameter("table");
 		
@@ -33,7 +33,7 @@ public class ServletForwardValidate {
 			return null; //abnormal value
 	}
 	
-	public static boolean departmentValidate(HttpServletRequest request, HttpServletResponse response) {
+	public static boolean departmentView(HttpServletRequest request, HttpServletResponse response) {
 		String direction=request.getParameter("direction");
 		
 		if(direction==null)
@@ -43,6 +43,23 @@ public class ServletForwardValidate {
 		else
 			return false; //abnormal value
 
+		return true;
+	}
+	
+	public static boolean departmentUpdate(HttpServletRequest request, HttpServletResponse response) {
+		String id=request.getParameter("id");
+		request.setAttribute("id", id);
+		return true;
+	}
+	public static boolean departmentRemove(HttpServletRequest request, HttpServletResponse response) {
+		String id=request.getParameter("id");
+		request.setAttribute("id", id);
+		return true;
+	}
+	public static boolean employeeUpdate(HttpServletRequest request, HttpServletResponse response) {
+		String id=request.getParameter("id");
+
+		request.setAttribute("id", id);
 		return true;
 	}
 }
