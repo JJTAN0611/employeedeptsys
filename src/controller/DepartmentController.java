@@ -48,7 +48,20 @@ public class DepartmentController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		String id = (String) request.getAttribute("id");
+		String action = (String) request.getAttribute("action");
+		
+		try {
+			if (action.compareTo("remove")==0) {
+				deptbean.deleteDepartment(id);	
+			} else if (action.compareTo("update")==0) {
+				String []dept= {id,request.getParameter("dept_name")};
+				deptbean.updateDepartment(dept);
+				ValidateManageLogic.navigateJS(response.getWriter());
+			}
+			
+		} catch (EJBException ex) {
+		}
 		
 	}
 }

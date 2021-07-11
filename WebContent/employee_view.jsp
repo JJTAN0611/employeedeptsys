@@ -17,13 +17,9 @@
 	 default: colour[0]="dark"; colour[1]="white";
 	 }
 %>		
-<%@ include file="header.html" %>  
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<div class="container">
+<%@ include file="header.jsp" %>  
+
+	<div class="container top-first">
 		<div class="row">
 			<div class='"badge bg-<%=colour[0]%> text-<%=colour[1] %> text-wrap large col-12 col-md"'>
 				<h1><%=table%></h1>
@@ -204,4 +200,4 @@
 
 
 
-<%@ include file="footer.html" %>  
+<%@ include file="footer.jsp" %>  

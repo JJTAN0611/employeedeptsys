@@ -759,7 +759,7 @@ Banner Style
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  padding: 226px 0px 120px 0px;
+  padding: 0px 0px 120px 0px;
   position: relative;
   overflow: hidden;
 }
@@ -770,7 +770,7 @@ Banner Style
   background-repeat: no-repeat;
   position: absolute;
   left: 0;
-  top: 100px;
+  top: 0px;
   width: 193px;
   height: 467px;
 }
@@ -827,7 +827,7 @@ Banner Style
 .main-banner .left-content form button {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 0px;
   display: inline-block;
   background-color: #fff;
   font-size: 15px;
@@ -1284,4 +1284,10 @@ responsive
       border-radius: 0 0 @table-radius 0;
     }
 }
+
+.top-first{
+	padding-top:168px;
+}
+
+
 

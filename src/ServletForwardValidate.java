@@ -1,17 +1,23 @@
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import controller.ValidateManageLogic;
 
 public class ServletForwardValidate {
 	
 	public static String action(HttpServletRequest request, HttpServletResponse response) {
 
 		String action=request.getParameter("action");
-		
+		request.setAttribute("action",action);
 		if(action.compareTo("view")==0)
 		{
 			return "view"; 
-		}else if(action.compareTo("edit")==0)
-			return "edit";
+		}else if(action.compareTo("add")==0)
+			return "add";
+		else if(action.compareTo("update")==0)
+			return "update";
 		else if(action.compareTo("remove")==0)
 			return "remove";
 		else
@@ -20,14 +26,14 @@ public class ServletForwardValidate {
 	
 	public static String table(HttpServletRequest request, HttpServletResponse response) {
 
-		String action=request.getParameter("table");
-		
-		if(action.compareTo("department")==0)
+		String table=request.getParameter("table");
+		request.setAttribute("table",table);
+		if(table.compareTo("department")==0)
 		{
 			return "department"; 
-		}else if(action.compareTo("departmentemployee")==0)
+		}else if(table.compareTo("departmentemployee")==0)
 			return "departmentemployee";
-		else if(action.compareTo("employee")==0)
+		else if(table.compareTo("employee")==0)
 			return "employee";
 		else
 			return null; //abnormal value

@@ -1,7 +1,7 @@
 <%@page import="model.entity.Employee"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ include file="header.html" %>  
+<%@ include file="header.jsp" %>  
 	<%
 		Employee emp = (Employee) request.getAttribute("EMP");
 	%>
@@ -59,4 +59,4 @@
 		<input type="submit" name="UPDATE" value="UPDATE" /> <input
 			type="submit" name="DELETE" value="DELETE" />
 	</form>
-<%@ include file="footer.html" %>  
+<%@ include file="footer.jsp" %>  

@@ -55,7 +55,7 @@ public class EmployeeController extends HttpServlet {
 		// this line is to package the whole values into one array string variable -
 		// easier just pass one parameter object
 		String[] s = { eid, fname, lname, gender, dob, hiredate };
-		try {
+		try {/*
 			if (ValidateManageLogic.validateManager(request).equals("UPDATE")) {
 				// call session bean updateEmployee method
 				empbean.updateEmployee(s);
@@ -66,7 +66,7 @@ public class EmployeeController extends HttpServlet {
 			} else {
 				// call session bean addEmployee method
 				empbean.addEmployee(s);
-			}
+			}*/
 			// this line is to redirect to notify record has been updated and redirect to
 			// another page
 			ValidateManageLogic.navigateJS(out);

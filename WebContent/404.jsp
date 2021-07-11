@@ -1,7 +1,7 @@
-<%@ include file="header.html" %>  
+<%@ include file="header.jsp" %>  
 
 
-  <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+  <div class="main-banner wow fadeIn top-first" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -18,4 +18,4 @@
     </div>
   </div>
 
-  <%@ include file="footer.html" %>  
+  <%@ include file="footer.jsp" %>  

@@ -36,6 +36,7 @@ public class MainServlet extends HttpServlet {
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("404.jsp");
 
+		//compulsory to check
 		String action = ServletForwardValidate.action(request, response);
 		String table = ServletForwardValidate.table(request, response);
 		
@@ -44,12 +45,14 @@ public class MainServlet extends HttpServlet {
 		{
 			if(table.compareTo("department")==0)
 			switch (action) {
-			case "view":
+			case "view": //check display's parameter
 				if(ServletForwardValidate.departmentView(request,response))
 					dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
 				break;
-			case "edit":
-			case "remove":
+			case "add":
+				break;
+			case "update": //check edit's parameter
+			case "remove": //check remove's parameter
 					if(ServletForwardValidate.departmentUpdate(request, response)) {
 						dispatcher = request.getRequestDispatcher("DepartmentController");
 						System.out.print("On here"+request.getAttribute("id"));
@@ -64,7 +67,7 @@ public class MainServlet extends HttpServlet {
 					if(ServletForwardValidate.departmentView(request,response))
 						dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
 					break;
-				case "edit":
+				case "update":
 				case "remove":
 						if(ServletForwardValidate.employeeUpdate(request, response))
 							dispatcher = request.getRequestDispatcher("EmployeeController");
