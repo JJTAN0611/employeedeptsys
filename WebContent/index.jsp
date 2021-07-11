@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
           <a href="#" onclick='$("#department").trigger("click");'>
             <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.3s">
               <div class="hidden-content">
@@ -48,7 +48,7 @@
             </div>
           </a>
         </div>
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
           <a href="#" onclick='$("#department_employee").trigger("click");'>
             <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.4s">
               <div class="hidden-content">
@@ -61,7 +61,7 @@
             </div>
           </a>
         </div>
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
           <a href="#" onclick='$("#employee").trigger("click");'>
             <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.5s">
               <div class="hidden-content">
@@ -74,19 +74,7 @@
             </div>
           </a>
         </div>
-        <div class="col-lg-3 col-sm-6">
-          <a href="#">
-            <div class="item wow bounceInUp" data-wow-duration="1s" data-wow-delay="0.6s">
-              <div class="hidden-content">
-                <h4>To be develop</h4>
-                <p>~~Stay Tuned~~</p>
-              </div>
-              <div class="showed-content">
-                <img src="assets/images/tobe.png" alt="">
-              </div>
-            </div>
-          </a>
-        </div>
+        
       </div>
     </div>
   </div>
@@ -96,10 +84,14 @@
       <div class="row">
         <div class="col-lg-6 align-self-center wow fadeInLeft" data-wow-duration="0.5s" data-wow-delay="0.25s">
           <div class="section-heading">
-            <h2>Feel Free To Send Us a Message About Your Website Needs</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doer ket eismod tempor incididunt ut labore et dolores</p>
+            <h2>Feel Free To Send Me A Message When You Need</h2>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This web application proposes the development of an online employee department registration system using Servlet, Java Server Page (JSP), Session Bean technologies, and relational database. This web application incorporates object-oriented principles into a 3-tier architecture.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The main function of this system is to allow administrators to register employee details and assign them into different departments. This system is used to track all the employee and department relation records.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beside the create, read, update, and delete (CRUD) function, this system integrates several functionalities such as searching, sorting, pagination to improve user experience. The result can be tabulated according to the actual need.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moreover, the generate report function is also provided to the administrator for managing purposes.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Last but not least, an application-level analysis is carried out in the system. The UML diagrams which indicate the overall view of the system design are illustrated in this poster.</p>
             <div class="phone-info">
-              <h4>For any enquiry, Call Us: <span><i class="fa fa-phone"></i> <a href="#">010-020-0340</a></span></h4>
+              <h4>For any enquiry, Call:<span><i class="fa fa-phone"></i> <a href="#">+6011-38100852</a></span></h4>
             </div>
           </div>
         </div>

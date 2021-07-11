@@ -84,7 +84,7 @@
 						<ul class="nav">
 							<li>
 								<div class="btn-group">
-									<button type="button"
+									<button id="department" type="button"
 										onclick="location.href='MainServlet?table=department&action=view'"
 										class="btn btn-warning">Department View</button>
 									<button type="button"
@@ -101,7 +101,7 @@
 								</div>
 							</li>
 							<li><div class="btn-group">
-									<button type="button"
+									<button  id="department_employee" type="button"
 										onclick="location.href='MainServlet?table=departmentemployee&action=view'"
 										class="btn btn-primary">Department Employee View</button>
 									<button type="button"
@@ -117,7 +117,7 @@
 									</ul>
 								</div></li>
 							<li><div class="btn-group">
-									<button type="button"
+									<button type="button"  id="employee"
 										onclick="location.href='MainServlet?table=employee&action=view'"
 										class="btn btn-success">Employee View</button>
 									<button type="button"
