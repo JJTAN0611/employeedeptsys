@@ -11,15 +11,16 @@ public class ServletForwardValidate {
 
 		String action=request.getParameter("action");
 		request.setAttribute("action",action);
-		if(action.compareTo("view")==0)
-		{
+		if(action.compareTo("getAutoId")==0){
+			return "getAutoId"; 
+		}else if(action.compareTo("view")==0){
 			return "view"; 
 		}else if(action.compareTo("add")==0)
 			return "add";
 		else if(action.compareTo("update")==0)
 			return "update";
-		else if(action.compareTo("remove")==0)
-			return "remove";
+		else if(action.compareTo("delete")==0)
+			return "delete";
 		else
 			return null; //abnormal value
 	}
@@ -52,20 +53,72 @@ public class ServletForwardValidate {
 		return true;
 	}
 	
-	public static boolean departmentUpdate(HttpServletRequest request, HttpServletResponse response) {
+	public static boolean departmentUpdateRemove(HttpServletRequest request, HttpServletResponse response) {
 		String id=request.getParameter("id");
 		request.setAttribute("id", id);
 		return true;
 	}
-	public static boolean departmentRemove(HttpServletRequest request, HttpServletResponse response) {
-		String id=request.getParameter("id");
-		request.setAttribute("id", id);
-		return true;
-	}
-	public static boolean employeeUpdate(HttpServletRequest request, HttpServletResponse response) {
-		String id=request.getParameter("id");
+	
+	public static boolean employeeView(HttpServletRequest request, HttpServletResponse response) {
+		String direction=request.getParameter("direction");
+		String currentPage=request.getParameter("currentPage");
+		String recordsPerPage=request.getParameter("recordsPerPage");
+		String nOfPages=request.getParameter("nOfPages");
+		String keyword=request.getParameter("keyword");
 
+		if(direction==null)
+			request.setAttribute("direction", "ASC");
+		else if(direction.equals("ASC")||direction.equals("DESC"))
+			request.setAttribute("direction", direction);
+		else
+			return false; //abnormal value
+
+		if(currentPage==null)
+			request.setAttribute("currentPage", 1);
+		else {
+			try { 
+		        int cp=Integer.parseInt(currentPage); 
+		        request.setAttribute("currentPage", cp);
+		    } catch(NumberFormatException e) { 
+		        return false; 
+		    } 
+		}
+	
+		if(recordsPerPage==null)
+			request.setAttribute("recordsPerPage", 50);
+		else {
+			try { 
+		        int rpp=Integer.parseInt(recordsPerPage); 
+		        request.setAttribute("recordsPerPage", rpp);
+		    } catch(NumberFormatException e) { 
+		        return false; 
+		    } 
+		}
+		
+	
+		if(nOfPages==null)
+			request.setAttribute("nOfPages", 1);
+		else {
+			try { 
+		        int npp=Integer.parseInt(nOfPages); 
+		        request.setAttribute("nOfPages", npp);
+		    } catch(NumberFormatException e) { 
+		        return false; 
+		    } 
+		}
+		
+		if(keyword==null)
+			request.setAttribute("keyword", "");
+		else
+			request.setAttribute("keyword", keyword);
+		
+		return true;
+	}
+	
+	public static boolean employeeUpdateRemove(HttpServletRequest request, HttpServletResponse response) {
+		String id=request.getParameter("id");
 		request.setAttribute("id", id);
 		return true;
 	}
+	
 }

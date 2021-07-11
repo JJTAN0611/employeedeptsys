@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -24,44 +25,76 @@ public class DepartmentController extends HttpServlet {
 	@EJB
 	private DepartmentSessionBeanLocal deptbean;
 
-
 	public DepartmentController() {
 		super();
 	}
 
-	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String id = request.getParameter("id");
+		String action = (String) request.getAttribute("action");
 
 		try {
-			Department dept = deptbean.findDepartment(id);
-			request.setAttribute("dept", dept);
+
+			if (action.compareTo("getAutoId") == 0) {
+				response.getWriter().print(getAutoId());
+			} else if (action.compareTo("add") == 0) {
+				RequestDispatcher req;
+				request.setAttribute("id", getAutoId());
+				req = request.getRequestDispatcher("department_add.jsp");
+				req.forward(request, response);
+			} else if (action.compareTo("update") == 0) {
+				RequestDispatcher req;
+				String id = (String) request.getAttribute("id");
+				Department dept = deptbean.findDepartment(id);
+				request.setAttribute("dept", dept);
+				req = request.getRequestDispatcher("department_update.jsp");
+				req.forward(request, response);
+			} else {
+				RequestDispatcher req;
+				String id = (String) request.getAttribute("id");
+				Department dept = deptbean.findDepartment(id);
+				request.setAttribute("dept", dept);
+				req = request.getRequestDispatcher("department_remove.jsp");
+				req.forward(request, response);
+			}
+
 		} catch (EJBException ex) {
 		}
 
-		RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
-		req.forward(request, response);
 	}
-
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String id = (String) request.getAttribute("id");
+
 		String action = (String) request.getAttribute("action");
-		
+
 		try {
-			if (action.compareTo("remove")==0) {
-				deptbean.deleteDepartment(id);	
-			} else if (action.compareTo("update")==0) {
-				String []dept= {id,request.getParameter("dept_name")};
-				deptbean.updateDepartment(dept);
-				ValidateManageLogic.navigateJS(response.getWriter());
-			}
+			if (action.compareTo("add") == 0) {
+				String[] s = { (String) request.getParameter("id"), (String) request.getParameter("dept_name") };
+				deptbean.addDepartment(s);
+			} else if (action.compareTo("delete") == 0) {
 			
+				String id = (String) request.getParameter("id");
+				System.out.println("here"+id);
+				deptbean.deleteDepartment(id);
+			} else if (action.compareTo("update") == 0) {
+				String[] dept = { (String) request.getParameter("id"), request.getParameter("dept_name") };
+				deptbean.updateDepartment(dept);
+			}
+
+			ValidateManageLogic.navigateJS(response.getWriter(),"department");
 		} catch (EJBException ex) {
 		}
-		
+
+	}
+
+	private String getAutoId() {
+		List<Department> ds = deptbean.getAllDepartment();
+		int t = 0;
+		for (Department d : ds)
+			if (Integer.valueOf(d.getId().substring(1, 4)) > t)
+				t = Integer.valueOf(d.getId().substring(1, 4));
+		return "d" + String.format("%03d", t + 1);
 	}
 }

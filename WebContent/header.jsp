@@ -9,13 +9,13 @@
 	String color;
 	switch (table) {
 	case "department":
-		color = "lightyellow";
+		color = "#ffffee";
 		break;
 	case "departmentemployee":
-		color = "lightblue";
+		color = "#d9edf3";
 		break;
 	case "employee":
-		color = "lightgreen";
+		color = "#d6f8d6";
 		break;
 	default:
 		color = "gainsboro";
@@ -48,8 +48,6 @@
 <link rel="stylesheet" href="assets/css/framestyle.css">
 <link rel="stylesheet" href="assets/css/animated.css">
 <link rel="stylesheet" href="assets/css/owl.css">
-
-
 <script src="https://kit.fontawesome.com/5641842b84.js"
 	crossorigin="anonymous"></script>
 </head>
@@ -120,7 +118,7 @@
 								</div></li>
 							<li><div class="btn-group">
 									<button type="button"
-										onclick="location.href='MainServlet?table=department&action=view'"
+										onclick="location.href='MainServlet?table=employee&action=view'"
 										class="btn btn-success">Employee View</button>
 									<button type="button"
 										class="btn btn-success dropdown-toggle dropdown-toggle-split"

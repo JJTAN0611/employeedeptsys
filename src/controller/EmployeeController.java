@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.entity.Employee;
 import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
 
@@ -31,46 +33,81 @@ public class EmployeeController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String id = request.getParameter("id");
+
+		String action = (String) request.getAttribute("action");
+		
 		try {
-			Employee emp = empbean.findEmployee(id);
-			request.setAttribute("EMP", emp);
-			RequestDispatcher req = request.getRequestDispatcher("EmployeeUpdate.jsp");
-			req.forward(request, response);
+			
+			if(action.compareTo("getAutoId")==0){
+				response.getWriter().print(getAutoId());
+			}else if(action.compareTo("add")==0) {
+				request.setAttribute("id",getAutoId());
+				RequestDispatcher req;
+				req=request.getRequestDispatcher("employee_add.jsp");
+				req.forward(request, response);
+			}else if(action.compareTo("update")==0) {
+				RequestDispatcher req;
+				String id = (String) request.getAttribute("id");
+				Employee emp = empbean.findEmployee(id);
+				request.setAttribute("emp", emp);
+				req=request.getRequestDispatcher("employee_update.jsp");
+				req.forward(request, response);
+			}else {
+				RequestDispatcher req;
+				String id = (String) request.getAttribute("id");
+				Employee emp = empbean.findEmployee(id);
+				request.setAttribute("emp", emp);
+				req=request.getRequestDispatcher("employee_remove.jsp");
+				req.forward(request, response);
+			}
+		
+			
 		} catch (EJBException ex) {
 		}
+
+		
 	}
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String eid = request.getParameter("id");
-		String fname = request.getParameter("fname");
-		String lname = request.getParameter("lname");
-		String gender = request.getParameter("gender");
-		String dob = request.getParameter("dob");
-		String hiredate = request.getParameter("hdate");
-		PrintWriter out = response.getWriter();
-		// this line is to package the whole values into one array string variable -
-		// easier just pass one parameter object
-		String[] s = { eid, fname, lname, gender, dob, hiredate };
-		try {/*
-			if (ValidateManageLogic.validateManager(request).equals("UPDATE")) {
-				// call session bean updateEmployee method
-				empbean.updateEmployee(s);
-			} else if (ValidateManageLogic.validateManager(request).equals("DELETE")) {
-				// call session bean deleteEmployee method
-				empbean.deleteEmployee(eid);	
-				// if ADD button is clicked
-			} else {
-				// call session bean addEmployee method
+		String action = (String) request.getAttribute("action");
+		
+		try {
+			if(action.compareTo("add")==0) {
+				String[] s = {(String) request.getParameter("id"), 
+						(String) request.getParameter("first_name"),
+						(String) request.getParameter("last_name"),
+						(String) request.getParameter("gender"),
+						(String) request.getParameter("birth_date"),
+						(String) request.getParameter("hire_date")
+						};
 				empbean.addEmployee(s);
-			}*/
-			// this line is to redirect to notify record has been updated and redirect to
-			// another page
-			ValidateManageLogic.navigateJS(out);
+			}
+			else if (action.compareTo("delete")==0) {
+				String id = (String) request.getParameter("id");
+				empbean.deleteEmployee(id);	
+			} else if (action.compareTo("update")==0) {
+				String[] s = {(String) request.getParameter("id"), 
+						(String) request.getParameter("first_name"),
+						(String) request.getParameter("last_name"),
+						(String) request.getParameter("gender"),
+						(String) request.getParameter("birth_date"),
+						(String) request.getParameter("hire_date")
+						};
+				empbean.updateEmployee(s);
+			}
+
+			ValidateManageLogic.navigateJS(response.getWriter(),"employee");
 		} catch (EJBException ex) {
 		}
+		
+	}
+	
+	private int getAutoId() {
+		List<Employee> ds = empbean.readEmployee(1, 1,"","DESC");
+		int id=ds.get(0).getId().intValue();
+		return id+1;
 	}
 }

@@ -26,7 +26,7 @@ public class DepartmentPaginationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	@EJB
-	private DepartmentSessionBeanLocal empbean;
+	private DepartmentSessionBeanLocal deptbean;
 
 	public DepartmentPaginationServlet() {
 		super();
@@ -38,10 +38,8 @@ public class DepartmentPaginationServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 
 		String direction=(String) request.getAttribute("direction");
-		
-		List<Department> lists = empbean.readDepartment(direction); //Ask bean to give list
+		List<Department> lists = deptbean.readDepartment(direction); //Ask bean to give list
 		request.setAttribute("departments", lists);
-		request.setAttribute("direction",direction);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("department_view.jsp");
 		dispatcher.forward(request, response);

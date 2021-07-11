@@ -36,11 +36,11 @@ public class EmployeePaginationServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		// Write some codes here…
 		int nOfPages = 0;
-		int currentPage = Integer.valueOf(request.getParameter("currentPage"));
-		int recordsPerPage = Integer.valueOf(request.getParameter("recordsPerPage"));
-		String keyword = request.getParameter("keyword");
-		String direction = request.getParameter("direction");
-		String table = request.getParameter("table");
+		int currentPage = (int) request.getAttribute("currentPage");
+		int recordsPerPage = (int) request.getAttribute("recordsPerPage");
+		String keyword = (String) request.getAttribute("keyword");
+		String direction = (String) request.getAttribute("direction");
+		
 		
 		try {
 			int rows = empbean.getNumberOfRows(keyword);
@@ -53,15 +53,10 @@ public class EmployeePaginationServlet extends HttpServlet {
 			}
 			List<Employee> lists = empbean.readEmployee(currentPage, recordsPerPage,keyword,direction); //Ask bean to give list
 			request.setAttribute("staffs", lists);
+			request.setAttribute("nOfPages", nOfPages);
 		} catch (EJBException ex) {
 		}
-		request.setAttribute("nOfPages", nOfPages);
-		request.setAttribute("currentPage", currentPage);
-		request.setAttribute("recordsPerPage", recordsPerPage);
-		request.setAttribute("keyword", keyword);
-		request.setAttribute("direction", direction);
-		request.setAttribute("table", table);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("employee_result.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("employee_view.jsp");
 		dispatcher.forward(request, response);
 	}
 

@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import controller.ValidateManageLogic;
 import model.entity.Department;
 import model.entity.Employee;
 
@@ -46,16 +47,10 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		return results;
 	}
 
-	public int getNumberOfRows(String keyword) throws EJBException {
+	public int getNumberOfRows() throws EJBException {
 		// Write some codes here…
 		Query q = null;
-		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department");
-		} else {
-			q = em.createNativeQuery(
-					"SELECT COUNT(*) AS totalrow from employees.department WHERE concat(id,dept_name) LIKE ?");
-			q.setParameter(1, "%" + keyword + "%");
-		}
+		q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department");
 		BigInteger results = (BigInteger) q.getSingleResult();
 		int i = results.intValue();
 		return i;
@@ -81,9 +76,10 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		em.remove(d);
 	}
 
-	public void addDepartment(String[] s) throws EJBException {
+	public void addDepartment(String s[]) throws EJBException {
 		// Write some codes here…
 		Department d = new Department();
+		d.setId(s[0]);
 		d.setDeptName(s[1]);
 		em.persist(d);
 	}

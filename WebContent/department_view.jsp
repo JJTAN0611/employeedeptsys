@@ -10,22 +10,20 @@
 <%@ include file="header.jsp"%>
 
 <div class="container top-first">
-	<h1>
-		<div class="badge bg-warning text-dark text-wrap large col-12">
-			<div class="row">
-				<div class="text-start col">
-					Department Record
-					<div class="badge bg-light text-primary text-wrap">View</div>
-				</div>
-				<div class="text-end col">
-					<button class="btn btn-info" style="font-size: 20px;"
-						onclick="document.getElementById('adddepartment').click()">+ Add
-						Record</button>
-				</div>
+	<div class="badge bg-warning text-dark text-wrap large col-12">
+		<div class="row">
+			<div class="text-start col" style="font-size: 30px;">
+				Department Record
+				<div class="badge bg-light text-info text-wrap">View</div>
+			</div>
+			<div class="text-end col">
+				<button class="btn btn-light btn-outline-success text-dark"
+					style="font-size: 20px; font-weight: bold;"
+					onclick="document.getElementById('adddepartment').click()">+
+					Add Record</button>
 			</div>
 		</div>
-	</h1>
-
+	</div>
 	<br> <br>
 	<hr>
 	<br> <br>
@@ -59,40 +57,39 @@
 		</form>
 	</div>
 	<br> <br>
-	<div class="card">
-		<div class="table-responsive">
-			<table class="table table-bordered table-striped table-hover">
-				<tr class="table-dark">
-					<th scope="col">ID</th>
-					<th scope="col">NAME</th>
-					<th colspan=2 scope="col"><center>Method</center></th>
-				</tr>
-				<tr class="table-info">
-				</tr>
-				<%
-					List<Department> departments = (List<Department>) request.getAttribute("departments");
-					if (departments.size() != 0) {
-						for (Department t : departments) {
-							out.println("<tr>");
-							out.println("<td>" + t.getId() + "</td>");
-							out.println("<td>" + t.getDeptName() + "</td>");
-							out.println("<td><a href=\"MainServlet?id=" + t.getId()
-									+ "&table=department&action=update\" class=\"text-success\"><i class=\"fas fa-marker\"></i>Update</a></td>");
-							out.println("<td><a href=\"MainServlet?id=" + t.getId()
-									+ "&table=department&action=remove\" class=\"text-danger\"><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
-							out.println("</tr>");
-						}
-					} else {
+	<div class="table-responsive">
+		<table
+			class="table table-bordered table-striped table-hover table-light">
+			<tr class="table-dark">
+				<th scope="col">ID</th>
+				<th scope="col">NAME</th>
+				<th colspan=2 scope="col"><center>Method</center></th>
+			</tr>
+			<tr class="table-info">
+			</tr>
+			<%
+				List<Department> departments = (List<Department>) request.getAttribute("departments");
+				if (departments.size() != 0) {
+					for (Department t : departments) {
 						out.println("<tr>");
-						String status = "No records";
-						for (int i = 0; i < 8; i++) {
-							out.println("<td>" + status + "</td>");
-						}
+						out.println("<td>" + t.getId() + "</td>");
+						out.println("<td>" + t.getDeptName() + "</td>");
+						out.println("<td><a href=\"MainServlet?id=" + t.getId()
+								+ "&table=department&action=update\" class=\"text-primary\"><i class=\"fas fa-marker\"></i>Update</a></td>");
+						out.println("<td><a href=\"MainServlet?id=" + t.getId()
+								+ "&table=department&action=delete\" class=\"text-danger\"><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
 						out.println("</tr>");
 					}
-				%>
-			</table>
-		</div>
+				} else {
+					out.println("<tr>");
+					String status = "No records";
+					for (int i = 0; i < 8; i++) {
+						out.println("<td>" + status + "</td>");
+					}
+					out.println("</tr>");
+				}
+			%>
+		</table>
 	</div>
 </div>
 </div>

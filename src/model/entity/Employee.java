@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name="employee", schema="employees")
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@Id
 	private Long id;
 

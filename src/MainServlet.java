@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controller.ValidateManageLogic;
 import model.entity.Department;
 import model.entity.Employee;
 import sessionbean.DepartmentSessionBeanLocal;
@@ -33,44 +34,50 @@ public class MainServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("404.jsp");
 
-		//compulsory to check
+		// compulsory to check
 		String action = ServletForwardValidate.action(request, response);
 		String table = ServletForwardValidate.table(request, response);
-		
 
-		if(action!=null && table!=null)
-		{
-			if(table.compareTo("department")==0)
-			switch (action) {
-			case "view": //check display's parameter
-				if(ServletForwardValidate.departmentView(request,response))
-					dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
-				break;
-			case "add":
-				break;
-			case "update": //check edit's parameter
-			case "remove": //check remove's parameter
-					if(ServletForwardValidate.departmentUpdate(request, response)) {
-						dispatcher = request.getRequestDispatcher("DepartmentController");
-						System.out.print("On here"+request.getAttribute("id"));
-					}
-				break;
-			default:
-				break;
-			}
-			else if(table.compareTo("employee")==0) {
+		
+		if (action != null && table != null) {
+			//department
+			if (table.compareTo("department") == 0)
 				switch (action) {
-				case "view":
-					if(ServletForwardValidate.departmentView(request,response))
-						dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
+				case "getAutoId":dispatcher = request.getRequestDispatcher("DepartmentController");break;
+				case "view": // check display's parameter
+					if (ServletForwardValidate.departmentView(request, response))
+						dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
 					break;
-				case "update":
-				case "remove":
-						if(ServletForwardValidate.employeeUpdate(request, response))
-							dispatcher = request.getRequestDispatcher("EmployeeController");
+				case "add":
+					dispatcher = request.getRequestDispatcher("DepartmentController");
+				case "update": // check edit's parameter
+				case "delete": // check remove's parameter
+					if (ServletForwardValidate.departmentUpdateRemove(request, response)) {
+						dispatcher = request.getRequestDispatcher("DepartmentController");
+					}
+					break;
+				default:
+					break;
+				}
+			//employee
+			else if (table.compareTo("employee") == 0) {
+				switch (action) {
+				case "getAutoId":dispatcher = request.getRequestDispatcher("EmployeeController");break;
+				case "view": // check display's parameter
+					if (ServletForwardValidate.employeeView(request, response)) {
+						dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
+					}
+					break;
+				case "add":
+					dispatcher = request.getRequestDispatcher("EmployeeController");
+				case "update": // check edit's parameter
+				case "delete": // check remove's parameter
+					if (ServletForwardValidate.employeeUpdateRemove(request, response)) {
+						dispatcher = request.getRequestDispatcher("EmployeeController");
+					}
 					break;
 				default:
 					break;
@@ -87,6 +94,5 @@ public class MainServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	
 
 }

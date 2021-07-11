@@ -14,14 +14,15 @@
 		<div class="row">
 			<div class="text-start col" style="font-size: 30px;">
 				Department Record
-				<div class="badge bg-light text-primary text-wrap">Update</div>
+				<div class="badge bg-light text-danger text-wrap">Remove</div>
 			</div>
 		</div>
 	</div>
 
+
 	<br> <br>
 	<h1>
-		<center>Please update the following details.</center>
+		<center>You are removing following details.</center>
 	</h1>
 	<hr>
 	<br> <br>
@@ -42,15 +43,16 @@
 			<label class="control-label col-3 text-end">Department name:</label>
 			<div class="col-8">
 				<input type="text" class="form-control" placeholder="Enter name"
-					name="dept_name" value="<%=dept.getDeptName()%>">
+					name="dept_name" value="<%=dept.getDeptName()%>"
+					readonly="readonly">
 			</div>
 		</div>
 		<br>
 		<div class="form-group row">
 			<label class="control-label col-3 text-end"></label>
 			<div class="col-8">
-				<input type="submit" class="btn btn-primary" name="action"
-					value="update">
+				<input type="submit" class="btn btn-danger" name="action"
+					value="delete">
 			</div>
 		</div>
 	</form>

@@ -16,11 +16,11 @@ public interface DepartmentSessionBeanLocal {
 
 	public List<Department> readDepartment(String direction) throws EJBException;
 
-	public int getNumberOfRows(String keyword) throws EJBException;
+	public int getNumberOfRows() throws EJBException;
 
 	public void updateDepartment(String[] s) throws EJBException;
 
 	public void deleteDepartment(String id) throws EJBException;
 
-	public void addDepartment(String[] s) throws EJBException;
+	public void addDepartment(String[] name) throws EJBException;
 }
