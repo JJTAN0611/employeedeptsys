@@ -13,7 +13,7 @@
 	<h1>
 		<div class="badge bg-warning text-dark text-wrap large col-12">
 			<div class="row">
-				<div class="text-start col">
+				<div class="text-start col" style="font-size: 35px;">
 					Department Record
 					<div class="badge bg-light text-success text-wrap">Add</div>
 				</div>

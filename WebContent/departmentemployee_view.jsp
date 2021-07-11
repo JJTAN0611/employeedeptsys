@@ -1,5 +1,5 @@
 <%@page import="java.util.List"%>
-<%@page import="model.entity.Employee"%>
+<%@page import="model.entity.DepartmentEmployee"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -14,7 +14,7 @@
 <%@ include file="header.jsp"%>
 
 <div class="container top-first">
-	<div class="badge bg-success text-light text-wrap large col-12">
+	<div class="badge bg-primary text-light text-wrap large col-12">
 		<div class="row">
 			<div class="text-start col" style="font-size: 35px;">
 				Employee Record
@@ -93,10 +93,8 @@
 			style="background: white">
 			<tr class="table-dark">
 				<th scope="col">ID</th>
+				<th scope="col">ID</th>
 				<th scope="col">DOB</th>
-				<th scope="col">First Name</th>
-				<th scope="col">Last Name</th>
-				<th scope="col">Gender</th>
 				<th scope="col">Hired Date</th>
 				<th colspan=2 scope="col"><center>Method</center></th>
 			</tr>
@@ -104,19 +102,17 @@
 
 			</tr>
 			<%
-				List<Employee> staffs = (List<Employee>) request.getAttribute("staffs");
-				if (staffs.size() != 0) {
-					for (Employee t : staffs) {
+				List<DepartmentEmployee> des = (List<DepartmentEmployee>) request.getAttribute("staffs");
+				if (des.size() != 0) {
+					for (DepartmentEmployee de : des) {
 						out.println("<tr>");
-						out.println("<td>" + t.getId() + "</td>");
-						out.println("<td>" + t.getBirthDate() + "</td>");
-						out.println("<td>" + t.getFirstName() + "</td>");
-						out.println("<td>" + t.getLastName() + "</td>");
-						out.println("<td>" + t.getGender() + "</td>");
-						out.println("<td>" + t.getHireDate() + "</td>");
-						out.println("<td><a href=\"MainServlet?table=employee&action=update&id=" + t.getId()
+						out.println("<td>" + de.getEmployee().getId() + "</td>");
+						out.println("<td>" + de.getDepartment().getId() + "</td>");
+						out.println("<td>" + de.getFromDate() + "</td>");
+						out.println("<td>" + de.getToDate() + "</td>");
+						out.println("<td><a href=\"MainServlet?table=employee&action=update&id=" + de.getId()
 								+ "\" class=\"text-success\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
-						out.println("<td><a href=\"MainServlet?table=employee&action=delete&id=" + t.getId()
+						out.println("<td><a href=\"MainServlet?table=employee&action=delete&id=" + de.getId()
 								+ "\" class=\"text-danger\" ><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
 						out.println("</tr>");
 					}

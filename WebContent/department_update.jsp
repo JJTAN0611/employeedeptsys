@@ -12,7 +12,7 @@
 <div class="container top-first">
 	<div class="badge bg-warning text-dark text-wrap large col-12">
 		<div class="row">
-			<div class="text-start col" style="font-size: 30px;">
+			<div class="text-start col" style="font-size: 35px;">
 				Department Record
 				<div class="badge bg-light text-primary text-wrap">Update</div>
 			</div>

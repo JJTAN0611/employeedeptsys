@@ -11,7 +11,7 @@
 <div class="container top-first">
 	<div class="badge bg-success text-light text-wrap large col-12">
 		<div class="row">
-			<div class="text-start col" style="font-size: 30px;">
+			<div class="text-start col" style="font-size: 35px;">
 				Employee Record
 				<div class="badge bg-light text-success text-wrap">Add</div>
 			</div>

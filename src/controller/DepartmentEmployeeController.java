@@ -19,13 +19,13 @@ import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
 
 @WebServlet("/EmployeeController")
-public class EmployeeController extends HttpServlet {
+public class DepartmentEmployeeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private EmployeeSessionBeanLocal empbean;
 
 
-	public EmployeeController() {
+	public DepartmentEmployeeController() {
 		super();
 	}
 

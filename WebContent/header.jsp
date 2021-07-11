@@ -102,7 +102,7 @@
 							</li>
 							<li><div class="btn-group">
 									<button type="button"
-										onclick="location.href='MainServlet?table=department&action=view'"
+										onclick="location.href='MainServlet?table=departmentemployee&action=view'"
 										class="btn btn-primary">Department Employee View</button>
 									<button type="button"
 										class="btn btn-primary dropdown-toggle dropdown-toggle-split"
