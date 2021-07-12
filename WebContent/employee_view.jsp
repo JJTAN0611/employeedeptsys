@@ -13,9 +13,9 @@
 %>
 <%@ include file="header.jsp"%>
 
-<div class="container top-first">
+<div class="container top-first wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
 	<div class="badge bg-success text-light text-wrap large col-12">
-		<div class="row">
+		<div class="row" >
 			<div class="text-start col" style="font-size: 35px;">
 				Employee Record
 				<div class="badge bg-light text-info text-wrap">View</div>
@@ -35,7 +35,7 @@
 </div>
 
 <div class="container">
-	<div class="row">
+	<div class="row wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
 		<form class="form-inline md-form mr-auto" action="MainServlet"
 			method="get">
 			<input type="hidden" name=table value="employee" /> <input
@@ -87,7 +87,7 @@
 	</div>
 	<br>
 
-	<div class="table-responsive">
+	<div class="table-responsive wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
 		<table
 			class="table table-bordered table-striped table-hover table-light"
 			style="background: white">
@@ -104,7 +104,7 @@
 
 			</tr>
 			<%
-				List<Employee> staffs = (List<Employee>) request.getAttribute("staffs");
+				List<Employee> staffs = (List<Employee>) request.getAttribute("employees");
 				if (staffs.size() != 0) {
 					for (Employee t : staffs) {
 						out.println("<tr>");

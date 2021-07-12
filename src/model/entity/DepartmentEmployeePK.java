@@ -20,6 +20,11 @@ public class DepartmentEmployeePK implements Serializable {
 
 	public DepartmentEmployeePK() {
 	}
+	public DepartmentEmployeePK(String departmentId,Long employeeId) {
+
+		this.departmentId = departmentId;
+		this.employeeId = employeeId;
+	}
 	public Long getEmployeeId() {
 		return this.employeeId;
 	}

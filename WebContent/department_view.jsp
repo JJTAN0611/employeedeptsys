@@ -9,7 +9,7 @@
 %>
 <%@ include file="header.jsp"%>
 
-<div class="container top-first">
+<div class="container top-first wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
 	<div class="badge bg-warning text-dark text-wrap large col-12">
 		<div class="row">
 			<div class="text-start col" style="font-size: 35px;">
@@ -30,7 +30,7 @@
 </div>
 
 <div class="container">
-	<div class="row">
+	<div class="row wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
 		<div class="col"></div>
 		<div class="col"></div>
 		<form class="form-inline md-form col" action="MainServlet"
@@ -57,7 +57,7 @@
 		</form>
 	</div>
 	<br> <br>
-	<div class="table-responsive">
+	<div class="table-responsive wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
 		<table
 			class="table table-bordered table-striped table-hover table-light">
 			<tr class="table-dark">

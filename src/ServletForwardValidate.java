@@ -121,4 +121,68 @@ public class ServletForwardValidate {
 		return true;
 	}
 	
+	public static boolean departmentemployeeView(HttpServletRequest request, HttpServletResponse response) {
+		String direction=request.getParameter("direction");
+		String currentPage=request.getParameter("currentPage");
+		String recordsPerPage=request.getParameter("recordsPerPage");
+		String nOfPages=request.getParameter("nOfPages");
+		String keyword=request.getParameter("keyword");
+
+		if(direction==null)
+			request.setAttribute("direction", "ASC");
+		else if(direction.equals("ASC")||direction.equals("DESC"))
+			request.setAttribute("direction", direction);
+		else
+			return false; //abnormal value
+
+		if(currentPage==null)
+			request.setAttribute("currentPage", 1);
+		else {
+			try { 
+		        int cp=Integer.parseInt(currentPage); 
+		        request.setAttribute("currentPage", cp);
+		    } catch(NumberFormatException e) { 
+		        return false; 
+		    } 
+		}
+	
+		if(recordsPerPage==null)
+			request.setAttribute("recordsPerPage", 50);
+		else {
+			try { 
+		        int rpp=Integer.parseInt(recordsPerPage); 
+		        request.setAttribute("recordsPerPage", rpp);
+		    } catch(NumberFormatException e) { 
+		        return false; 
+		    } 
+		}
+		
+	
+		if(nOfPages==null)
+			request.setAttribute("nOfPages", 1);
+		else {
+			try { 
+		        int npp=Integer.parseInt(nOfPages); 
+		        request.setAttribute("nOfPages", npp);
+		    } catch(NumberFormatException e) { 
+		        return false; 
+		    } 
+		}
+		
+		if(keyword==null)
+			request.setAttribute("keyword", "");
+		else
+			request.setAttribute("keyword", keyword);
+		
+		return true;
+	}
+	
+	public static boolean departmentemployeeUpdateRemove(HttpServletRequest request, HttpServletResponse response) {
+		String emp_id=request.getParameter("emp_id");
+		String dept_id=request.getParameter("dept_id");
+		request.setAttribute("emp_id", emp_id);
+		request.setAttribute("dept_id", dept_id);
+		return true;
+	}
+	
 }

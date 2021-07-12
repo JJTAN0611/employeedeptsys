@@ -7,12 +7,6 @@
 		<class>model.entity.Department</class>
 		<class>model.entity.DepartmentEmployee</class>
 		<class>model.entity.DepartmentEmployeePK</class>
-		<class>model.entity.DepartmentManager</class>
-		<class>model.entity.DepartmentManagerPK</class>
 		<class>model.entity.Employee</class>
-		<class>model.entity.Salary</class>
-		<class>model.entity.SalaryPK</class>
-		<class>model.entity.Title</class>
-		<class>model.entity.TitlePK</class>
 	</persistence-unit>
 </persistence>

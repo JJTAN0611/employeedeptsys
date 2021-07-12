@@ -82,11 +82,12 @@ public class MainServlet extends HttpServlet {
 				default:
 					break;
 				}
+			//departmentemployee
 			}else if (table.compareTo("departmentemployee") == 0) {
 				switch (action) {
 				case "getAutoId":dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");break;
 				case "view": // check display's parameter
-					if (ServletForwardValidate.employeeView(request, response)) {
+					if (ServletForwardValidate.departmentemployeeView(request, response)) {
 						dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");
 					}
 					break;
@@ -94,7 +95,7 @@ public class MainServlet extends HttpServlet {
 					dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 				case "update": // check edit's parameter
 				case "delete": // check remove's parameter
-					if (ServletForwardValidate.employeeUpdateRemove(request, response)) {
+					if (ServletForwardValidate.departmentemployeeUpdateRemove(request, response)) {
 						dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 					}
 					break;

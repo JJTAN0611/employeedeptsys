@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import controller.ValidateManageLogic;
 import model.entity.DepartmentEmployee;
 import model.entity.Employee;
 import sessionbean.DepartmentEmployeeSessionBeanLocal;
@@ -42,8 +43,8 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 		int recordsPerPage = (int) request.getAttribute("recordsPerPage");
 		String keyword = (String) request.getAttribute("keyword");
 		String direction = (String) request.getAttribute("direction");
-		
-		
+
+
 		try {
 			int rows = deptembbean.getNumberOfRows(keyword);
 			nOfPages = rows / recordsPerPage;
@@ -54,7 +55,7 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 				currentPage = nOfPages;
 			}
 			List<DepartmentEmployee> lists = deptembbean.readDepartmentEmployee(currentPage, recordsPerPage,keyword,direction); //Ask bean to give list
-			request.setAttribute("staffs", lists);
+			request.setAttribute("departmentemployee", lists);
 			request.setAttribute("nOfPages", nOfPages);
 		} catch (EJBException ex) {
 		}

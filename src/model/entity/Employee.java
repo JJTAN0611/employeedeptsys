@@ -16,7 +16,7 @@ import java.util.List;
 @Table(name="employee", schema="employees")
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
-	//@GeneratedValue(strategy = GenerationType.AUTO)
+
 	@Id
 	private Long id;
 
@@ -39,18 +39,6 @@ public class Employee implements Serializable {
 	//bi-directional many-to-one association to DepartmentEmployee
 	@OneToMany(mappedBy="employee")
 	private List<DepartmentEmployee> departmentEmployees;
-
-	//bi-directional many-to-one association to DepartmentManager
-	@OneToMany(mappedBy="employee")
-	private List<DepartmentManager> departmentManagers;
-
-	//bi-directional many-to-one association to Salary
-	@OneToMany(mappedBy="employee")
-	private List<Salary> salaries;
-
-	//bi-directional many-to-one association to Title
-	@OneToMany(mappedBy="employee")
-	private List<Title> titles;
 
 	public Employee() {
 	}
@@ -123,72 +111,6 @@ public class Employee implements Serializable {
 		departmentEmployee.setEmployee(null);
 
 		return departmentEmployee;
-	}
-
-	public List<DepartmentManager> getDepartmentManagers() {
-		return this.departmentManagers;
-	}
-
-	public void setDepartmentManagers(List<DepartmentManager> departmentManagers) {
-		this.departmentManagers = departmentManagers;
-	}
-
-	public DepartmentManager addDepartmentManager(DepartmentManager departmentManager) {
-		getDepartmentManagers().add(departmentManager);
-		departmentManager.setEmployee(this);
-
-		return departmentManager;
-	}
-
-	public DepartmentManager removeDepartmentManager(DepartmentManager departmentManager) {
-		getDepartmentManagers().remove(departmentManager);
-		departmentManager.setEmployee(null);
-
-		return departmentManager;
-	}
-
-	public List<Salary> getSalaries() {
-		return this.salaries;
-	}
-
-	public void setSalaries(List<Salary> salaries) {
-		this.salaries = salaries;
-	}
-
-	public Salary addSalary(Salary salary) {
-		getSalaries().add(salary);
-		salary.setEmployee(this);
-
-		return salary;
-	}
-
-	public Salary removeSalary(Salary salary) {
-		getSalaries().remove(salary);
-		salary.setEmployee(null);
-
-		return salary;
-	}
-
-	public List<Title> getTitles() {
-		return this.titles;
-	}
-
-	public void setTitles(List<Title> titles) {
-		this.titles = titles;
-	}
-
-	public Title addTitle(Title title) {
-		getTitles().add(title);
-		title.setEmployee(this);
-
-		return title;
-	}
-
-	public Title removeTitle(Title title) {
-		getTitles().remove(title);
-		title.setEmployee(null);
-
-		return title;
 	}
 
 }

@@ -29,7 +29,7 @@
 	<br> <br>
 </div>
 
-<div class="container">
+<div class="container wow bounceIn" data-wow-duration="1s" data-wow-delay="0.2s">
 	<form method="post" action="MainServlet">
 		<input type="hidden" name="table" value="department" />
 		<div class="form-group row">

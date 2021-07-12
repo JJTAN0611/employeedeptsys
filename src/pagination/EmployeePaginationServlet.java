@@ -52,7 +52,7 @@ public class EmployeePaginationServlet extends HttpServlet {
 				currentPage = nOfPages;
 			}
 			List<Employee> lists = empbean.readEmployee(currentPage, recordsPerPage,keyword,direction); //Ask bean to give list
-			request.setAttribute("staffs", lists);
+			request.setAttribute("employees", lists);
 			request.setAttribute("nOfPages", nOfPages);
 		} catch (EJBException ex) {
 		}

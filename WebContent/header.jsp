@@ -97,6 +97,7 @@
 										<li><a id="adddepartment" class="dropdown-item"
 											href="MainServlet?table=department&action=add">Add
 												Department</a></li>
+												<li></li>
 									</ul>
 								</div>
 							</li>
@@ -114,10 +115,11 @@
 										<li><a id="adddepartmentemployee" class="dropdown-item"
 											href="MainServlet?table=departmentemployee&action=add">Add
 												Department Employee</a></li>
+												<li></li>
 									</ul>
 								</div></li>
 							<li><div class="btn-group">
-									<button type="button"  id="employee"
+									<button  id="employee" type="button"
 										onclick="location.href='MainServlet?table=employee&action=view'"
 										class="btn btn-success">Employee View</button>
 									<button type="button"
@@ -129,8 +131,10 @@
 									<ul class="dropdown-menu">
 										<li><a id="addemployee" class="dropdown-item"
 											href="MainServlet?table=employee&action=add">Add Employee</a></li>
+										<li></li>
 									</ul>
 								</div></li>
+							<li></li>
 						</ul>
 
 						<a class="menu-trigger"> <span>Menu</span>

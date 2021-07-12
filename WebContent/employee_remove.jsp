@@ -26,7 +26,7 @@
 	<br> <br>
 </div>
 
-<div class="container">
+<div class="container wow bounceInDown" data-wow-duration="1.5s" data-wow-delay="0.2s">
 	<form method="post" action="MainServlet">
 		<input type="hidden" name="table" value="employee" />
 		<div class="form-group row">

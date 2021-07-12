@@ -5,7 +5,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import model.entity.Department;
 import model.entity.DepartmentEmployee;
+import model.entity.DepartmentEmployeePK;
 import model.entity.Employee;
 
 import java.math.BigInteger;
@@ -13,6 +15,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Local;
 
@@ -21,7 +25,10 @@ import javax.ejb.Local;
  */
 @Stateless
 public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionBeanLocal {
-
+	@EJB
+	private DepartmentSessionBeanLocal a;
+	@EJB
+	private EmployeeSessionBeanLocal b;
 	// Write some codes here…
 	@PersistenceContext(unitName = "DepartmentEmployeeWebApp")
 	EntityManager em;
@@ -42,13 +49,12 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		// Write some codes here…
 		Query q = null;
 		int start = 0;
-		direction = " " + direction;
 		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.department_employee", DepartmentEmployee.class);
+			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id "+direction, DepartmentEmployee.class);
 			start = currentPage * recordsPerPage - recordsPerPage;
 		} else {
 			q = em.createNativeQuery(
-					"SELECT * from employees.department_employee",
+					"SELECT * from employees.department_employee  WHERE concat(department_id,employee_id,from_date,to_date) LIKE ? order by department_id "+direction,
 					DepartmentEmployee.class);
 			start = currentPage * recordsPerPage - recordsPerPage;
 			q.setParameter(1, "%" + keyword + "%");
@@ -64,7 +70,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department_employee");
 		} else {
 			q = em.createNativeQuery(
-					"SELECT COUNT(*) AS totalrow from employees.department_employee");
+					"SELECT COUNT(*) AS totalrow from employees.department_employee WHERE concat(department_id,employee_id,from_date,to_date) LIKE ?");
 			q.setParameter(1, "%" + keyword + "%");
 		}
 		BigInteger results = (BigInteger) q.getSingleResult();
@@ -74,50 +80,57 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	public DepartmentEmployee findDepartmentEmployee(String[] id) throws EJBException {
 		// Write some codes here…
-		Query q = em.createNamedQuery("Employee.findbyId");
-		q.setParameter("id", id);
+		Query q = em.createNamedQuery("DepartmentEmployee.findbyId");
+		q.setParameter("id", new DepartmentEmployeePK(String.valueOf(id[0]),Long.valueOf(id[1])));
+		
 		return (DepartmentEmployee) q.getSingleResult();
 	}
 
 	public void updateDepartmentEmployee(String[] s) throws EJBException {
 		// Write some codes here…
-		Date dob = null;
-		Date hd = null;
-		DepartmentEmployee e = findDepartmentEmployee(s);
+		Date from_date = null;
+		Date to_date = null;
 		try {
-			dob = new SimpleDateFormat("yyyy-MM-dd").parse(s[4]);
-			hd = new SimpleDateFormat("yyyy-MM-dd").parse(s[5]);
+			from_date = new SimpleDateFormat("yyyy-MM-dd").parse(s[2]);
+			to_date = new SimpleDateFormat("yyyy-MM-dd").parse(s[3]);
 		} catch (Exception ex) {
 		}
-		java.sql.Date DOB = new java.sql.Date(dob.getTime());
-		java.sql.Date HD = new java.sql.Date(hd.getTime());
-		em.merge(e);
+		
+		java.sql.Date fd = new java.sql.Date(from_date.getTime());
+		java.sql.Date td = new java.sql.Date(to_date.getTime());
+	
+
+		DepartmentEmployeePK depk = new DepartmentEmployeePK(s[0],Long.valueOf(s[1]));
+		DepartmentEmployee de = new DepartmentEmployee();
+		de.setId(depk);
+		de.setFromDate(fd);
+		de.setToDate(td);
+		em.merge(de);
 	}
 
 	public void deleteDepartmentEmployee(String[] id) throws EJBException {
 		// Write some codes here…
-		DepartmentEmployee e = findDepartmentEmployee(id);
-		em.remove(e);
+		DepartmentEmployee de = findDepartmentEmployee(id);
+		em.remove(de);
 	}
 
 	public void addDepartmentEmployee(String[] s) throws EJBException {
 		// Write some codes here…
-		Date dob = null;
-		Date hd = null;
+		Date from_date = null;
+		Date to_date = null;
 		try {
-			dob = new SimpleDateFormat("yyyy-MM-dd").parse(s[4]);
-			hd = new SimpleDateFormat("yyyy-MM-dd").parse(s[5]);
+			from_date = new SimpleDateFormat("yyyy-MM-dd").parse(s[2]);
+			to_date = new SimpleDateFormat("yyyy-MM-dd").parse(s[3]);
 		} catch (Exception ex) {
 		}
-		Employee e = new Employee();
-		java.sql.Date DOB = new java.sql.Date(dob.getTime());
-		java.sql.Date HD = new java.sql.Date(hd.getTime());
-		e.setId(Long.parseLong(s[0]));
-		e.setFirstName(s[1]);
-		e.setLastName(s[2]);
-		e.setGender(s[3]);
-		e.setBirthDate(DOB);
-		e.setHireDate(HD);
-		em.persist(e);
+		java.sql.Date fd = new java.sql.Date(from_date.getTime());
+		java.sql.Date td = new java.sql.Date(to_date.getTime());
+	
+		DepartmentEmployeePK depk = new DepartmentEmployeePK(s[0],Long.valueOf(s[1]));
+		DepartmentEmployee de = new DepartmentEmployee();
+		de.setId(depk);
+		de.setFromDate(fd);
+		de.setToDate(td);
+		em.persist(de);
 	}
 }

@@ -76,7 +76,6 @@ public class DepartmentController extends HttpServlet {
 			} else if (action.compareTo("delete") == 0) {
 			
 				String id = (String) request.getParameter("id");
-				System.out.println("here"+id);
 				deptbean.deleteDepartment(id);
 			} else if (action.compareTo("update") == 0) {
 				String[] dept = { (String) request.getParameter("id"), request.getParameter("dept_name") };
