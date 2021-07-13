@@ -50,7 +50,8 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		Query q = null;
 		int start = 0;
 		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id "+direction, DepartmentEmployee.class);
+			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id", DepartmentEmployee.class);
+
 			start = currentPage * recordsPerPage - recordsPerPage;
 		} else {
 			q = em.createNativeQuery(
