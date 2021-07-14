@@ -7,12 +7,17 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.postgresql.util.PSQLException;
+
+import com.ibm.wsdl.util.StringUtils;
 
 import model.entity.DepartmentEmployee;
 import model.entity.Employee;
@@ -42,14 +47,14 @@ public class DepartmentEmployeeController extends HttpServlet {
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
 				RequestDispatcher req;
-				String id[]={(String) request.getAttribute("dept_id"),(String) request.getAttribute("emp_id")};
+				String id[] = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(id);
 				request.setAttribute("deptemp", deptemp);
 				req = request.getRequestDispatcher("departmentemployee_update.jsp");
 				req.forward(request, response);
 			} else {
 				RequestDispatcher req;
-				String id[] = {(String) request.getAttribute("dept_id"),(String) request.getAttribute("emp_id")};
+				String id[] = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
 
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(id);
 				request.setAttribute("deptemp", deptemp);
@@ -67,31 +72,30 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 		String action = (String) request.getAttribute("action");
 
-		try {
-			if (action.compareTo("add") == 0) {
-				String[] s = {(String) request.getAttribute("dept_id")
-						,(String) request.getAttribute("emp_id")
-				    	,(String) request.getParameter("from_date")
-				    	,(String) request.getParameter("to_date") };
-				
+		if (action.compareTo("add") == 0) {
+			String[] s = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id"),
+					(String) request.getParameter("from_date"), (String) request.getParameter("to_date") };
+			try {
 				deptempbean.addDepartmentEmployee(s);
-			} else if (action.compareTo("delete") == 0) {
-				String[] id =  {(String) request.getAttribute("dept_id"),
-								(String) request.getAttribute("emp_id")};
-				
-				deptempbean.deleteDepartmentEmployee(id);
-			} else if (action.compareTo("update") == 0) {
-				String[] s = {(String) request.getAttribute("dept_id")
-							,(String) request.getAttribute("emp_id")
-					    	,(String) request.getParameter("from_date")
-					    	,(String) request.getParameter("to_date") };
-				System.out.println(s[0]+s[1]);
-				System.out.println(s[2]);
-				deptempbean.updateDepartmentEmployee(s);
+				ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
+			} catch (EJBException ex) {
+				if (ex.getCause().toString().contains("ARJUNA016053"))
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Duplicate record occur!! "+ex.getCause().toString(), "departmentemployee");
+				else
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid input!! "+ex.getCause().toString(), "departmentemployee");
 			}
+		} else if (action.compareTo("delete") == 0) {
+			String[] id = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
 
+			deptempbean.deleteDepartmentEmployee(id);
 			ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
-		} catch (EJBException ex) {
+		} else if (action.compareTo("update") == 0) {
+			String[] s = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id"),
+					(String) request.getParameter("from_date"), (String) request.getParameter("to_date") };
+			System.out.println(s[0] + s[1]);
+			System.out.println(s[2]);
+			deptempbean.updateDepartmentEmployee(s);
+			ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
 		}
 
 	}

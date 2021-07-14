@@ -7,6 +7,9 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonValue;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.entity.Department;
 import model.entity.Employee;
 import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
@@ -40,6 +44,21 @@ public class EmployeeController extends HttpServlet {
 			
 			if(action.compareTo("getAutoId")==0){
 				response.getWriter().print(getAutoId());
+			}else if (action.compareTo("getEmployee") == 0) {
+				String id = (String) request.getAttribute("id");
+				Employee emp = empbean.findEmployee(id);
+				
+				JsonObject jo = Json.createObjectBuilder()
+						.add("id", emp.getId())
+						.add("first_name", emp.getFirstName())
+						.add("last_name", emp.getLastName())
+						.add("gender", emp.getGender())
+						.add("birth_date",emp.getBirthDate().toString())
+						.add("hire_date",emp.getHireDate().toString())
+						.build();
+				PrintWriter out = response.getWriter();
+				out.print(jo);
+				out.flush();
 			}else if(action.compareTo("add")==0) {
 				request.setAttribute("id",getAutoId());
 				RequestDispatcher req;

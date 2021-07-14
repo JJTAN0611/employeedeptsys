@@ -2,13 +2,16 @@ package sessionbean;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import model.entity.Department;
 import model.entity.Employee;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -74,8 +77,24 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 	public Employee findEmployee(String id) throws EJBException {
 		// Write some codes here…
 		Query q = em.createNamedQuery("Employee.findbyId");
-		q.setParameter("id", Long.valueOf(id));
-		return (Employee) q.getSingleResult();
+		Employee em;
+		try {
+			q.setParameter("id", Long.valueOf(id));
+			em=(Employee) q.getSingleResult();
+			return em;
+		}catch (NoResultException | NumberFormatException e ) {
+			em = new Employee();
+			em.setId(Long.valueOf(0));
+			em.setFirstName("null");
+			em.setLastName("null");
+			em.setGender("null");
+			try {
+				em.setHireDate(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
+				em.setBirthDate(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
+			} catch (ParseException e1) {
+			}
+			return em;
+		}
 	}
 
 	public void updateEmployee(String[] s) throws EJBException {

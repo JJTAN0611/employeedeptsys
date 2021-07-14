@@ -55,8 +55,8 @@
 					name="emp_id" value="<%=deptemp.getEmployee().getId()%>"
 					readonly="readonly">
 				<div class="collapse id<%=deptemp.getId().toString().substring(34)%>">
+					<hr>
 					<ul class='list-group'>
-						<hr>
 						<li class='list-group-item list-group-item-dark  list-group-item-action'>First
 							Name: &emsp;<%=deptemp.getEmployee().getFirstName()%></li>
 						<li class='list-group-item list-group-item-dark  list-group-item-action'>First

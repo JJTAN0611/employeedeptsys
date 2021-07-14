@@ -2,6 +2,7 @@ package sessionbean;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -60,7 +61,16 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		// Write some codes here…
 		Query q = em.createNamedQuery("Department.findbyId");
 		q.setParameter("id", String.valueOf(id));
-		return (Department) q.getSingleResult();
+		Department d;
+		try {
+			d=(Department) q.getSingleResult();
+			return d;
+		}catch (NoResultException e) {
+			d = new Department();
+			d.setId(id);
+			d.setDeptName("null");
+			return d;
+		}
 	}
 
 	public void updateDepartment(String[] s) throws EJBException {

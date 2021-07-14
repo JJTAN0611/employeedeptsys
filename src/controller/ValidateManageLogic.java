@@ -16,9 +16,11 @@ public class ValidateManageLogic {
 		out.println("</SCRIPT>");
 	}
 	
-	public static void check(PrintWriter out, String check) {
+	public static void printErrorNotice(PrintWriter out, String error, String location) {
 		out.println("<SCRIPT type=\"text/javascript\">");
-		out.println("alert(\""+check+"\");");
+		out.println("alert('Error: "+error+"');");
+		out.println("alert(\"Redirected\")");
+		out.println("window.location.assign(\"MainServlet?table="+location+"&action=view\")");
 		out.println("</SCRIPT>");
 	}
 }

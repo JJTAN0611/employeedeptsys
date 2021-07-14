@@ -86,6 +86,14 @@ public class MainServlet extends HttpServlet {
 			}else if (table.compareTo("departmentemployee") == 0) {
 				switch (action) {
 				case "getAutoId":dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");break;
+				case "getDepartment":
+					if (ServletForwardValidate.departmentUpdateRemove(request, response)) {
+						dispatcher=request.getRequestDispatcher("DepartmentController");break;
+					}
+				case "getEmployee":
+					if (ServletForwardValidate.employeeUpdateRemove(request, response)) {
+						dispatcher=request.getRequestDispatcher("EmployeeController");break;
+					}
 				case "view": // check display's parameter
 					if (ServletForwardValidate.departmentemployeeView(request, response)) {
 						dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");

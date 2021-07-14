@@ -13,6 +13,10 @@ public class ServletForwardValidate {
 		request.setAttribute("action",action);
 		if(action.compareTo("getAutoId")==0){
 			return "getAutoId"; 
+		}else if (action.compareTo("getDepartment")==0) {
+			return "getDepartment";
+		}else if (action.compareTo("getEmployee")==0) {
+			return "getEmployee";
 		}else if(action.compareTo("view")==0){
 			return "view"; 
 		}else if(action.compareTo("add")==0)
