@@ -30,8 +30,18 @@
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
-				<input type="text" class="form-control"
-					name="dept_id" >
+				<input type="text" class="form-control" data-bs-toggle='collapse'
+					data-bs-target='#dept_content'
+					name="dept_id"
+					readonly="readonly">
+
+				<div id="dept_content" class="collapse">
+					<hr>
+					<ul class='list-group'>
+						<li class='list-group-item list-group-item-action'>Department
+							Name: &emsp;</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<br>

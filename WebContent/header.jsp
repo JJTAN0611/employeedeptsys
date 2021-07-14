@@ -50,6 +50,8 @@
 <link rel="stylesheet" href="assets/css/owl.css">
 <script src="https://kit.fontawesome.com/5641842b84.js"
 	crossorigin="anonymous"></script>
+
+
 </head>
 
 <body style="background:<%=color%>;">
@@ -64,6 +66,8 @@
 		</div>
 	</div>
 	<!-- ***** Preloader End ***** -->
+
+	<a id="b2t"></a>
 
 	<!-- ***** Header Area Start ***** -->
 	<header class="header-area header-sticky wow slideInDown animated"
@@ -97,12 +101,12 @@
 										<li><a id="adddepartment" class="dropdown-item"
 											href="MainServlet?table=department&action=add">Add
 												Department</a></li>
-												<li></li>
+										<li></li>
 									</ul>
 								</div>
 							</li>
 							<li><div class="btn-group">
-									<button  id="department_employee" type="button"
+									<button id="department_employee" type="button"
 										onclick="location.href='MainServlet?table=departmentemployee&action=view'"
 										class="btn btn-primary">Department Employee View</button>
 									<button type="button"
@@ -115,11 +119,11 @@
 										<li><a id="adddepartmentemployee" class="dropdown-item"
 											href="MainServlet?table=departmentemployee&action=add">Add
 												Department Employee</a></li>
-												<li></li>
+										<li></li>
 									</ul>
 								</div></li>
 							<li><div class="btn-group">
-									<button  id="employee" type="button"
+									<button id="employee" type="button"
 										onclick="location.href='MainServlet?table=employee&action=view'"
 										class="btn btn-success">Employee View</button>
 									<button type="button"

@@ -12,7 +12,14 @@
 	String direction = (String) request.getAttribute("direction");
 %>
 <%@ include file="header.jsp"%>
-
+<style>
+button[aria-expanded=true] .fa-chevron-right {
+   display: none;
+}
+button[aria-expanded=false] .fa-chevron-down {
+   display: none;
+}
+</style>
 <div class="container top-first wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
 	<div class="badge bg-primary text-light text-wrap large col-12">
 		<div class="row">
@@ -107,11 +114,27 @@
 				if (des.size() != 0) {
 					for (DepartmentEmployee de : des) {
 						out.println("<tr>");
-						out.println("<td>" + de.getId().toString().substring(35) + "</td>");
-						out.println("<td>" + de.getDepartment().getId() + "</td>");
-						out.println("<td>" + de.getEmployee().getId() + "</td>");
+						//id
+						out.println("<td>"+ de.getId().toString().substring(34)+"</td>");
+						
+						//department
+						out.println("<td>" + de.getDepartment().getId() +" | "+de.getDepartment().getDeptName()+ "</td>");
+					
+						//employee
+						out.println("<td>" + de.getEmployee().getId()+" | " +de.getEmployee().getFirstName()+" "+de.getEmployee().getLastName());
+						out.println("<button class='btn btn-info btn-sm btntgl float-end' data-bs-toggle='collapse' data-bs-target='.a"+de.getId().toString().substring(34)
+								+"' aria-expanded='false'><i class='fa fa-chevron-right pull-right'></i><i class='fa fa-chevron-down pull-right'></i></button>");
+						out.println("<div class='collapse a"+de.getId().toString().substring(34)+"'>");
+						
+						//Fill the relevent (show more)
+						out.println("<hr><ul class='list-group'><li class='list-group-item list-group-item-action'>Gender: &emsp;"+(de.getEmployee().getGender()=="M"?"Male":"Female")+"</li>");
+						out.println("<li class='list-group-item list-group-item-action'>Birth date: &emsp;"+de.getEmployee().getBirthDate()+"</li>");
+						out.println("<li class='list-group-item list-group-item-action'>Hire date: &emsp;"+de.getEmployee().getHireDate()+"</li>");
+						out.println("</ul></div></td>");
+						
 						out.println("<td>" + de.getFromDate() + "</td>");
 						out.println("<td>" + de.getToDate() + "</td>");
+						
 						out.println("<td><a href=\"MainServlet?table=departmentemployee&action=update&emp_id="
 								+ de.getEmployee().getId() + "&dept_id=" + de.getDepartment().getId()
 								+ "\" class=\"text-success\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
@@ -189,8 +212,6 @@
 	</div>
 
 </div>
-
-
 
 
 

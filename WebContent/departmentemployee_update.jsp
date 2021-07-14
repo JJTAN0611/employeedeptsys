@@ -32,16 +32,43 @@
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
-				<input type="text" class="form-control"
-					name="dept_id" value="<%=deptemp.getDepartment().getId()%>" readonly="readonly">
+				<input type="text" class="form-control" data-bs-toggle='collapse'
+					data-bs-target='.id<%=deptemp.getId().toString().substring(34)%>'
+					name="dept_id" value="<%=deptemp.getDepartment().getId()%>"
+					readonly="readonly">
+
+				<div class="collapse id<%=deptemp.getId().toString().substring(34)%>">
+					<hr>
+					<ul class='list-group'>
+						<li class='list-group-item list-group-item-dark  list-group-item-action'>Department
+							Name: &emsp;<%=deptemp.getDepartment().getDeptName()%></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<br>
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Employee ID:</label>
 			<div class="col-8">
-				<input type="text" class="form-control"
-					name="emp_id" value="<%=deptemp.getEmployee().getId()%>" readonly="readonly">
+				<input type="text" class="form-control" data-bs-toggle='collapse'
+					data-bs-target='.id<%=deptemp.getId().toString().substring(34)%>'
+					name="emp_id" value="<%=deptemp.getEmployee().getId()%>"
+					readonly="readonly">
+				<div class="collapse id<%=deptemp.getId().toString().substring(34)%>">
+					<ul class='list-group'>
+						<hr>
+						<li class='list-group-item list-group-item-dark  list-group-item-action'>First
+							Name: &emsp;<%=deptemp.getEmployee().getFirstName()%></li>
+						<li class='list-group-item list-group-item-dark  list-group-item-action'>First
+							Name: &emsp;<%=deptemp.getEmployee().getLastName()%></li>
+						<li class='list-group-item list-group-item-dark  list-group-item-action'>Gender:
+							&emsp;<%=(deptemp.getEmployee().getGender() == "M" ? "Male" : "Female")%></li>
+						<li class='list-group-item list-group-item-dark  list-group-item-action'>Birth
+							date: &emsp;<%=deptemp.getEmployee().getBirthDate()%></li>
+						<li class='list-group-item list-group-item-dark  list-group-item-action'>Hire date:
+							&emsp;<%=deptemp.getEmployee().getHireDate()%></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<br>

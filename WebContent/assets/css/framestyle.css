@@ -1289,5 +1289,62 @@ responsive
 	padding-top:168px;
 }
 
+#b2t {
+	display: inline-block;
+	background-color: #400040;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	border-radius: 30px;
+	position: fixed;
+	bottom: 30px;
+	right: 30px;
+	transition: background-color .3s, opacity .5s, visibility .5s;
+	opacity: 0;
+	visibility: hidden;
+	z-index: 1000;
+}
 
+#b2t::after {
+	content: "\f077";
+	font-family: FontAwesome;
+	font-weight: normal;
+	font-style: normal;
+	font-size: 2em;
+	line-height: 50px;
+	color: #fff;
+}
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+#b2t:hover {
+	cursor: pointer;
+	background-color: #333;
+}
+
+#b2t:active {
+	background-color: #555;
+}
+
+#b2t.show {
+	opacity: 1;
+	visibility: visible;
+}
