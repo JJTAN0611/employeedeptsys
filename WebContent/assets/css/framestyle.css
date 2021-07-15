@@ -308,8 +308,8 @@ header
 }
 
 .header-area .main-nav .nav li {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 
@@ -517,8 +517,8 @@ header
 
 @media (max-width: 1200px) {
   .header-area .main-nav .nav li {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 5px;
+    padding-right: 5px;
   }
   .header-area .main-nav:before {
     display: none;
@@ -591,22 +591,22 @@ header
   }
   .header-area .main-nav .nav li {
     width: 100%;
-    background: #fff;
+    background: #ffffff;
     border-bottom: 1px solid #e7e7e7;
     padding-left: 0px !important;
     padding-right: 0px !important;
   }
   .header-area .main-nav .nav li a {
     height: 50px !important;
+    padding-left: 10px !important;
     line-height: 50px !important;
-    padding: 0px !important;
     border: none !important;
-    background: #f7f7f7 !important;
-    color: #191a20 !important;
+    background: #c0c0c0!important;
+    color: #000000 !important;
   }
   .header-area .main-nav .nav li a:hover {
-    background: #eee !important;
-    color: #fe3f40!important;
+    background: #000000 !important;
+    color: #ffffff!important;
   }
   .header-area .main-nav .nav li.submenu ul {
     position: relative;
@@ -1285,6 +1285,7 @@ responsive
     }
 }
 
+
 .top-first{
 	padding-top:168px;
 }
@@ -1348,3 +1349,5 @@ responsive
 	opacity: 1;
 	visibility: visible;
 }
+
+

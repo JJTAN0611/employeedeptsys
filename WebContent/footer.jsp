@@ -18,5 +18,25 @@
 <script src="assets/js/imagesloaded.js"></script>
 <script src="assets/js/templatemo-custom.js"></script>
 
+<script>
+	window.onload = function() {
+		var x = readCookie('oedrsUserId');
+		document.getElementById("userId").innerHTML = x;
+		console.log("aa"+x);
+		
+	}
+	function readCookie(name) {
+		var nameEQ = name + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ')
+				c = c.substring(1, c.length);
+			if (c.indexOf(nameEQ) == 0)
+				return c.substring(nameEQ.length, c.length);
+		}
+		return null;
+	}
+</script>
 </body>
 </html>

@@ -207,11 +207,11 @@ sup {
 }
 
 a {
-  color: #0d6efd;
+  color: #000000;
   text-decoration: underline;
 }
 a:hover {
-  color: #0a58ca;
+  color: #052961;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -3655,7 +3655,7 @@ textarea.form-control-lg {
 .dropdown-item.active, .dropdown-item:active {
   color: #fff;
   text-decoration: none;
-  background-color: #0d6efd;
+  background-color: #000000;
 }
 .dropdown-item.disabled, .dropdown-item:disabled {
   color: #adb5bd;

@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@page import="weblistener.UserTrackingListener"%>
+<%@page import="javax.servlet.http.Cookie"%>
 <%
 	String table = (String) request.getAttribute("table");
 	if (table == null)
@@ -20,6 +21,27 @@
 	default:
 		color = "gainsboro";
 		break;
+	}
+%>
+
+<%
+	Cookie[] cookies = request.getCookies();
+
+	if (cookies != null) {
+		Cookie cookie;
+		for (int i = 0; i < cookies.length; i++) {
+			cookie = cookies[i];
+			if (!cookie.getName().equals("oedrsUserId") && i==cookies.length-1) {
+				Cookie nc = new Cookie("oedrsUserId",
+						String.valueOf(weblistener.UserTrackingListener.getUserId()));
+				nc.setMaxAge(-1);
+				response.addCookie(nc);
+			}
+		}
+	} else {
+		Cookie nc = new Cookie("oedrsUserId", String.valueOf(weblistener.UserTrackingListener.getUserId()));
+		nc.setMaxAge(-1);
+		response.addCookie(nc);
 	}
 %>
 
@@ -138,6 +160,7 @@
 										<li></li>
 									</ul>
 								</div></li>
+								<li><a type="button" href="log_view.jsp" class="btn btn-dark btn-circle" style="border-radius: 30px">Log <i class="fas fa-calendar-week"></i></a></li>
 							<li></li>
 						</ul>
 
@@ -146,8 +169,25 @@
 
 						<!-- ***** Menu End ***** -->
 					</nav>
+
 				</div>
 			</div>
-		</div>
+			<!-- ***** Header Area End ***** -->
+			<div class="container">
+				<div class="row">
+					<div class="col-6">
+						<div class="text-start">
+							Number of users viewing: <b><a
+								onClick="window.location.reload()"><%=UserTrackingListener.getActiveSessions()%></a></b>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="text-end">
+							Hi, welcome <b><a id="userId"
+								onClick="window.location.reload()"></a></b>!
+						</div>
+					</div>
+					<hr>
+				</div>
+			</div>
 	</header>
-	<!-- ***** Header Area End ***** -->

@@ -18,6 +18,7 @@ import model.entity.Department;
 import model.entity.Employee;
 import sessionbean.DepartmentSessionBeanLocal;
 import sessionbean.EmployeeSessionBeanLocal;
+import utilities.LoggingGeneral;
 
 
 @WebServlet("/DepartmentPaginationServlet")
@@ -35,14 +36,22 @@ public class DepartmentPaginationServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		LoggingGeneral logger = (LoggingGeneral)request.getServletContext().getAttribute("log");
+		logger.setEntryPoints(request);
+		
 		response.setContentType("text/html;charset=UTF-8");
 
+		
 		String direction=(String) request.getAttribute("direction");
+		
 		List<Department> lists = deptbean.readDepartment(direction); //Ask bean to give list
 		request.setAttribute("departments", lists);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("department_view.jsp");
 		dispatcher.forward(request, response);
+		
+		logger.setContentPoints(request, "Success view");
+		logger.setExitPoints(request);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
+import utilities.LoggingGeneral;
 
 
 @WebServlet("/EmployeePaginationServlet")
@@ -33,6 +34,9 @@ public class EmployeePaginationServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		LoggingGeneral logger = (LoggingGeneral)request.getServletContext().getAttribute("log");
+		logger.setEntryPoints(request);
+		
 		response.setContentType("text/html;charset=UTF-8");
 		// Write some codes here…
 		int nOfPages = 0;
@@ -58,6 +62,9 @@ public class EmployeePaginationServlet extends HttpServlet {
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher("employee_view.jsp");
 		dispatcher.forward(request, response);
+		
+		logger.setContentPoints(request, "Success view");
+		logger.setExitPoints(request);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

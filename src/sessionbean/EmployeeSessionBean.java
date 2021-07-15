@@ -135,7 +135,6 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		Employee e = new Employee();
 		java.sql.Date DOB = new java.sql.Date(dob.getTime());
 		java.sql.Date HD = new java.sql.Date(hd.getTime());
-		e.setId(Long.parseLong(s[0]));
 		e.setFirstName(s[1]);
 		e.setLastName(s[2]);
 		e.setGender(s[3]);
