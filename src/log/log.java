@@ -19,6 +19,7 @@ public class log extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		
 	
 		OutputStream ost = null;
 		BufferedInputStream buffIn = null;

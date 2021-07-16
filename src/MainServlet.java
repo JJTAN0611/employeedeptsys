@@ -41,12 +41,13 @@ public class MainServlet extends HttpServlet {
 		String action = ServletForwardValidate.action(request, response);
 		String table = ServletForwardValidate.table(request, response);
 
-		
 		if (action != null && table != null) {
-			//department
+			// department
 			if (table.compareTo("department") == 0)
 				switch (action) {
-				case "getAutoId":dispatcher = request.getRequestDispatcher("DepartmentController");break;
+				case "getAutoId":
+					dispatcher = request.getRequestDispatcher("DepartmentController");
+					break;
 				case "view": // check display's parameter
 					if (ServletForwardValidate.departmentView(request, response))
 						dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
@@ -62,10 +63,12 @@ public class MainServlet extends HttpServlet {
 				default:
 					break;
 				}
-			//employee
+			// employee
 			else if (table.compareTo("employee") == 0) {
 				switch (action) {
-				case "getAutoId":dispatcher = request.getRequestDispatcher("EmployeeController");break;
+				case "getAutoId":
+					dispatcher = request.getRequestDispatcher("EmployeeController");
+					break;
 				case "view": // check display's parameter
 					if (ServletForwardValidate.employeeView(request, response)) {
 						dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
@@ -82,17 +85,21 @@ public class MainServlet extends HttpServlet {
 				default:
 					break;
 				}
-			//departmentemployee
-			}else if (table.compareTo("departmentemployee") == 0) {
+				// departmentemployee
+			} else if (table.compareTo("departmentemployee") == 0) {
 				switch (action) {
-				case "getAutoId":dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");break;
+				case "getAutoId":
+					dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
+					break;
 				case "getDepartment":
 					if (ServletForwardValidate.departmentUpdateRemove(request, response)) {
-						dispatcher=request.getRequestDispatcher("DepartmentController");break;
+						dispatcher = request.getRequestDispatcher("DepartmentController");
+						break;
 					}
 				case "getEmployee":
 					if (ServletForwardValidate.employeeUpdateRemove(request, response)) {
-						dispatcher=request.getRequestDispatcher("EmployeeController");break;
+						dispatcher = request.getRequestDispatcher("EmployeeController");
+						break;
 					}
 				case "view": // check display's parameter
 					if (ServletForwardValidate.departmentemployeeView(request, response)) {
@@ -106,6 +113,17 @@ public class MainServlet extends HttpServlet {
 					if (ServletForwardValidate.departmentemployeeUpdateRemove(request, response)) {
 						dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 					}
+					break;
+				default:
+					break;
+				}
+			} else if (table.compareTo("log") == 0) {
+				switch (action) {
+				case "view":
+					dispatcher = request.getRequestDispatcher("log_view.jsp");
+					break;
+				case "download":
+					dispatcher = request.getRequestDispatcher("log");
 					break;
 				default:
 					break;

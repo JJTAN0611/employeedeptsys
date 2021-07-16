@@ -31,7 +31,7 @@
 		Cookie cookie;
 		for (int i = 0; i < cookies.length; i++) {
 			cookie = cookies[i];
-			if (!cookie.getName().equals("oedrsUserId") && i==cookies.length-1) {
+			if (!cookie.getName().equals("oedrsUserId") && i == cookies.length - 1) {
 				Cookie nc = new Cookie("oedrsUserId",
 						String.valueOf(weblistener.UserTrackingListener.getUserId()));
 				nc.setMaxAge(-1);
@@ -160,7 +160,12 @@
 										<li></li>
 									</ul>
 								</div></li>
-								<li><a type="button" href="log_view.jsp" class="btn btn-dark btn-circle" style="border-radius: 30px">Log <i class="fas fa-calendar-week"></i></a></li>
+							<li><button type="button"
+									onclick="location.href='MainServlet?table=log&action=view'"
+									class="btn btn-dark text-light  btn-circle"
+									style="border-radius: 30px">
+									Log <i class="fas fa-calendar-week"></i>
+								</button></li>
 							<li></li>
 						</ul>
 
@@ -173,21 +178,19 @@
 				</div>
 			</div>
 			<!-- ***** Header Area End ***** -->
-			<div class="container">
-				<div class="row">
-					<div class="col-6">
-						<div class="text-start">
-							Number of users viewing: <b><a
-								onClick="window.location.reload()"><%=UserTrackingListener.getActiveSessions()%></a></b>
-						</div>
+			<div class="row">
+				<div class="col-6">
+					<div class="text-start">
+						Number of users viewing: <b><a
+							onClick="window.location.reload()"><%=UserTrackingListener.getActiveSessions()%></a></b>
 					</div>
-					<div class="col-6">
-						<div class="text-end">
-							Hi, welcome <b><a id="userId"
-								onClick="window.location.reload()"></a></b>!
-						</div>
+				</div>
+				<div class="col-6">
+					<div class="text-end">
+						Hi, welcome <b><a id="userId"
+							onClick="window.location.reload()"></a></b>!
 					</div>
-					<hr>
 				</div>
 			</div>
+		</div>
 	</header>

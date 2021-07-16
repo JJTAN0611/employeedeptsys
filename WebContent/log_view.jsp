@@ -23,7 +23,7 @@
 		<center>The log content.</center>
 	</h1>
 	<hr>
-	<a type="button" href="log" class="btn btn-dark btn-circle float-end"
+	<a type="button" href="MainServlet?table=log&action=download" class="btn btn-dark btn-circle float-end"
 		style="border-radius: 30px">Download <i
 		class="fas fa-file-download"></i></a> <br> <br>
 </div>

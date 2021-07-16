@@ -25,6 +25,8 @@ public class ServletForwardValidate {
 			return "update";
 		else if(action.compareTo("delete")==0)
 			return "delete";
+		else if(action.compareTo("download")==0)
+			return "download";
 		else
 			return null; //abnormal value
 	}
@@ -40,6 +42,8 @@ public class ServletForwardValidate {
 			return "departmentemployee";
 		else if(table.compareTo("employee")==0)
 			return "employee";
+		else if(table.compareTo("log")==0)
+			return "log";
 		else
 			return null; //abnormal value
 	}
