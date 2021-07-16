@@ -57,23 +57,20 @@ public class DepartmentController extends HttpServlet {
 				out.print(jo);
 				out.flush();
 			} else if (action.compareTo("add") == 0) {
-				RequestDispatcher req;
 				request.setAttribute("id", getAutoId());
-				req = request.getRequestDispatcher("department_add.jsp");
+				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
-				RequestDispatcher req;
-				String id = (String) request.getAttribute("id");
+				String id = (String) request.getParameter("id");
 				Department dept = deptbean.findDepartment(id);
 				request.setAttribute("dept", dept);
-				req = request.getRequestDispatcher("department_update.jsp");
+				RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
 				req.forward(request, response);
 			} else {
-				RequestDispatcher req;
-				String id = (String) request.getAttribute("id");
+				String id = (String) request.getParameter("id");
 				Department dept = deptbean.findDepartment(id);
 				request.setAttribute("dept", dept);
-				req = request.getRequestDispatcher("department_remove.jsp");
+				RequestDispatcher req = request.getRequestDispatcher("department_remove.jsp");
 				req.forward(request, response);
 			}
 
@@ -87,42 +84,53 @@ public class DepartmentController extends HttpServlet {
 
 		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
 		logger.setEntryPoints(request);
-		
+
 		String action = (String) request.getAttribute("action");
 
 		try {
 			logger.setEntryPoints(request);
 
 			if (action.compareTo("add") == 0) {
-				String[] s = { (String) request.getParameter("id"), (String) request.getParameter("dept_name") };
-				deptbean.addDepartment(s);
-				ValidateManageLogic.navigateJS(response.getWriter(), "department");
-				logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
-			} else if (action.compareTo("delete") == 0) {
+				if (!ValidateManageLogic.departmentContent(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department name", "department");
+				} else if (!ValidateManageLogic.departmentID(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department id", "department");
+				} else {
+					String[] s = { (String) request.getAttribute("id"), (String) request.getAttribute("dept_name") };
+					deptbean.addDepartment(s);
+					ValidateManageLogic.navigateJS(response.getWriter(), "department");
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
+				}
 
-				String id = (String) request.getParameter("id");
-				deptbean.deleteDepartment(id);
-				ValidateManageLogic.navigateJS(response.getWriter(), "department");
-				logger.setContentPoints(request, "Success " + action + " --> ID:" + id);
+			} else if (action.compareTo("delete") == 0) {
+				if (!ValidateManageLogic.departmentID(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department", "department");
+				} else {
+					String id = (String) request.getAttribute("id");
+					deptbean.deleteDepartment(id);
+					ValidateManageLogic.navigateJS(response.getWriter(), "department");
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + id);
+				}
+
 			} else if (action.compareTo("update") == 0) {
-				String[] dept = { (String) request.getParameter("id"), request.getParameter("dept_name") };
-				deptbean.updateDepartment(dept);
-				ValidateManageLogic.navigateJS(response.getWriter(), "department");
-				logger.setContentPoints(request, "Success " + action + " --> ID:" + dept[0]);
+				if (!ValidateManageLogic.departmentContent(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department name: "+request.getParameter("dept_name"), "department");
+				}else {
+					String[] dept = { (String) request.getParameter("id"), request.getParameter("dept_name") };
+					deptbean.updateDepartment(dept);
+					ValidateManageLogic.navigateJS(response.getWriter(), "department");
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + dept[0]);
+				}
 			} else {
 				logger.setContentPoints(request, "Invalid action --> " + action);
 			}
 
 		} catch (EJBTransactionRolledbackException rollback) {
 			ValidateManageLogic.printErrorNotice(response.getWriter(),
-					"Duplicate record or extremely large value given!! " + rollback.getStackTrace().toString(),
+					"Duplicate record!! " + rollback.getStackTrace().toString(),
 					"department");
 			logger.setContentPoints(request, "Unsuccess --> " + action + rollback.getStackTrace().toString());
 		} catch (EJBException invalid) {
-			if (invalid.toString().contains("NullPointerException"))
-				ValidateManageLogic.printErrorNotice(response.getWriter(), "Empty input!! " + invalid.toString(),
-						"department");
-			else
 				ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid input!!. " + invalid.toString(),
 						"department");
 			logger.setContentPoints(request, "Unsuccess --> " + action + invalid.getStackTrace().toString());

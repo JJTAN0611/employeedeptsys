@@ -53,12 +53,9 @@ public class MainServlet extends HttpServlet {
 						dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
 					break;
 				case "add":
-					dispatcher = request.getRequestDispatcher("DepartmentController");
 				case "update": // check edit's parameter
 				case "delete": // check remove's parameter
-					if (ServletForwardValidate.departmentUpdateRemove(request, response)) {
-						dispatcher = request.getRequestDispatcher("DepartmentController");
-					}
+					dispatcher = request.getRequestDispatcher("DepartmentController");
 					break;
 				default:
 					break;
@@ -75,12 +72,9 @@ public class MainServlet extends HttpServlet {
 					}
 					break;
 				case "add":
-					dispatcher = request.getRequestDispatcher("EmployeeController");
 				case "update": // check edit's parameter
 				case "delete": // check remove's parameter
-					if (ServletForwardValidate.employeeUpdateRemove(request, response)) {
-						dispatcher = request.getRequestDispatcher("EmployeeController");
-					}
+					dispatcher = request.getRequestDispatcher("EmployeeController");
 					break;
 				default:
 					break;
@@ -92,27 +86,19 @@ public class MainServlet extends HttpServlet {
 					dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 					break;
 				case "getDepartment":
-					if (ServletForwardValidate.departmentUpdateRemove(request, response)) {
-						dispatcher = request.getRequestDispatcher("DepartmentController");
-						break;
-					}
+					dispatcher = request.getRequestDispatcher("DepartmentController");
 				case "getEmployee":
-					if (ServletForwardValidate.employeeUpdateRemove(request, response)) {
-						dispatcher = request.getRequestDispatcher("EmployeeController");
-						break;
-					}
+					dispatcher = request.getRequestDispatcher("EmployeeController");
+					break;
 				case "view": // check display's parameter
 					if (ServletForwardValidate.departmentemployeeView(request, response)) {
 						dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");
 					}
 					break;
 				case "add":
-					dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 				case "update": // check edit's parameter
 				case "delete": // check remove's parameter
-					if (ServletForwardValidate.departmentemployeeUpdateRemove(request, response)) {
-						dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
-					}
+					dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 					break;
 				default:
 					break;

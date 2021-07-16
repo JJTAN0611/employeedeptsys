@@ -51,14 +51,14 @@ public class DepartmentEmployeeController extends HttpServlet {
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
 				RequestDispatcher req;
-				String id[] = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
+				String id[] = { (String) request.getParameter("dept_id"), (String) request.getParameter("emp_id") };
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(id);
 				request.setAttribute("deptemp", deptemp);
 				req = request.getRequestDispatcher("departmentemployee_update.jsp");
 				req.forward(request, response);
 			} else {
 				RequestDispatcher req;
-				String id[] = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
+				String id[] = { (String) request.getParameter("dept_id"), (String) request.getParameter("emp_id") };
 
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(id);
 				request.setAttribute("deptemp", deptemp);
@@ -80,29 +80,46 @@ public class DepartmentEmployeeController extends HttpServlet {
 		try {
 
 			if (action.compareTo("add") == 0) {
-				String[] s = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id"),
-						(String) request.getParameter("from_date"), (String) request.getParameter("to_date") };
+				if (!ValidateManageLogic.departmentemployeeContent(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee content",
+							"employee");
+				} else if (!ValidateManageLogic.departmentemployeeID(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee id",
+							"employee");
+				} else {
+					String[] s = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id"),
+							(String) request.getAttribute("from_date"), (String) request.getAttribute("to_date") };
 
-				deptempbean.addDepartmentEmployee(s);
-				ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
+					deptempbean.addDepartmentEmployee(s);
+					ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
 
-				logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
+				}
+
 			} else if (action.compareTo("delete") == 0) {
-				String[] id = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
+				if (!ValidateManageLogic.departmentemployeeID(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee id", "departmentemployee");
+				} else {
+					String[] id = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
+					deptempbean.deleteDepartmentEmployee(id);
+					ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + id[0] + "|" + id[1]);
+				}
 
-				deptempbean.deleteDepartmentEmployee(id);
-				ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
-
-				logger.setContentPoints(request, "Success " + action + " --> ID:" + id[0] + "|" + id[1]);
 			} else if (action.compareTo("update") == 0) {
-				String[] s = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id"),
-						(String) request.getParameter("from_date"), (String) request.getParameter("to_date") };
-				System.out.println(s[0] + s[1]);
-				System.out.println(s[2]);
+				if (!ValidateManageLogic.departmentemployeeID(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee ID", "departmentemployee");
+				}else if (!ValidateManageLogic.departmentemployeeContent(request, response)) {
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee content.", "departmentemployee");
+				} else {
+					String[] s = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id"),
+							(String) request.getAttribute("from_date"), (String) request.getAttribute("to_date") };
 
-				deptempbean.updateDepartmentEmployee(s);
-				ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
-				logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
+					deptempbean.updateDepartmentEmployee(s);
+					ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
+				}
+				
 			}
 		} catch (EJBTransactionRolledbackException rollback) {
 			ValidateManageLogic.printErrorNotice(response.getWriter(), "Duplicate record occur!! ",
