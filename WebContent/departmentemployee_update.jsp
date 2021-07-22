@@ -23,16 +23,16 @@
 		<center>Please update the following details.</center>
 	</h1>
 	<hr>
+		<center>Click the ID text box to see detail.</center>
 	<br> <br>
 </div>
-
 <div class="container wow bounceInDown" data-wow-duration="1.5s" data-wow-delay="0.2s">
 	<form method="post" action="MainServlet">
 		<input type="hidden" name="table" value="departmentemployee" />
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
-				<input type="text" class="form-control" data-bs-toggle='collapse'
+				<input type="button" class="form-control" data-bs-toggle='collapse'
 					data-bs-target='.id<%=deptemp.getId().toString().substring(34)%>'
 					name="dept_id" value="<%=deptemp.getDepartment().getId()%>"
 					readonly="readonly">
@@ -50,7 +50,7 @@
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Employee ID:</label>
 			<div class="col-8">
-				<input type="text" class="form-control" data-bs-toggle='collapse'
+				<input type="button" class="form-control" data-bs-toggle='collapse'
 					data-bs-target='.id<%=deptemp.getId().toString().substring(34)%>'
 					name="emp_id" value="<%=deptemp.getEmployee().getId()%>"
 					readonly="readonly">

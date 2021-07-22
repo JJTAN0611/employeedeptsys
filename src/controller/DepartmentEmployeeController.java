@@ -82,10 +82,10 @@ public class DepartmentEmployeeController extends HttpServlet {
 			if (action.compareTo("add") == 0) {
 				if (!ValidateManageLogic.departmentemployeeContent(request, response)) {
 					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee content",
-							"employee");
+							request);
 				} else if (!ValidateManageLogic.departmentemployeeID(request, response)) {
 					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee id",
-							"employee");
+							request);
 				} else {
 					String[] s = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id"),
 							(String) request.getAttribute("from_date"), (String) request.getAttribute("to_date") };
@@ -98,7 +98,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 			} else if (action.compareTo("delete") == 0) {
 				if (!ValidateManageLogic.departmentemployeeID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee id", "departmentemployee");
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee id", request);
 				} else {
 					String[] id = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
 					deptempbean.deleteDepartmentEmployee(id);
@@ -108,9 +108,9 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 			} else if (action.compareTo("update") == 0) {
 				if (!ValidateManageLogic.departmentemployeeID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee ID", "departmentemployee");
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee ID", request);
 				}else if (!ValidateManageLogic.departmentemployeeContent(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee content.", "departmentemployee");
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee content.", request);
 				} else {
 					String[] s = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id"),
 							(String) request.getAttribute("from_date"), (String) request.getAttribute("to_date") };
@@ -123,15 +123,15 @@ public class DepartmentEmployeeController extends HttpServlet {
 			}
 		} catch (EJBTransactionRolledbackException rollback) {
 			ValidateManageLogic.printErrorNotice(response.getWriter(), "Duplicate record occur!! ",
-					"departmentemployee");
+					request);
 			logger.setContentPoints(request, "Unsuccess --> " + action + rollback.getStackTrace().toString());
 		} catch (EJBException invalid) {
 			if (invalid.toString().contains("NullPointerException"))
 				ValidateManageLogic.printErrorNotice(response.getWriter(), "Empty input!! " + invalid.toString(),
-						"departmentemployee");
+						request);
 			else
 				ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid input!!. " + invalid.toString(),
-						"departmentemployee");
+						request);
 			logger.setContentPoints(request, "Unsuccess --> " + action + invalid.getStackTrace().toString());
 		} finally {
 			logger.setExitPoints(request);

@@ -1,6 +1,10 @@
 package controller;
 
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,8 +21,18 @@ public class ValidateManageLogic {
 		else if(type==0) {
 			if(temp.length()>length||temp.length()<=0)
 				return false;
+			request.setAttribute(parameter, temp);
+		}else {
+			Date date = null;
+			try {
+				date = new SimpleDateFormat("yyyy-MM-dd").parse(temp);
+				java.sql.Date d = new java.sql.Date(date.getTime());
+				request.setAttribute(parameter, temp);
+			} catch (Exception ex) {
+				return false;
+			}
+
 		}
-		request.setAttribute(parameter, temp);
 		return true;
 	}
 
@@ -88,11 +102,21 @@ public class ValidateManageLogic {
 		out.println("</SCRIPT>");
 	}
 
-	public static void printErrorNotice(PrintWriter out, String error, String location) {
+	public static void printErrorNotice(PrintWriter out, String error, HttpServletRequest request) {
 		out.println("<SCRIPT type=\"text/javascript\">");
-		out.println("alert('Error: " + error + "');");
-		out.println("alert(\"Redirected\")");
-		out.println("window.location.assign(\"MainServlet?table=" + location + "&action=view\")");
+		out.println("alert('Error: " + error.replace("\n", "").replace("\r", "") + "');");
+		out.println("alert(\"Redirected to previous page.\")");
+
+		String page="table=" + request.getAttribute("table");
+
+		if(request.getAttribute("id")!=null)
+			page=page+"&action="+request.getAttribute("action");
+		else
+			page=page+"&action=view";
+		
+		if(request.getAttribute("action").toString().compareTo("update")==0||request.getAttribute("action").toString().compareTo("delete")==0)
+				page=page+"&id="+(String) request.getAttribute("id");
+		out.println("window.location.assign(\"MainServlet?"+page+"\")");
 		out.println("</SCRIPT>");
 	}
 

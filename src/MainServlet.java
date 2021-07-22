@@ -35,7 +35,7 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("404.jsp");
+		RequestDispatcher dispatcher=null;
 
 		// compulsory to check
 		String action = ServletForwardValidate.action(request, response);
@@ -106,9 +106,12 @@ public class MainServlet extends HttpServlet {
 			} else if (table.compareTo("log") == 0) {
 				switch (action) {
 				case "view":
-					dispatcher = request.getRequestDispatcher("log_view.jsp");
+					if(ServletForwardValidate.refresh(request, response))
+						dispatcher = request.getRequestDispatcher("log_view.jsp");
+					System.out.print(request.getAttribute("refresh"));
 					break;
 				case "download":
+				case "delete":
 					dispatcher = request.getRequestDispatcher("log");
 					break;
 				default:
@@ -117,7 +120,10 @@ public class MainServlet extends HttpServlet {
 			}
 		}
 
-		dispatcher.forward(request, response);
+		if(dispatcher!=null)
+			dispatcher.forward(request, response);
+		else
+			response.sendRedirect("404.jsp");
 
 	}
 

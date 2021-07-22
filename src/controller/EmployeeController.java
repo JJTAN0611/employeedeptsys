@@ -89,9 +89,9 @@ public class EmployeeController extends HttpServlet {
 		try {
 			if (action.compareTo("add") == 0) {
 				if (!ValidateManageLogic.employeeContent(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee content", "employee");
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee content", request);
 				} else if (!ValidateManageLogic.employeeID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department id", "employee");
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department id", request);
 				} else {
 					String[] s = { (String) request.getAttribute("id"), (String) request.getAttribute("first_name"),
 							(String) request.getAttribute("last_name"), (String) request.getAttribute("gender"),
@@ -103,7 +103,7 @@ public class EmployeeController extends HttpServlet {
 
 			} else if (action.compareTo("delete") == 0) {
 				if (!ValidateManageLogic.employeeID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee", "employee");
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee",request);
 				} else {
 					String id = (String) request.getAttribute("id");
 					empbean.deleteEmployee(id);
@@ -113,9 +113,9 @@ public class EmployeeController extends HttpServlet {
 
 			} else if (action.compareTo("update") == 0) {
 				if (!ValidateManageLogic.employeeID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee ID", "employee");
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee ID", request);
 				}else if (!ValidateManageLogic.employeeContent(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee content.", "employee");
+					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee content.", request);
 				} else {
 					String[] s = { (String) request.getAttribute("id"), (String) request.getAttribute("first_name"),
 							(String) request.getAttribute("last_name"), (String) request.getAttribute("gender"),
@@ -127,14 +127,14 @@ public class EmployeeController extends HttpServlet {
 			}
 		} catch (EJBTransactionRolledbackException rollback) {
 			ValidateManageLogic.printErrorNotice(response.getWriter(),
-					"Duplicate record or extremely large value given!! ", "departmentemployee");
+					"Duplicate record or extremely large value given!! ", request);
 		} catch (EJBException invalid) {
 			if (invalid.toString().contains("NullPointerException"))
 				ValidateManageLogic.printErrorNotice(response.getWriter(), "Empty input!! " + invalid.toString(),
-						"departmentemployee");
+						request);
 			else
 				ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid input!!. " + invalid.toString(),
-						"departmentemployee");
+						request);
 			logger.setContentPoints(request, "Unsuccess --> " + action + invalid.getStackTrace().toString());
 		} finally {
 			logger.setExitPoints(request);

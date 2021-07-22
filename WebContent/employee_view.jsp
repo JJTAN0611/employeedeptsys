@@ -93,10 +93,10 @@
 			style="background: white">
 			<tr class="table-dark">
 				<th scope="col">ID</th>
-				<th scope="col">DOB</th>
 				<th scope="col">First Name</th>
 				<th scope="col">Last Name</th>
 				<th scope="col">Gender</th>
+				<th scope="col">DOB</th>
 				<th scope="col">Hired Date</th>
 				<th colspan=2 scope="col"><center>Method</center></th>
 			</tr>
@@ -109,13 +109,13 @@
 					for (Employee t : staffs) {
 						out.println("<tr>");
 						out.println("<td>" + t.getId() + "</td>");
-						out.println("<td>" + t.getBirthDate() + "</td>");
 						out.println("<td>" + t.getFirstName() + "</td>");
 						out.println("<td>" + t.getLastName() + "</td>");
 						out.println("<td>" + t.getGender() + "</td>");
+						out.println("<td>" + t.getBirthDate() + "</td>");
 						out.println("<td>" + t.getHireDate() + "</td>");
 						out.println("<td><a href=\"MainServlet?table=employee&action=update&id=" + t.getId()
-								+ "\" class=\"text-success\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
+								+ "\" class=\"text-primary\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
 						out.println("<td><a href=\"MainServlet?table=employee&action=delete&id=" + t.getId()
 								+ "\" class=\"text-danger\" ><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
 						out.println("</tr>");

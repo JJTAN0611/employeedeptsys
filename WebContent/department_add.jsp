@@ -7,6 +7,7 @@
 <%
 	String id = (String) request.getAttribute("id");
 %>
+
 <%@ include file="header.jsp"%>
 
 <div class="container top-first">

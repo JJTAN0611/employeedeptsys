@@ -23,11 +23,11 @@ button[aria-expanded=false] .fa-chevron-down {
 <div class="container top-first wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
 	<div class="badge bg-primary text-light text-wrap large col-12">
 		<div class="row">
-			<div class="text-start col" style="font-size: 35px;">
-				Employee Record
+			<div class="text-start col-9" style="font-size: 35px;">
+				Department Employee Record
 				<div class="badge bg-light text-info text-wrap">View</div>
 			</div>
-			<div class="text-end col">
+			<div class="text-end col-3">
 				<button class="btn btn-light btn-outline-success text-dark"
 					style="font-size: 20px; font-weight: bold;"
 					onclick="document.getElementById('adddepartmentemployee').click()">+
@@ -137,7 +137,7 @@ button[aria-expanded=false] .fa-chevron-down {
 						
 						out.println("<td><a href=\"MainServlet?table=departmentemployee&action=update&emp_id="
 								+ de.getEmployee().getId() + "&dept_id=" + de.getDepartment().getId()
-								+ "\" class=\"text-success\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
+								+ "\" class=\"text-primary\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
 						out.println("<td><a href=\"MainServlet?table=departmentemployee&action=delete&emp_id="
 								+ de.getEmployee().getId() + "&dept_id=" + de.getDepartment().getId()
 								+ "\" class=\"text-danger\" ><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");

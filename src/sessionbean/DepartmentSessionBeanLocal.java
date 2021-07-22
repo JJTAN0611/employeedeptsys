@@ -22,5 +22,5 @@ public interface DepartmentSessionBeanLocal {
 
 	public void deleteDepartment(String id) throws EJBException;
 
-	public void addDepartment(String[] name) throws EJBException;
+	public void addDepartment(String[] s) throws EJBException;
 }

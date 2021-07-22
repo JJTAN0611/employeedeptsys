@@ -10,6 +10,19 @@ public class ServletForwardValidate {
 	 * This class is to verify those compulsory servlet forwarding The validate
 	 * parameter is table, action, and pagination parameter (if have)
 	 */
+	
+	public static boolean refresh(HttpServletRequest request, HttpServletResponse response) {
+
+		String refresh= request.getParameter("refresh");
+		request.setAttribute("refresh", refresh);
+		 if(refresh==null)
+			 return true;//by default
+		 else if (refresh.compareTo("false") == 0) {
+			return true;
+		}else
+			return false;
+	}
+	
 	public static String action(HttpServletRequest request, HttpServletResponse response) {
 
 		String action = request.getParameter("action");
