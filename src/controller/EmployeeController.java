@@ -97,7 +97,7 @@ public class EmployeeController extends HttpServlet {
 							(String) request.getAttribute("last_name"), (String) request.getAttribute("gender"),
 							(String) request.getAttribute("birth_date"), (String) request.getAttribute("hire_date") };
 					empbean.addEmployee(s);
-					ValidateManageLogic.navigateJS(response.getWriter(), "employee");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
 				}
 
@@ -107,7 +107,7 @@ public class EmployeeController extends HttpServlet {
 				} else {
 					String id = (String) request.getAttribute("id");
 					empbean.deleteEmployee(id);
-					ValidateManageLogic.navigateJS(response.getWriter(), "employee");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + id);
 				}
 
@@ -121,7 +121,7 @@ public class EmployeeController extends HttpServlet {
 							(String) request.getAttribute("last_name"), (String) request.getAttribute("gender"),
 							(String) request.getAttribute("birth_date"), (String) request.getAttribute("hire_date") };
 					empbean.updateEmployee(s);
-					ValidateManageLogic.navigateJS(response.getWriter(), "employee");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
 				}
 			}

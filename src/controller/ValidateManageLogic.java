@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,8 +58,6 @@ public class ValidateManageLogic {
 	}
 
 	public static boolean employeeContent(HttpServletRequest request, HttpServletResponse response) {
-		String dept_name = request.getParameter("dept_name");
-		System.out.println(dept_name);
 
 		if (convert(request, "first_name",0,14) && convert(request, "last_name",0,16) && convert(request, "gender",0,1)
 				&& convert(request, "hire_date",1,0) && convert(request, "birth_date",1,0))
@@ -75,8 +74,7 @@ public class ValidateManageLogic {
 	}
 	
 	public static boolean departmentemployeeContent(HttpServletRequest request, HttpServletResponse response) {
-		String dept_name = request.getParameter("dept_name");
-		System.out.println(dept_name);
+
 
 		if (convert(request,"from_date",1,0) && convert(request, "to_date",1,0))
 			return true;
@@ -86,6 +84,7 @@ public class ValidateManageLogic {
 	public static boolean departmentemployeeID(HttpServletRequest request, HttpServletResponse response) {
 		String emp_id = request.getParameter("emp_id");
 		String dept_id = request.getParameter("dept_id");
+		System.out.println("aaa"+emp_id+"cac"+dept_id+"ss"+request.getParameter("emp_id"));
 		if (emp_id == null||dept_id==null)
 			return false;
 		request.setAttribute("emp_id", emp_id);
@@ -95,10 +94,10 @@ public class ValidateManageLogic {
 
 // this method is used to notify a user that a record has been updated and to
 // redirect to another page
-	public static void navigateJS(PrintWriter out, String location) {
+	public static void navigateJS(PrintWriter out, HttpServletRequest request) {
 		out.println("<SCRIPT type=\"text/javascript\">");
-		out.println("alert(\"Record has been updated and url will be redirected\")");
-		out.println("window.location.assign(\"MainServlet?table=" + location + "&action=view\")");
+		out.println("alert(\"Your ["+request.getAttribute("action")+"] action to ["+ request.getAttribute("table")+"] is successful.\")");
+		out.println("window.location.assign(\"MainServlet?table=" + request.getAttribute("table") + "&action=view\")");
 		out.println("</SCRIPT>");
 	}
 
@@ -118,6 +117,21 @@ public class ValidateManageLogic {
 				page=page+"&id="+(String) request.getAttribute("id");
 		out.println("window.location.assign(\"MainServlet?"+page+"\")");
 		out.println("</SCRIPT>");
+	}
+	
+	public static void test(HttpServletResponse response) {
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.println("<SCRIPT type=\"text/javascript\">");
+			out.println("alert(\"Your  is successful.\")");
+			out.println("</SCRIPT>");
+			response.sendRedirect("https://www.google.com/search?q=");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 
 }

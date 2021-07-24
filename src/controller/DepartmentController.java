@@ -103,7 +103,8 @@ public class DepartmentController extends HttpServlet {
 					String[] s = { (String) request.getAttribute("id"), (String) request.getAttribute("dept_name") };
 
 					deptbean.addDepartment(s);
-					ValidateManageLogic.navigateJS(response.getWriter(), "department");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
+					
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
 				}
 
@@ -113,7 +114,7 @@ public class DepartmentController extends HttpServlet {
 				} else {
 					String id = (String) request.getAttribute("id");
 					deptbean.deleteDepartment(id);
-					ValidateManageLogic.navigateJS(response.getWriter(), "department");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + id);
 				}
 
@@ -126,7 +127,7 @@ public class DepartmentController extends HttpServlet {
 				} else {
 					String[] dept = { (String) request.getAttribute("id"), (String) request.getAttribute("dept_name") };
 					deptbean.updateDepartment(dept);
-					ValidateManageLogic.navigateJS(response.getWriter(), "department");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + dept[0]);
 				}
 			} else {

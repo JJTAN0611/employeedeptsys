@@ -32,7 +32,7 @@
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
-				<input type="button" class="form-control" data-bs-toggle='collapse'
+				<input type="text" class="form-control btn" data-bs-toggle='collapse'
 					data-bs-target='.id<%=deptemp.getId().toString().substring(34)%>'
 					name="dept_id" value="<%=deptemp.getDepartment().getId()%>"
 					readonly="readonly">
@@ -50,7 +50,7 @@
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Employee ID:</label>
 			<div class="col-8">
-				<input type="button" class="form-control" data-bs-toggle='collapse'
+				<input type="text" class="form-control btn" data-bs-toggle='collapse'
 					data-bs-target='.id<%=deptemp.getId().toString().substring(34)%>'
 					name="emp_id" value="<%=deptemp.getEmployee().getId()%>"
 					readonly="readonly">
@@ -59,7 +59,7 @@
 					<ul class='list-group'>
 						<li class='list-group-item list-group-item-dark  list-group-item-action'>First
 							Name: &emsp;<%=deptemp.getEmployee().getFirstName()%></li>
-						<li class='list-group-item list-group-item-dark  list-group-item-action'>First
+						<li class='list-group-item list-group-item-dark  list-group-item-action'>Last
 							Name: &emsp;<%=deptemp.getEmployee().getLastName()%></li>
 						<li class='list-group-item list-group-item-dark  list-group-item-action'>Gender:
 							&emsp;<%=(deptemp.getEmployee().getGender() == "M" ? "Male" : "Female")%></li>

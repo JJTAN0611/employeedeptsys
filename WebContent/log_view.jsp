@@ -10,7 +10,7 @@
 	checked = (String) request.getAttribute("refresh");
 	if (checked == null) {
 		response.setHeader("Refresh", "3");
-		checked="true";
+		checked = "true";
 	}
 %>
 
@@ -27,9 +27,28 @@
 	</h1>
 
 	<br> <br>
-	<h1>
-		<center>The log content.</center>
-	</h1>
+
+	<div class="row">
+		<div class="col"></div>
+		<div class="col">
+			<h1>The log content.</h1>
+		</div>
+		<div class="col form-check form-switch h3 align-middle">
+			<label class="bg float-end"  style="align-item:center">Refresh </label><input
+				class="form-check-input float-end" type="checkbox"
+				id="flexSwitchCheckChecked"
+				onchange="
+					if ($('#flexSwitchCheckChecked').is(':checked')) {
+						window.location.replace('MainServlet?table=log&action=view');
+					}else{
+						window.location.replace('MainServlet?table=log&action=view&refresh=false');
+					}
+					"
+				<%=checked.compareTo("true") == 0 ? "checked" : ""%>></input>
+
+		</div>
+	</div>
+
 	<hr>
 	<div class="row">
 		<div class="col">
@@ -37,21 +56,7 @@
 				class="btn btn-danger btn-circle float-start"
 				style="border-radius: 30px">Remove <i class="fas fa-trash-alt"></i></a>
 		</div>
-		<div class="col justify-content-center">
-			<div class="form-check form-switch h3">
-				<label class="bg">Refresh </label><input class="form-check-input"
-					type="checkbox" id="flexSwitchCheckChecked"
-					onchange="
-					if ($('#flexSwitchCheckChecked').is(':checked')) {
-						window.location.replace('MainServlet?table=log&action=view');
-					}else{
-						window.location.replace('MainServlet?table=log&action=view&refresh=false');
-					}
-					"
-					<%=checked.compareTo("true")==0 ? "checked" : ""%>></input>
 
-			</div>
-		</div>
 		<div class="col">
 			<a type="button" href="MainServlet?table=log&action=download"
 				class="btn btn-dark btn-circle float-end"

@@ -91,7 +91,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 							(String) request.getAttribute("from_date"), (String) request.getAttribute("to_date") };
 
 					deptempbean.addDepartmentEmployee(s);
-					ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
 
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
 				}
@@ -102,11 +102,12 @@ public class DepartmentEmployeeController extends HttpServlet {
 				} else {
 					String[] id = { (String) request.getAttribute("dept_id"), (String) request.getAttribute("emp_id") };
 					deptempbean.deleteDepartmentEmployee(id);
-					ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + id[0] + "|" + id[1]);
 				}
 
 			} else if (action.compareTo("update") == 0) {
+				System.out.println("daaass"+request.getParameter("emp_id"));
 				if (!ValidateManageLogic.departmentemployeeID(request, response)) {
 					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department-employee ID", request);
 				}else if (!ValidateManageLogic.departmentemployeeContent(request, response)) {
@@ -116,7 +117,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 							(String) request.getAttribute("from_date"), (String) request.getAttribute("to_date") };
 
 					deptempbean.updateDepartmentEmployee(s);
-					ValidateManageLogic.navigateJS(response.getWriter(), "departmentemployee");
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
 				}
 				

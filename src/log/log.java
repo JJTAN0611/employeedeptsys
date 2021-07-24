@@ -56,7 +56,7 @@ public class log extends HttpServlet {
 			        bw.write("");
 			        bw.flush();
 			        bw.close();
-			    	ValidateManageLogic.navigateJS(response.getWriter(), "log");
+			    	ValidateManageLogic.navigateJS(response.getWriter(), request);
 			    }catch(IOException ioe){
 			        // You should really do something more appropriate here
 			        ioe.printStackTrace();
