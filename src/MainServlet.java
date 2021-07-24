@@ -106,10 +106,6 @@ public class MainServlet extends HttpServlet {
 			} else if (table.compareTo("log") == 0) {
 				switch (action) {
 				case "view":
-					if(ServletForwardValidate.refresh(request, response))
-						dispatcher = request.getRequestDispatcher("log_view.jsp");
-					System.out.print(request.getAttribute("refresh"));
-					break;
 				case "download":
 				case "delete":
 					dispatcher = request.getRequestDispatcher("log");
