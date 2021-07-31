@@ -12,10 +12,19 @@
 	String direction = (String) request.getAttribute("direction");
 %>
 <%@ include file="header.jsp"%>
+<style>
+button[aria-expanded=true] .fa-chevron-right {
+	display: none;
+}
 
-<div class="container top-first wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+button[aria-expanded=false] .fa-chevron-down {
+	display: none;
+}
+</style>
+<div class="container top-first wow fadeIn" data-wow-duration="2s"
+	data-wow-delay="0.4s">
 	<div class="badge bg-success text-light text-wrap large col-12">
-		<div class="row" >
+		<div class="row">
 			<div class="text-start col" style="font-size: 35px;">
 				Employee Record
 				<div class="badge bg-light text-info text-wrap">View</div>
@@ -35,63 +44,88 @@
 </div>
 
 <div class="container">
-	<div class="row wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
-		<form class="form-inline md-form mr-auto" action="MainServlet"
-			method="get">
-			<input type="hidden" name=table value="employee" /> <input
-				type="hidden" name=action value="view" />
-			<div class="input-group col-sm">
-				<input class="form-control" type="text" aria-label="Search"
-					name="keyword" value="<%=keyword%>" />
-				<div class="input-group-append">
-					<button class="btn btn-primary btn-info" type="submit">Search</button>
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col">
-					<div class="input-group col-sm">
-						<input class="form-control" id="records" name="recordsPerPage"
-							type="number" id="quantity" name="quantity" min="1" max="100"
-							value="<%=recordsPerPage%>">
+	<div class="row wow fadeInLeft" data-wow-duration="1s"
+		data-wow-delay="0.5s">
+		<div class="card text-white bg-dark">
+			<h4 class="card-header text-center">
+				Page Sorting and Filter Control
+				<button class="btn btn-light float-end btn-circle  rounded-pill"
+					data-bs-toggle="collapse" data-bs-target="#pane"
+					aria-expanded="true">
+					<i class="fa fa-chevron-down pull-right" aria-hidden="false"></i> <i
+						class="fa fa-chevron-right pull-right" aria-hidden="true"></i>
 
-						<div class="input-group-append">
-							<button class="btn btn-primary btn-info" type="submit">Records
-								per page</button>
+				</button>
+			</h4>
+			<div id="pane" class="card-body collapse show ">
+				<form class="form-inline md-form mr-auto" action="MainServlet"
+					method="get">
+					<input type="hidden" name=target value="employee" /> <input
+						type="hidden" name=action value="view" />
+					<!-- Left -->
+
+					<div class="row">
+						<!-- Left -->
+						<div class="col-3 border-end border-light">
+							<div class="card  text-dark bg-light">
+								<div class="card-header">Record per page</div>
+								<div class="card-body">
+									<input class="form-control-range" type="range"
+										name="recordsPerPage" style="color: red" min="1" max="100"
+										value="<%=recordsPerPage%>"
+										oninput="$('#value').text($(this).val())"> <span
+										id="value"><%=recordsPerPage%></span>
+								</div>
+							</div>
+							<br>
+							<div class="card text-dark bg-light">
+								<div class="card-header">Sorting</div>
+								<div class="card-body">
+									<select class="form-control custom-select" id="direction"
+										name="direction">
+										<%
+											if (direction.compareTo("DESC") == 0) {
+												out.println("<option value=\"ASC\">ascending</option>");
+												out.println("<option value=\"DESC\" selected>descending</option>");
+											} else {
+												out.println("<option value=\"ASC\" selected>ascending</option>");
+												out.println("<option value=\"DESC\">descending</option>");
+											}
+										%>
+									</select>
+								</div>
+
+							</div>
+						</div>
+						<!-- Right -->
+						<div class="col-9">
+							<div class="input-group col-sm">
+								<input class="form-control" type="text" aria-label="Search"
+									name="keyword" value="<%=keyword%>" />
+								<div class="input-group-append">
+									<button class="btn btn-primary btn-info" type="submit">Search</button>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col"></div>
-				<div class="col">
-					<div class="input-group col-sm">
-						<select class="form-control custom-select" id="direction"
-							name="direction">
-							<%
-								if (direction.compareTo("DESC") == 0) {
-									out.println("<option value=\"ASC\">ascending</option>");
-									out.println("<option value=\"DESC\" selected>descending</option>");
-								} else {
-									out.println("<option value=\"ASC\" selected>ascending</option>");
-									out.println("<option value=\"DESC\">descending</option>");
-								}
-							%>
-						</select>
-
-						<div class="input-group-append">
-							<button class="btn btn-primary" type="submit">Sorting</button>
-						</div>
-					</div>
-				</div>
+				</form>
 			</div>
-		</form>
+
+		</div>
+
+
+
+
+
 	</div>
 	<br>
 
-	<div class="table-responsive wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+	<div class=" wow fadeInRight " data-wow-duration="1s"
+		data-wow-delay="0.5s">
 		<table
-			class="table table-bordered table-striped table-hover table-light"
+			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg"
 			style="background: white">
-			<tr class="table-dark">
+			<tr class="table-dark shadow-lg">
 				<th scope="col">ID</th>
 				<th scope="col">First Name</th>
 				<th scope="col">Last Name</th>
@@ -114,9 +148,9 @@
 						out.println("<td>" + t.getGender() + "</td>");
 						out.println("<td>" + t.getBirthDate() + "</td>");
 						out.println("<td>" + t.getHireDate() + "</td>");
-						out.println("<td><a href=\"MainServlet?table=employee&action=update&id=" + t.getId()
+						out.println("<td><a href=\"MainServlet?target=employee&action=update&id=" + t.getId()
 								+ "\" class=\"text-primary\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
-						out.println("<td><a href=\"MainServlet?table=employee&action=delete&id=" + t.getId()
+						out.println("<td><a href=\"MainServlet?target=employee&action=delete&id=" + t.getId()
 								+ "\" class=\"text-danger\" ><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
 						out.println("</tr>");
 					}
@@ -137,11 +171,11 @@
 				<%
 					if (currentPage != 1 && nOfPages != 0) {
 						out.println("<li class=\"page-item\">");
-						out.println("<a class=\"page-link\" href=\"" + "MainServlet?table=employee&action=view&recordsPerPage="
+						out.println("<a class=\"page-link\" href=\"" + "MainServlet?target=employee&action=view&recordsPerPage="
 								+ recordsPerPage + "&currentPage=1" + "&keyword=" + keyword + "&direction=" + direction
 								+ "\">First</a>");
 						out.println("</li><li class=\"page-item\">");
-						out.println("<a class=\"page-link\" href=\"" + "MainServlet?table=employee&action=view&recordsPerPage="
+						out.println("<a class=\"page-link\" href=\"" + "MainServlet?target=employee&action=view&recordsPerPage="
 								+ recordsPerPage + "&currentPage=" + (currentPage - 1) + "&keyword=" + keyword + "&direction="
 								+ direction + "&direction=" + direction + "\">Previous</a>	</li>");
 					} else {
@@ -154,12 +188,12 @@
 					}
 					if (currentPage < nOfPages) {
 						out.println("<li class=\"page-item\">");
-						out.println("<a class=\"page-link\" href=\"" + "MainServlet?table=employee&action=view&recordsPerPage="
+						out.println("<a class=\"page-link\" href=\"" + "MainServlet?target=employee&action=view&recordsPerPage="
 								+ recordsPerPage + "&currentPage=" + (currentPage + 1) + "&keyword=" + keyword + "&direction="
 								+ direction + "\">Next</a>");
 						out.println("</li>");
 						out.println("<li class=\"page-item\">");
-						out.println("<a class=\"page-link \" href=\"" + "MainServlet?table=employee&action=view&recordsPerPage="
+						out.println("<a class=\"page-link \" href=\"" + "MainServlet?target=employee&action=view&recordsPerPage="
 								+ recordsPerPage + "&currentPage=" + nOfPages + "&keyword=" + keyword + "&direction="
 								+ direction + "\">Last</a>");
 						out.println("</li>");

@@ -35,15 +35,15 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
-		RequestDispatcher dispatcher=null;
+		RequestDispatcher dispatcher = null;
 
 		// compulsory to check
 		String action = ServletForwardValidate.action(request, response);
-		String table = ServletForwardValidate.table(request, response);
+		String target = ServletForwardValidate.target(request, response);
 
-		if (action != null && table != null) {
+		if (action != null && target != null) {
 			// department
-			if (table.compareTo("department") == 0)
+			if (target.compareTo("department") == 0)
 				switch (action) {
 				case "getAutoId":
 					dispatcher = request.getRequestDispatcher("DepartmentController");
@@ -61,7 +61,7 @@ public class MainServlet extends HttpServlet {
 					break;
 				}
 			// employee
-			else if (table.compareTo("employee") == 0) {
+			else if (target.compareTo("employee") == 0) {
 				switch (action) {
 				case "getAutoId":
 					dispatcher = request.getRequestDispatcher("EmployeeController");
@@ -80,7 +80,7 @@ public class MainServlet extends HttpServlet {
 					break;
 				}
 				// departmentemployee
-			} else if (table.compareTo("departmentemployee") == 0) {
+			} else if (target.compareTo("departmentemployee") == 0) {
 				switch (action) {
 				case "getAutoId":
 					dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
@@ -103,7 +103,7 @@ public class MainServlet extends HttpServlet {
 				default:
 					break;
 				}
-			} else if (table.compareTo("log") == 0) {
+			} else if (target.compareTo("log") == 0) {
 				switch (action) {
 				case "view":
 				case "download":
@@ -116,10 +116,10 @@ public class MainServlet extends HttpServlet {
 			}
 		}
 
-		if(dispatcher!=null)
-			dispatcher.forward(request, response);
-		else
-			response.sendRedirect("404.jsp");
+		if (dispatcher == null)
+			dispatcher = request.getRequestDispatcher("error.jsp");
+
+		dispatcher.forward(request, response);
 
 	}
 

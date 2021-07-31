@@ -1,4 +1,7 @@
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,17 +10,20 @@ import controller.ValidateManageLogic;
 
 public class ServletForwardValidate {
 	/*
-	 * This class is to verify those compulsory servlet forwarding The validate
-	 * parameter is table, action, and pagination parameter (if have)
+	 * This class is to verify those compulsory servlets forwarding The validate
+	 * parameter is target, action, and pagination parameter (if have)
 	 */
-	
 
 	
 	public static String action(HttpServletRequest request, HttpServletResponse response) {
-
+		//retrieve
 		String action = request.getParameter("action");
 		request.setAttribute("action", action);
-		if (action.compareTo("getAutoId") == 0) {
+		
+		//check
+		if(action==null)
+			return null;
+		else if (action.compareTo("getAutoId") == 0) {
 			return "getAutoId";
 		} else if (action.compareTo("getDepartment") == 0) {
 			return "getDepartment";
@@ -37,17 +43,22 @@ public class ServletForwardValidate {
 			return null; // abnormal value
 	}
 
-	public static String table(HttpServletRequest request, HttpServletResponse response) {
-
-		String table = request.getParameter("table");
-		request.setAttribute("table", table);
-		if (table.compareTo("department") == 0)
+	public static String target(HttpServletRequest request, HttpServletResponse response) {
+		
+		//retrieve
+		String target = request.getParameter("target");
+		request.setAttribute("target", target);
+		
+		//check
+		if(target==null)
+			return null;
+		else if (target.compareTo("department") == 0)
 			return "department";
-		else if (table.compareTo("departmentemployee") == 0)
+		else if (target.compareTo("departmentemployee") == 0)
 			return "departmentemployee";
-		else if (table.compareTo("employee") == 0)
+		else if (target.compareTo("employee") == 0)
 			return "employee";
-		else if (table.compareTo("log") == 0)
+		else if (target.compareTo("log") == 0)
 			return "log";
 		else
 			return null; // abnormal value

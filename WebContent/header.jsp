@@ -111,7 +111,7 @@
 							<li>
 								<div class="btn-group">
 									<button id="department" type="button"
-										onclick="location.href='MainServlet?table=department&action=view'"
+										onclick="location.href='MainServlet?target=department&action=view'"
 										class="btn btn-warning">Department View</button>
 									<button type="button"
 										class="btn btn-warning dropdown-toggle dropdown-toggle-split"
@@ -129,7 +129,7 @@
 							</li>
 							<li><div class="btn-group">
 									<button id="department_employee" type="button"
-										onclick="location.href='MainServlet?table=departmentemployee&action=view'"
+										onclick="location.href='MainServlet?target=departmentemployee&action=view'"
 										class="btn btn-primary">Department Employee View</button>
 									<button type="button"
 										class="btn btn-primary dropdown-toggle dropdown-toggle-split"
@@ -146,7 +146,7 @@
 								</div></li>
 							<li><div class="btn-group">
 									<button id="employee" type="button"
-										onclick="location.href='MainServlet?table=employee&action=view'"
+										onclick="location.href='MainServlet?target=employee&action=view'"
 										class="btn btn-success">Employee View</button>
 									<button type="button"
 										class="btn btn-success dropdown-toggle dropdown-toggle-split"
@@ -161,7 +161,7 @@
 									</ul>
 								</div></li>
 							<li><button type="button"
-									onclick="location.href='MainServlet?table=log&action=view'"
+									onclick="location.href='MainServlet?target=log&action=view'"
 									class="btn btn-dark text-light  btn-circle"
 									style="border-radius: 30px">
 									Log <i class="fas fa-calendar-week"></i>

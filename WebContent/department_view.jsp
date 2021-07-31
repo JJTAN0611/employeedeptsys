@@ -35,7 +35,7 @@
 		<div class="col"></div>
 		<form class="form-inline md-form col" action="MainServlet"
 			method="get">
-			<input type="hidden" name=table value="department" /> <input
+			<input type="hidden" name=target value="department" /> <input
 				type="hidden" name=action value="view" />
 			<div class="input-group">
 				<select class="form-control custom-select" id="direction"
@@ -57,9 +57,9 @@
 		</form>
 	</div>
 	<br> <br>
-	<div class="table-responsive wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+	<div class="wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
 		<table
-			class="table table-bordered table-striped table-hover table-light">
+			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg">
 			<tr class="table-dark">
 				<th scope="col">ID</th>
 				<th scope="col">NAME</th>
@@ -75,9 +75,9 @@
 						out.println("<td>" + t.getId() + "</td>");
 						out.println("<td>" + t.getDeptName() + "</td>");
 						out.println("<td><a href=\"MainServlet?id=" + t.getId()
-								+ "&table=department&action=update\" class=\"text-primary\"><i class=\"fas fa-marker\"></i>Update</a></td>");
+								+ "&target=department&action=update\" class=\"text-primary\"><i class=\"fas fa-marker\"></i>Update</a></td>");
 						out.println("<td><a href=\"MainServlet?id=" + t.getId()
-								+ "&table=department&action=delete\" class=\"text-danger\"><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
+								+ "&target=department&action=delete\" class=\"text-danger\"><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
 						out.println("</tr>");
 					}
 				} else {

@@ -14,13 +14,15 @@
 <%@ include file="header.jsp"%>
 <style>
 button[aria-expanded=true] .fa-chevron-right {
-   display: none;
+	display: none;
 }
+
 button[aria-expanded=false] .fa-chevron-down {
-   display: none;
+	display: none;
 }
 </style>
-<div class="container top-first wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+<div class="container top-first wow fadeIn" data-wow-duration="2s"
+	data-wow-delay="0.4s">
 	<div class="badge bg-primary text-light text-wrap large col-12">
 		<div class="row">
 			<div class="text-start col-9" style="font-size: 35px;">
@@ -42,61 +44,84 @@ button[aria-expanded=false] .fa-chevron-down {
 </div>
 
 <div class="container">
-	<div class="row wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
-		<form class="form-inline md-form mr-auto" action="MainServlet"
-			method="get">
-			<input type="hidden" name=table value="departmentemployee" /> <input
-				type="hidden" name=action value="view" />
-			<div class="input-group col-sm">
-				<input class="form-control" type="text" aria-label="Search"
-					name="keyword" value="<%=keyword%>" />
-				<div class="input-group-append">
-					<button class="btn btn-primary btn-info" type="submit">Search</button>
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col">
-					<div class="input-group col-sm">
-						<input class="form-control" id="records" name="recordsPerPage"
-							type="number" id="quantity" name="quantity" min="1" max="100"
-							value="<%=recordsPerPage%>">
+	<div class="row wow fadeInLeft" data-wow-duration="1s"
+		data-wow-delay="0.5s">
+		<div class="card text-white bg-dark">
+			<h4 class="card-header text-center">
+				Page Sorting and Filter Control
+				<button class="btn btn-light float-end btn-circle rounded-pill"
+					data-bs-toggle="collapse" data-bs-target="#pane"
+					aria-expanded="true">
+					<i class="fa fa-chevron-down pull-right" aria-hidden="false"></i> <i
+						class="fa fa-chevron-right pull-right" aria-hidden="true"></i>
 
-						<div class="input-group-append">
-							<button class="btn btn-primary btn-info" type="submit">Records
-								per page</button>
+				</button>
+			</h4>
+			<div id="pane" class="card-body collapse show ">
+				<form class="form-inline md-form mr-auto" action="MainServlet"
+					method="get">
+					<input type="hidden" name=target value="departmentemployee" /> <input
+						type="hidden" name=action value="view" />
+					<!-- Left -->
+
+					<div class="row">
+						<!-- Left -->
+						<div class="col-3 border-end border-light">
+							<div class="card  text-dark bg-light">
+								<div class="card-header">
+									Record per page
+								</div>
+								<div class="card-body">
+									<input class="form-control-range" type="range"
+										name="recordsPerPage" style="color: red" min="1" max="100"
+										value="<%=recordsPerPage%>"
+										oninput="$('#value').text($(this).val())">
+										<span id="value"><%=recordsPerPage%></span>
+								</div>
+							</div>
+							<br>
+							<div class="card text-dark bg-light">
+								<div class="card-header">Sorting</div>
+								<div class="card-body">
+									<select class="form-control custom-select" id="direction"
+										name="direction">
+										<%
+											if (direction.compareTo("DESC") == 0) {
+												out.println("<option value=\"ASC\">ascending</option>");
+												out.println("<option value=\"DESC\" selected>descending</option>");
+											} else {
+												out.println("<option value=\"ASC\" selected>ascending</option>");
+												out.println("<option value=\"DESC\">descending</option>");
+											}
+										%>
+									</select>
+								</div>
+
+							</div>
+						</div>
+						<!-- Right -->
+						<div class="col-9">
+							<div class="input-group col-sm">
+								<input class="form-control" type="text" aria-label="Search"
+									name="keyword" value="<%=keyword%>" />
+								<div class="input-group-append">
+									<button class="btn btn-primary btn-info" type="submit">Search</button>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col"></div>
-				<div class="col">
-					<div class="input-group col-sm">
-						<select class="form-control custom-select" id="direction"
-							name="direction">
-							<%
-								if (direction.compareTo("DESC") == 0) {
-									out.println("<option value=\"ASC\">ascending</option>");
-									out.println("<option value=\"DESC\" selected>descending</option>");
-								} else {
-									out.println("<option value=\"ASC\" selected>ascending</option>");
-									out.println("<option value=\"DESC\">descending</option>");
-								}
-							%>
-						</select>
-
-						<div class="input-group-append">
-							<button class="btn btn-primary" type="submit">Sorting</button>
-						</div>
-					</div>
-				</div>
+				</form>
 			</div>
-		</form>
+
+		</div>
+
 	</div>
 	<br>
 
-	<div class="table-responsive wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+	<div class="wow fadeInRight" data-wow-duration="1s"
+		data-wow-delay="0.5s">
 		<table
-			class="table table-bordered table-striped table-hover table-light"
+			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg"
 			style="background: white">
 			<tr class="table-dark">
 				<th scope="col">PK ID</th>
@@ -115,30 +140,38 @@ button[aria-expanded=false] .fa-chevron-down {
 					for (DepartmentEmployee de : des) {
 						out.println("<tr>");
 						//id
-						out.println("<td>"+ de.getId().toString().substring(34)+"</td>");
-						
+						out.println("<td>" + de.getId().toString().substring(34) + "</td>");
+
 						//department
-						out.println("<td>" + de.getDepartment().getId() +" | "+de.getDepartment().getDeptName()+ "</td>");
-					
+						out.println(
+								"<td>" + de.getDepartment().getId() + " | " + de.getDepartment().getDeptName() + "</td>");
+
 						//employee
-						out.println("<td>" + de.getEmployee().getId()+" | " +de.getEmployee().getFirstName()+" "+de.getEmployee().getLastName());
-						out.println("<button class='btn btn-info btn-sm btntgl float-end' data-bs-toggle='collapse' data-bs-target='.a"+de.getId().toString().substring(34)
-								+"' aria-expanded='false'><i class='fa fa-chevron-right pull-right'></i><i class='fa fa-chevron-down pull-right'></i></button>");
-						out.println("<div class='collapse a"+de.getId().toString().substring(34)+"'>");
-						
+						out.println("<td>" + de.getEmployee().getId() + " | " + de.getEmployee().getFirstName() + " "
+								+ de.getEmployee().getLastName());
+						out.println(
+								"<button class='btn btn-info btn-sm btntgl float-end' data-bs-toggle='collapse' data-bs-target='.a"
+										+ de.getId().toString().substring(34)
+										+ "' aria-expanded='false'><i class='fa fa-chevron-right pull-right'></i><i class='fa fa-chevron-down pull-right'></i></button>");
+						out.println("<div class='collapse a" + de.getId().toString().substring(34) + "'>");
+
 						//Fill the relevent (show more)
-						out.println("<hr><ul class='list-group'><li class='list-group-item list-group-item-action'>Gender: &emsp;"+(de.getEmployee().getGender()=="M"?"Male":"Female")+"</li>");
-						out.println("<li class='list-group-item list-group-item-action'>Birth date: &emsp;"+de.getEmployee().getBirthDate()+"</li>");
-						out.println("<li class='list-group-item list-group-item-action'>Hire date: &emsp;"+de.getEmployee().getHireDate()+"</li>");
+						out.println(
+								"<hr><ul class='list-group'><li class='list-group-item list-group-item-action'>Gender: &emsp;"
+										+ (de.getEmployee().getGender() == "M" ? "Male" : "Female") + "</li>");
+						out.println("<li class='list-group-item list-group-item-action'>Birth date: &emsp;"
+								+ de.getEmployee().getBirthDate() + "</li>");
+						out.println("<li class='list-group-item list-group-item-action'>Hire date: &emsp;"
+								+ de.getEmployee().getHireDate() + "</li>");
 						out.println("</ul></div></td>");
-						
+
 						out.println("<td>" + de.getFromDate() + "</td>");
 						out.println("<td>" + de.getToDate() + "</td>");
-						
-						out.println("<td><a href=\"MainServlet?table=departmentemployee&action=update&emp_id="
+
+						out.println("<td><a href=\"MainServlet?target=departmentemployee&action=update&emp_id="
 								+ de.getEmployee().getId() + "&dept_id=" + de.getDepartment().getId()
 								+ "\" class=\"text-primary\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
-						out.println("<td><a href=\"MainServlet?table=departmentemployee&action=delete&emp_id="
+						out.println("<td><a href=\"MainServlet?target=departmentemployee&action=delete&emp_id="
 								+ de.getEmployee().getId() + "&dept_id=" + de.getDepartment().getId()
 								+ "\" class=\"text-danger\" ><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
 						out.println("</tr>");
@@ -146,7 +179,7 @@ button[aria-expanded=false] .fa-chevron-down {
 				} else {
 					out.println("<tr>");
 					String status = "No records";
-					for (int i = 0; i < 8; i++) {
+					for (int i = 0; i < 7; i++) {
 						out.println("<td>" + status + "</td>");
 					}
 					out.println("</tr>");
@@ -161,11 +194,11 @@ button[aria-expanded=false] .fa-chevron-down {
 					if (currentPage != 1 && nOfPages != 0) {
 						out.println("<li class=\"page-item\">");
 						out.println("<a class=\"page-link\" href=\""
-								+ "MainServlet?table=departmentemployee&action=view&recordsPerPage=" + recordsPerPage
+								+ "MainServlet?target=departmentemployee&action=view&recordsPerPage=" + recordsPerPage
 								+ "&currentPage=1" + "&keyword=" + keyword + "&direction=" + direction + "\">First</a>");
 						out.println("</li><li class=\"page-item\">");
 						out.println("<a class=\"page-link\" href=\""
-								+ "MainServlet?table=departmentemployee&action=view&recordsPerPage=" + recordsPerPage
+								+ "MainServlet?target=departmentemployee&action=view&recordsPerPage=" + recordsPerPage
 								+ "&currentPage=" + (currentPage - 1) + "&keyword=" + keyword + "&direction=" + direction
 								+ "\">Previous</a>	</li>");
 					} else {
@@ -179,13 +212,13 @@ button[aria-expanded=false] .fa-chevron-down {
 					if (currentPage < nOfPages) {
 						out.println("<li class=\"page-item\">");
 						out.println("<a class=\"page-link\" href=\""
-								+ "MainServlet?table=departmentemployee&action=view&recordsPerPage=" + recordsPerPage
+								+ "MainServlet?target=departmentemployee&action=view&recordsPerPage=" + recordsPerPage
 								+ "&currentPage=" + (currentPage + 1) + "&keyword=" + keyword + "&direction=" + direction
 								+ "\">Next</a>");
 						out.println("</li>");
 						out.println("<li class=\"page-item\">");
 						out.println("<a class=\"page-link \" href=\""
-								+ "MainServlet?table=departmentemployee&action=view&recordsPerPage=" + recordsPerPage
+								+ "MainServlet?target=departmentemployee&action=view&recordsPerPage=" + recordsPerPage
 								+ "&currentPage=" + nOfPages + "&keyword=" + keyword + "&direction=" + direction
 								+ "\">Last</a>");
 						out.println("</li>");

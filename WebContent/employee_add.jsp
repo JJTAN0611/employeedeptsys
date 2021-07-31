@@ -24,7 +24,7 @@
 
 <div class="container wow bounceIn" data-wow-duration="1s" data-wow-delay="0.2s">
 	<form method="post" action="MainServlet">
-		<input type="hidden" name="table" value="employee" />
+		<input type="hidden" name="target" value="employee" />
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Employee ID:</label>
 			<div class="col-8">

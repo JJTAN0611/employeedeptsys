@@ -61,7 +61,6 @@ public class log extends HttpServlet {
 			        bw.close();
 			    	ValidateManageLogic.navigateJS(response.getWriter(), request);
 			    }catch(IOException ioe){
-			        // You should really do something more appropriate here
 			        ioe.printStackTrace();
 			    }
 		}else if(action.compareTo("view")==0) {
@@ -77,6 +76,7 @@ public class log extends HttpServlet {
 					else if (!cookie.getName().equals("log_refresh") && i == cookies.length - 1) {
 						Cookie nc = new Cookie("log_refresh",
 								String.valueOf("true"));
+						request.setAttribute("log_refresh", "true"); // for jsp
 						nc.setMaxAge(-1);
 						response.addCookie(nc);
 					}

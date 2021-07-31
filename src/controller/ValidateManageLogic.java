@@ -96,8 +96,8 @@ public class ValidateManageLogic {
 // redirect to another page
 	public static void navigateJS(PrintWriter out, HttpServletRequest request) {
 		out.println("<SCRIPT type=\"text/javascript\">");
-		out.println("alert(\"Your ["+request.getAttribute("action")+"] action to ["+ request.getAttribute("table")+"] is successful.\")");
-		out.println("window.location.assign(\"MainServlet?table=" + request.getAttribute("table") + "&action=view\")");
+		out.println("alert(\"Your ["+request.getAttribute("action")+"] action to ["+ request.getAttribute("target")+"] is successful.\")");
+		out.println("window.location.assign(\"MainServlet?target=" + request.getAttribute("target") + "&action=view\")");
 		out.println("</SCRIPT>");
 	}
 
@@ -106,7 +106,7 @@ public class ValidateManageLogic {
 		out.println("alert('Error: " + error.replace("\n", "").replace("\r", "") + "');");
 		out.println("alert(\"Redirected to previous page.\")");
 
-		String page="table=" + request.getAttribute("table");
+		String page="target=" + request.getAttribute("target");
 
 		if(request.getAttribute("id")!=null)
 			page=page+"&action="+request.getAttribute("action");

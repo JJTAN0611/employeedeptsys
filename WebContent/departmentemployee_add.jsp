@@ -27,7 +27,7 @@
 <div class="container wow bounceIn" data-wow-duration="1s"
 	data-wow-delay="0.2s">
 	<form method="post" action="MainServlet">
-		<input type="hidden" name="table" value="departmentemployee" />
+		<input type="hidden" name="target" value="departmentemployee" />
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
@@ -36,7 +36,7 @@
 					<div class="input-group-append">
 					<button class="btn btn-info" data-bs-toggle='collapse' data-bs-target='#deptcontent' type="button"
 							onclick="
-								 $.get('MainServlet?table=departmentemployee&action=getDepartment&id='+$('#dept_id').val(), function(data, status){
+								 $.get('MainServlet?target=departmentemployee&action=getDepartment&id='+$('#dept_id').val(), function(data, status){
 									  var aid = $.parseJSON(data);
 									  if(aid.name=='null'){
 										  $('#deptcontent').hide();
@@ -68,7 +68,7 @@
 					<div class="input-group-append">
 						<button class="btn btn-info" data-bs-toggle='collapse' data-bs-target='#empcontent' type="button"
 							onclick="
-						  $.get('MainServlet?table=departmentemployee&action=getEmployee&id='+$('#emp_id').val(), function(data, status){
+						  $.get('MainServlet?target=departmentemployee&action=getEmployee&id='+$('#emp_id').val(), function(data, status){
 							  var aid = $.parseJSON(data);
 							  
 							  if(aid.first_name=='null'){

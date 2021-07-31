@@ -29,7 +29,7 @@
 
 <div class="container wow bounceInDown" data-wow-duration="1.5s" data-wow-delay="0.2s">
 	<form method="post" action="MainServlet">
-		<input type="hidden" name="table" value="department" />
+		<input type="hidden" name="target" value="department" />
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">

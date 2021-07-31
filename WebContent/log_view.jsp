@@ -53,13 +53,13 @@
 	<hr>
 	<div class="row">
 		<div class="col">
-			<a type="button" href="MainServlet?table=log&action=delete"
+			<a type="button" href="MainServlet?target=log&action=delete"
 				class="btn btn-danger btn-circle float-start"
 				style="border-radius: 30px">Remove <i class="fas fa-trash-alt"></i></a>
 		</div>
 
 		<div class="col">
-			<a type="button" href="MainServlet?table=log&action=download"
+			<a type="button" href="MainServlet?target=log&action=download"
 				class="btn btn-dark btn-circle float-end"
 				style="border-radius: 30px">Download <i
 				class="fas fa-file-download"></i>
