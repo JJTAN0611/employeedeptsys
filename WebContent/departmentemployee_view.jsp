@@ -46,7 +46,7 @@ button[aria-expanded=false] .fa-chevron-down {
 <div class="container">
 	<div class="row wow fadeInLeft" data-wow-duration="1s"
 		data-wow-delay="0.5s">
-		<div class="card text-white bg-dark">
+		<div class="card text-white bg-dark shadow-lg">
 			<h4 class="card-header text-center">
 				Page Sorting and Filter Control
 				<button class="btn btn-light float-end btn-circle rounded-pill"
@@ -62,54 +62,70 @@ button[aria-expanded=false] .fa-chevron-down {
 					method="get">
 					<input type="hidden" name=target value="departmentemployee" /> <input
 						type="hidden" name=action value="view" />
-					<!-- Left -->
 
-					<div class="row">
-						<!-- Left -->
-						<div class="col-3 border-end border-light">
-							<div class="card  text-dark bg-light">
-								<div class="card-header">
-									Record per page
-								</div>
-								<div class="card-body">
-									<input class="form-control-range" type="range"
-										name="recordsPerPage" style="color: red" min="1" max="100"
-										value="<%=recordsPerPage%>"
-										oninput="$('#value').text($(this).val())">
-										<span id="value"><%=recordsPerPage%></span>
-								</div>
-							</div>
-							<br>
-							<div class="card text-dark bg-light">
-								<div class="card-header">Sorting</div>
-								<div class="card-body">
-									<select class="form-control custom-select" id="direction"
-										name="direction">
-										<%
-											if (direction.compareTo("DESC") == 0) {
-												out.println("<option value=\"ASC\">ascending</option>");
-												out.println("<option value=\"DESC\" selected>descending</option>");
-											} else {
-												out.println("<option value=\"ASC\" selected>ascending</option>");
-												out.println("<option value=\"DESC\">descending</option>");
-											}
-										%>
-									</select>
-								</div>
 
-							</div>
+					<div class="card text-dark bg-light">
+						<div class="card-header"><h5>Filter by keyword</h5> (You may leave empty), (Case is not sensitive)
 						</div>
-						<!-- Right -->
-						<div class="col-9">
-							<div class="input-group col-sm">
-								<input class="form-control" type="text" aria-label="Search"
-									name="keyword" value="<%=keyword%>" />
-								<div class="input-group-append">
-									<button class="btn btn-primary btn-info" type="submit">Search</button>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-2 float-end">Keyword:</div>
+								<div class="col-10">
+									<input class="form-control" type="text" aria-label="Search"
+										name="keyword" value="<%=keyword%>"
+										placeholder="Enter keyword. (Id, name, etc)" /><br>
+										<i>**You may use <b>department name</b> or <b>employee name</b> instead of use <b>id</b> to search.</i><br>
+										<i>**You may use <b>%</b> for searching mask. For example, <b>Marketing%Ekawit Diderrich</b>.</i>
 								</div>
 							</div>
 						</div>
 					</div>
+					<hr>
+					<div class="card  text-dark bg-light">
+						<div class="card-header"><h5>Page Sorting</h5></div>
+						<div class="card-body">
+							<div class="row">
+								<div
+									class="col-6 item-aligns-center border-end border-dark border-5">
+									<div class="row">
+										<div class="col">Record per Page:</div>
+										<div class="col">
+											<input class="form-control-range" type="range"
+												name="recordsPerPage" style="color: red" min="1" max="100"
+												value="<%=recordsPerPage%>"
+												oninput="$('#value').text($(this).val())"> <span
+												id="value"><%=recordsPerPage%></span>
+										</div>
+									</div>
+
+								</div>
+								<div class="col-6 item-aligns-center">
+									<div class="row">
+										<div class="col">Direction:</div>
+										<div class="col">
+											<div class="form-check">
+												<input class="form-check-input" type="radio" value="ASC"
+													name="direction" id="asc"
+													<%=direction.compareTo("ASC") == 0 ? "checked" : ""%>>
+												<label class="form-check-label" for="asc"> Ascending</label>
+											</div>
+											<div class="form-check">
+												<input class="form-check-input" type="radio"
+													name="direction" id="desc"
+													<%=direction.compareTo("DESC") == 0 ? "checked" : ""%>
+													value="DESC"> <label class="form-check-label"
+													for="desc">Descending </label>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<button class="btn btn-primary btn-info float-end" type="submit">Go</button>
+
 				</form>
 			</div>
 
@@ -186,8 +202,7 @@ button[aria-expanded=false] .fa-chevron-down {
 				}
 			%>
 		</table>
-	</div>
-	<div class=row>
+		<div class=row>
 		<nav class="col-6" aria-label="Navigation for staffs">
 			<ul class="pagination">
 				<%
@@ -243,6 +258,8 @@ button[aria-expanded=false] .fa-chevron-down {
 			}
 		%>
 	</div>
+	</div>
+	
 
 </div>
 

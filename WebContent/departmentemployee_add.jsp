@@ -34,8 +34,9 @@
 				<div class="input-group">
 					<input id="dept_id" type="text" class="form-control" name="dept_id">
 					<div class="input-group-append">
-					<button class="btn btn-info" data-bs-toggle='collapse' data-bs-target='#deptcontent' type="button"
+					<button id="checkdept" class="btn btn-info" data-bs-toggle='collapse' data-bs-target='#deptcontent' type="button"
 							onclick="
+								$('#checkdept').attr('class', 'btn btn-info spinner-border');
 								 $.get('MainServlet?target=departmentemployee&action=getDepartment&id='+$('#dept_id').val(), function(data, status){
 									  var aid = $.parseJSON(data);
 									  if(aid.name=='null'){
@@ -46,7 +47,9 @@
 										$('#dept_id').val(aid.id);
 									  	$('#dept_name').html('Department Name:&emsp;'+aid.name);
 									  	$('#deptcontent').show();
-									  }});
+									  }
+										$('#checkdept').attr('class', 'btn btn-info');
+									});
 						">Check</button>
 					</div>
 				</div>
@@ -66,11 +69,11 @@
 				<div class="input-group">
 					<input id="emp_id" type="text" class="form-control" name="emp_id">
 					<div class="input-group-append">
-						<button class="btn btn-info" data-bs-toggle='collapse' data-bs-target='#empcontent' type="button"
+						<button id="checkemp" class="btn btn-info" data-bs-toggle='collapse' data-bs-target='#empcontent' type="button"
 							onclick="
+								$('#checkemp').attr('class', 'btn btn-info spinner-border');
 						  $.get('MainServlet?target=departmentemployee&action=getEmployee&id='+$('#emp_id').val(), function(data, status){
 							  var aid = $.parseJSON(data);
-							  
 							  if(aid.first_name=='null'){
 								  $('#empcontent').hide();
 								  alert('Employee ID: ['+$('#emp_id').val()+'] not exist.');
@@ -88,6 +91,7 @@
 								  $('#emphdate').html('Hire date:&emsp;'+aid.hire_date);
 							  	$('#empcontent').show();
 							  }
+							  $('#checkemp').attr('class', 'btn btn-info');
 							  });
 						">Check</button>
 					</div>

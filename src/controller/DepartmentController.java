@@ -42,7 +42,9 @@ public class DepartmentController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
 
+		
 		String action = (String) request.getAttribute("action");
 
 		try {
@@ -53,7 +55,7 @@ public class DepartmentController extends HttpServlet {
 				out.print(jo);
 				out.flush();
 			} else if (action.compareTo("getDepartment") == 0) {
-				String id = (String) request.getAttribute("id");
+				String id = (String) request.getParameter("id");
 				Department dept = deptbean.findDepartment(id);
 				JsonObject jo = Json.createObjectBuilder().add("id", dept.getId()).add("name", dept.getDeptName())
 						.build();

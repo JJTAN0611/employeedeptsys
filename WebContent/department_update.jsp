@@ -6,6 +6,11 @@
 
 <%
 	Department dept = (Department) request.getAttribute("dept");
+	if (dept == null) {
+		dept = new Department();
+		dept.setId("");
+		dept.setDeptName("");
+	}
 %>
 <%@ include file="header.jsp"%>
 
@@ -27,22 +32,25 @@
 	<br> <br>
 </div>
 
-<div class="container wow bounceInDown" data-wow-duration="1.5s" data-wow-delay="0.2s">
+<div class="container wow bounceInDown" data-wow-duration="1.5s"
+	data-wow-delay="0.2s">
 	<form method="post" action="MainServlet">
 		<input type="hidden" name="target" value="department" />
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
-				<input type="text" class="form-control" placeholder="Enter name"
-					name="id" value="<%=dept.getId()%>" readonly="readonly">
+				<input id="id_placeholder" type="text" class="form-control"
+					placeholder="Enter name" name="id" value="<%=dept.getId()%>"
+					readonly='readonly'>
 			</div>
 		</div>
 		<br>
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department name:</label>
 			<div class="col-8">
-				<input type="text" class="form-control" placeholder="Enter name"
-					name="dept_name" value="<%=dept.getDeptName()%>">
+				<input id="name_placeholder" type="text" class="form-control"
+					placeholder="Enter name" name="dept_name"
+					value="<%=dept.getDeptName()%>">
 			</div>
 		</div>
 		<br>
@@ -57,3 +65,37 @@
 </div>
 
 <%@ include file="footer.jsp"%>
+<!--
+	<div class="input-group">
+					<input id="id_placeholder" type="text" class="form-control"
+						placeholder="Enter name" name="id" value="<%=dept.getId()%>"
+						readonly='readonly'>
+					<button class="btn btn-primary" type="button" id="getDept">Search</button>
+				</div>
+<!%=(dept.getId().compareTo("")!=0?"readonly='readonly'":"") %>
+<script>
+	$(document).ready(function() {
+		$("#getDept").click(function() {
+			$.ajax({
+				url : 'MainServlet',
+				type : 'GET',
+				dataType : 'json',
+				data : jQuery.param({ target:'department',action:'getDepartment',id: 'd001'}),
+				success : function(data) {
+					if (data === null) {
+						alert("Invalid department id");
+					} else {
+						alert($.parseJSON(data));
+						$("#id_placeholder").val(data.id);
+						$("#name_placeholder").val(data.name);
+					}
+				},
+				error : function() {
+					alert('Invalid id no or an error occurred');
+				}
+			});
+			return false;
+		});
+	});
+</script>
+  -->

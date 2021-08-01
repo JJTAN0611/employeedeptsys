@@ -4,11 +4,11 @@
 <%@page import="weblistener.UserTrackingListener"%>
 <%@page import="javax.servlet.http.Cookie"%>
 <%
-	String table = (String) request.getAttribute("table");
-	if (table == null)
-		table = "index";
+	String target = (String) request.getAttribute("target");
+	if (target == null)
+		target = "index";
 	String color;
-	switch (table) {
+	switch (target) {
 	case "department":
 		color = "#ffffee";
 		break;
@@ -121,7 +121,7 @@
 									</button>
 									<ul class="dropdown-menu">
 										<li><a id="adddepartment" class="dropdown-item"
-											href="MainServlet?table=department&action=add">Add
+											href="MainServlet?target=department&action=add">Add
 												Department</a></li>
 										<li></li>
 									</ul>
@@ -139,7 +139,7 @@
 									</button>
 									<ul class="dropdown-menu">
 										<li><a id="adddepartmentemployee" class="dropdown-item"
-											href="MainServlet?table=departmentemployee&action=add">Add
+											href="MainServlet?target=departmentemployee&action=add">Add
 												Department Employee</a></li>
 										<li></li>
 									</ul>
@@ -156,7 +156,7 @@
 									</button>
 									<ul class="dropdown-menu">
 										<li><a id="addemployee" class="dropdown-item"
-											href="MainServlet?table=employee&action=add">Add Employee</a></li>
+											href="MainServlet?target=employee&action=add">Add Employee</a></li>
 										<li></li>
 									</ul>
 								</div></li>

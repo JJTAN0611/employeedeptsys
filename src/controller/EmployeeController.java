@@ -36,7 +36,7 @@ public class EmployeeController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
 		String action = (String) request.getAttribute("action");
 
 		try {
@@ -44,9 +44,9 @@ public class EmployeeController extends HttpServlet {
 			if (action.compareTo("getAutoId") == 0) {
 				response.getWriter().print(getAutoId());
 			} else if (action.compareTo("getEmployee") == 0) {
-				String id = (String) request.getAttribute("id");
+				String id = (String) request.getParameter("id");
 				Employee emp = empbean.findEmployee(id);
-
+				logger.setContentPoints(request, "hi"+id);
 				JsonObject jo = Json.createObjectBuilder().add("id", emp.getId()).add("first_name", emp.getFirstName())
 						.add("last_name", emp.getLastName()).add("gender", emp.getGender())
 						.add("birth_date", emp.getBirthDate().toString()).add("hire_date", emp.getHireDate().toString())

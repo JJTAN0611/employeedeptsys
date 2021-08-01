@@ -43,7 +43,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	public List<Department> readDepartment(String direction) throws EJBException {
 		// Write some codes here…
 		Query q = null;
-		q = em.createNativeQuery("SELECT * FROM employees.department order by id "+direction, Department.class);
+		q = em.createNativeQuery("SELECT * FROM employees.department order by id " + direction, Department.class);
 		List<Department> results = q.getResultList();
 		return results;
 	}
@@ -63,14 +63,21 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		q.setParameter("id", String.valueOf(id));
 		Department d;
 		try {
-			d=(Department) q.getSingleResult();
+			d = (Department) q.getSingleResult();
 			return d;
-		}catch (NoResultException e) {
+		} catch (NoResultException e) {
 			d = new Department();
 			d.setId(id);
 			d.setDeptName("null");
 			return d;
 		}
+	}
+
+	public List<Department> getDepartmentByName(String name) throws EJBException {
+		// Write some codes here…
+		Query q = em.createNamedQuery("Department.findbyName");
+		q.setParameter("dept_name", name);
+		return q.getResultList();
 	}
 
 	public void updateDepartment(String[] s) throws EJBException {

@@ -40,6 +40,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		// TODO Auto-generated constructor stub
 	}
 
+	
 	public List<DepartmentEmployee> getAllDepartmentEmployees() throws EJBException {
 		// Write some codes here…
 		return em.createNamedQuery("DepartmentEmployee.findAll").getResultList();
@@ -55,10 +56,14 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 			start = currentPage * recordsPerPage - recordsPerPage;
 		} else {
 			q = em.createNativeQuery(
-					"SELECT * from employees.department_employee  WHERE concat(department_id,employee_id,from_date,to_date) LIKE ? order by department_id "+direction,
+					"SELECT * from employees.department_employee de, employees.department d, employees.employee e "
+					+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
+					+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
+					+ "LIKE lower(?) order by de.department_id "+direction,
 					DepartmentEmployee.class);
-			start = currentPage * recordsPerPage - recordsPerPage;
 			q.setParameter(1, "%" + keyword + "%");
+			start = currentPage * recordsPerPage - recordsPerPage;
+	
 		}
 		List<DepartmentEmployee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
 		return results;
@@ -70,8 +75,10 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		if (keyword.isEmpty()) {
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department_employee");
 		} else {
-			q = em.createNativeQuery(
-					"SELECT COUNT(*) AS totalrow from employees.department_employee WHERE concat(department_id,employee_id,from_date,to_date) LIKE ?");
+			q = em.createNativeQuery("SELECT * from employees.department_employee de, employees.department d, employees.employee e "
+					+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
+					+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
+					+ "LIKE lower(?) order by de.department_id ");
 			q.setParameter(1, "%" + keyword + "%");
 		}
 		BigInteger results = (BigInteger) q.getSingleResult();

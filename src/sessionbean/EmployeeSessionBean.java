@@ -50,7 +50,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 			start = currentPage * recordsPerPage - recordsPerPage;
 		} else {
 			q = em.createNativeQuery(
-					"SELECT * from employees.employee WHERE concat(id,first_name,last_name,gender) LIKE ? order by id"+direction,
+					"SELECT * from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?) order by id "+direction,
 					Employee.class);
 			start = currentPage * recordsPerPage - recordsPerPage;
 			q.setParameter(1, "%" + keyword + "%");
@@ -66,7 +66,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.employee");
 		} else {
 			q = em.createNativeQuery(
-					"SELECT COUNT(*) AS totalrow from employees.employee WHERE concat(id,first_name,last_name,gender) LIKE ?");
+					"SELECT * from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?) order by id");
 			q.setParameter(1, "%" + keyword + "%");
 		}
 		BigInteger results = (BigInteger) q.getSingleResult();

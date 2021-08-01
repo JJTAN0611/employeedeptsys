@@ -17,6 +17,7 @@ import model.entity.Department;
 import model.entity.Employee;
 import sessionbean.DepartmentSessionBeanLocal;
 import sessionbean.EmployeeSessionBeanLocal;
+import utilities.LoggingGeneral;
 
 @WebServlet("/MainServlet")
 public class MainServlet extends HttpServlet {
@@ -33,6 +34,9 @@ public class MainServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
+		
 		response.setContentType("text/html;charset=UTF-8");
 
 		RequestDispatcher dispatcher = null;
@@ -49,7 +53,6 @@ public class MainServlet extends HttpServlet {
 					dispatcher = request.getRequestDispatcher("DepartmentController");
 					break;
 				case "view": // check display's parameter
-					if (ServletForwardValidate.departmentView(request, response))
 						dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
 					break;
 				case "add":
@@ -67,9 +70,7 @@ public class MainServlet extends HttpServlet {
 					dispatcher = request.getRequestDispatcher("EmployeeController");
 					break;
 				case "view": // check display's parameter
-					if (ServletForwardValidate.employeeView(request, response)) {
-						dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
-					}
+					dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
 					break;
 				case "add":
 				case "update": // check edit's parameter
@@ -87,13 +88,12 @@ public class MainServlet extends HttpServlet {
 					break;
 				case "getDepartment":
 					dispatcher = request.getRequestDispatcher("DepartmentController");
+					break;
 				case "getEmployee":
 					dispatcher = request.getRequestDispatcher("EmployeeController");
 					break;
 				case "view": // check display's parameter
-					if (ServletForwardValidate.departmentemployeeView(request, response)) {
-						dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");
-					}
+					dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");
 					break;
 				case "add":
 				case "update": // check edit's parameter

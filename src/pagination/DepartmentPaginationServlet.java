@@ -1,6 +1,5 @@
 package pagination;
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -20,12 +19,11 @@ import sessionbean.DepartmentSessionBeanLocal;
 import sessionbean.EmployeeSessionBeanLocal;
 import utilities.LoggingGeneral;
 
-
 @WebServlet("/DepartmentPaginationServlet")
 public class DepartmentPaginationServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@EJB
 	private DepartmentSessionBeanLocal deptbean;
 
@@ -36,20 +34,32 @@ public class DepartmentPaginationServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LoggingGeneral logger = (LoggingGeneral)request.getServletContext().getAttribute("log");
+		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
 		logger.setEntryPoints(request);
-		
+
 		response.setContentType("text/html;charset=UTF-8");
 
-		
-		String direction=(String) request.getAttribute("direction");
-		
-		List<Department> lists = deptbean.readDepartment(direction); //Ask bean to give list
-		request.setAttribute("departments", lists);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("department_view.jsp");
-		dispatcher.forward(request, response);
-		
+		RequestDispatcher dispatcher = null;
+		try {
+			if (!PaginationValidate.singlePageView(request, response))
+				throw new Exception();
+
+			String direction = (String) request.getAttribute("direction");
+
+			List<Department> lists = deptbean.readDepartment(direction); // Ask bean to give list
+			request.setAttribute("departments", lists);
+			
+			dispatcher = request.getRequestDispatcher("department_view.jsp");
+			logger.setContentPoints(request, "Success view");
+			
+		} catch (Exception ex) {
+			dispatcher = request.getRequestDispatcher("error.jsp");
+			logger.setContentPoints(request, "Unsuccess view" + ex.getMessage());
+		} finally {
+			dispatcher.forward(request, response);
+			logger.setExitPoints(request);
+		}
+
 		logger.setContentPoints(request, "Success view");
 		logger.setExitPoints(request);
 	}

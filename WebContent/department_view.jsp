@@ -9,7 +9,8 @@
 %>
 <%@ include file="header.jsp"%>
 
-<div class="container top-first wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
+<div class="container top-first wow fadeIn" data-wow-duration="2s"
+	data-wow-delay="0.4s">
 	<div class="badge bg-warning text-dark text-wrap large col-12">
 		<div class="row">
 			<div class="text-start col" style="font-size: 35px;">
@@ -30,14 +31,15 @@
 </div>
 
 <div class="container">
-	<div class="row wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
+	<div class="row wow fadeInLeft" data-wow-duration="1s"
+		data-wow-delay="0.5s">
 		<div class="col"></div>
 		<div class="col"></div>
 		<form class="form-inline md-form col" action="MainServlet"
 			method="get">
 			<input type="hidden" name=target value="department" /> <input
 				type="hidden" name=action value="view" />
-			<div class="input-group">
+			<div class="input-group shadow-lg">
 				<select class="form-control custom-select" id="direction"
 					name="direction">
 					<%
@@ -57,7 +59,8 @@
 		</form>
 	</div>
 	<br> <br>
-	<div class="wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+	<div class="wow fadeInRight" data-wow-duration="1s"
+		data-wow-delay="0.5s">
 		<table
 			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg">
 			<tr class="table-dark">
