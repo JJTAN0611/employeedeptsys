@@ -29,9 +29,7 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 
 	@EJB
 	private DepartmentEmployeeSessionBeanLocal deptembbean;
-	@EJB
-	private DepartmentSessionBeanLocal deptbean;
-
+	
 	public DepartmentEmployeePaginationServlet() {
 		super();
 		// TODO Auto-generated constructor stub
