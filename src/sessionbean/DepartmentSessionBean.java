@@ -25,7 +25,7 @@ import javax.ejb.Local;
 public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	// Write some codes here…
-	@PersistenceContext(unitName = "DepartmentEmployeeWebApp")
+	@PersistenceContext(unitName = "TanJingJie1804560")
 	EntityManager em;
 
 	/**

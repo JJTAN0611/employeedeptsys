@@ -71,7 +71,7 @@ button[aria-expanded=false] .fa-chevron-down {
 							<div class="row">
 								<div class="col-2 float-end">Keyword:</div>
 								<div class="col-10">
-									<input class="form-control" type="text" aria-label="Search"
+									<input class="form-control border-info border-5" type="text" aria-label="Search"
 										name="keyword" value="<%=keyword%>"
 										placeholder="Enter keyword. (Id, name, etc)" /><br>
 										<i>**You may use <b>department name</b> or <b>employee name</b> instead of use <b>id</b> to search.</i><br>
@@ -91,7 +91,7 @@ button[aria-expanded=false] .fa-chevron-down {
 										<div class="col">Record per Page:</div>
 										<div class="col">
 											<input class="form-control-range" type="range"
-												name="recordsPerPage" style="color: red" min="1" max="100"
+												name="recordsPerPage" min="1" max="100"
 												value="<%=recordsPerPage%>"
 												oninput="$('#value').text($(this).val())"> <span
 												id="value"><%=recordsPerPage%></span>

@@ -61,7 +61,7 @@
 	rel="stylesheet">
 
 <title>Department Employee System</title>
-
+<link rel="shortcut icon" href="assets/images/employee.png">
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 

@@ -30,7 +30,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 	@EJB
 	private EmployeeSessionBeanLocal b;
 	// Write some codes here…
-	@PersistenceContext(unitName = "DepartmentEmployeeWebApp")
+	@PersistenceContext(unitName = "TanJingJie1804560")
 	EntityManager em;
 
 	/**
@@ -75,10 +75,10 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		if (keyword.isEmpty()) {
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department_employee");
 		} else {
-			q = em.createNativeQuery("SELECT * from employees.department_employee de, employees.department d, employees.employee e "
+			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow from employees.department_employee de, employees.department d, employees.employee e "
 					+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
 					+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
-					+ "LIKE lower(?) order by de.department_id ");
+					+ "LIKE lower(?)");
 			q.setParameter(1, "%" + keyword + "%");
 		}
 		BigInteger results = (BigInteger) q.getSingleResult();

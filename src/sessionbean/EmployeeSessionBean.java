@@ -25,7 +25,7 @@ import javax.ejb.Local;
 public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 	// Write some codes here…
-	@PersistenceContext(unitName = "DepartmentEmployeeWebApp")
+	@PersistenceContext(unitName = "TanJingJie1804560")
 	EntityManager em;
 
 	/**
@@ -66,7 +66,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.employee");
 		} else {
 			q = em.createNativeQuery(
-					"SELECT * from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?) order by id");
+					"SELECT COUNT(id) AS totalrow  from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?)");
 			q.setParameter(1, "%" + keyword + "%");
 		}
 		BigInteger results = (BigInteger) q.getSingleResult();

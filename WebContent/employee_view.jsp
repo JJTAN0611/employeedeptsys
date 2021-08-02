@@ -70,7 +70,7 @@ button[aria-expanded=false] .fa-chevron-down {
 							<div class="row">
 								<div class="col-2 float-end"><b>Keyword:</b></div>
 								<div class="col-10">
-									<input class="form-control" type="text" aria-label="Search"
+									<input class="form-control border-info border-5" type="text" aria-label="Search"
 										name="keyword" value="<%=keyword%>"
 										placeholder="Enter keyword. (Id, name, etc)" /><br> <i>**You
 										may use <b>%</b> for searching mask. For example, <b>Georgi
