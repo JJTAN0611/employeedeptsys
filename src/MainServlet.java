@@ -36,88 +36,80 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
-		
+
 		response.setContentType("text/html;charset=UTF-8");
 
 		RequestDispatcher dispatcher = null;
 
 		// compulsory to check
-		String action = ServletForwardValidate.action(request, response);
-		String target = ServletForwardValidate.target(request, response);
 
-		if (action != null && target != null) {
-			// department
-			if (target.compareTo("department") == 0)
-				switch (action) {
-				case "getAutoId":
-					dispatcher = request.getRequestDispatcher("DepartmentController");
-					break;
-				case "view": // check display's parameter
-						dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
-					break;
-				case "add":
-				case "update": // check edit's parameter
-				case "delete": // check remove's parameter
-					dispatcher = request.getRequestDispatcher("DepartmentController");
-					break;
-				default:
-					break;
-				}
-			// employee
-			else if (target.compareTo("employee") == 0) {
-				switch (action) {
-				case "getAutoId":
-					dispatcher = request.getRequestDispatcher("EmployeeController");
-					break;
-				case "view": // check display's parameter
-					dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
-					break;
-				case "add":
-				case "update": // check edit's parameter
-				case "delete": // check remove's parameter
-					dispatcher = request.getRequestDispatcher("EmployeeController");
-					break;
-				default:
-					break;
-				}
-				// departmentemployee
-			} else if (target.compareTo("departmentemployee") == 0) {
-				switch (action) {
-				case "getAutoId":
-					dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
-					break;
-				case "getDepartment":
-					dispatcher = request.getRequestDispatcher("DepartmentController");
-					break;
-				case "getEmployee":
-					dispatcher = request.getRequestDispatcher("EmployeeController");
-					break;
-				case "view": // check display's parameter
-					dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");
-					break;
-				case "add":
-				case "update": // check edit's parameter
-				case "delete": // check remove's parameter
-					dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
-					break;
-				default:
-					break;
-				}
-			} else if (target.compareTo("log") == 0) {
-				switch (action) {
-				case "view":
-				case "download":
-				case "delete":
-					dispatcher = request.getRequestDispatcher("log");
-					break;
-				default:
-					break;
-				}
+		String target = (String) request.getAttribute("target");
+		String action = (String) request.getAttribute("action");
+		// department
+		if (target.compareTo("department") == 0)
+			switch (action) {
+			case "getAutoId":
+				dispatcher = request.getRequestDispatcher("DepartmentController");
+				break;
+			case "view": // check display's parameter
+				dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
+				break;
+			case "add":
+			case "update": // check edit's parameter
+			case "delete": // check remove's parameter
+				dispatcher = request.getRequestDispatcher("DepartmentController");
+				break;
+			}
+		// employee
+		else if (target.compareTo("employee") == 0) {
+			switch (action) {
+			case "getAutoId":
+				dispatcher = request.getRequestDispatcher("EmployeeController");
+				break;
+			case "view": // check display's parameter
+				dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
+				break;
+			case "add":
+			case "update": // check edit's parameter
+			case "delete": // check remove's parameter
+				dispatcher = request.getRequestDispatcher("EmployeeController");
+				break;
+			}
+			// departmentemployee
+		} else if (target.compareTo("departmentemployee") == 0) {
+			switch (action) {
+			case "getAutoId":
+				dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
+				break;
+			case "getDepartment":
+				dispatcher = request.getRequestDispatcher("DepartmentController");
+				break;
+			case "getEmployee":
+				dispatcher = request.getRequestDispatcher("EmployeeController");
+				break;
+			case "view": // check display's parameter
+				dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");
+				break;
+			case "add":
+			case "update": // check edit's parameter
+			case "delete": // check remove's parameter
+				dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
+				break;
+			}
+		} else if (target.compareTo("log") == 0) {
+			switch (action) {
+			case "view":
+			case "download":
+			case "delete":
+				dispatcher = request.getRequestDispatcher("log");
+				break;
 			}
 		}
 
-		if (dispatcher == null)
+		if (dispatcher == null) {
+			request.setAttribute("filtered", "is eliminated from servlet");
 			dispatcher = request.getRequestDispatcher("error.jsp");
+		}
 
 		dispatcher.forward(request, response);
 

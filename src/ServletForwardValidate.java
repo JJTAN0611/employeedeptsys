@@ -3,65 +3,79 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import controller.ValidateManageLogic;
 
-public class ServletForwardValidate {
+@WebFilter(filterName="MainFilter",urlPatterns="/MainServlet",dispatcherTypes= {DispatcherType.REQUEST})
+public class ServletForwardValidate implements Filter{
 	/*
 	 * This class is to verify those compulsory servlets forwarding The validate
 	 * parameter is target, action
 	 */
 
-	
-	public static String action(HttpServletRequest request, HttpServletResponse response) {
+	private boolean action(ServletRequest request, ServletResponse response) {
 		//retrieve
 		String action = request.getParameter("action");
 		request.setAttribute("action", action);
 		
 		//check
-		if(action==null)
-			return null;
-		else if (action.compareTo("getAutoId") == 0) {
-			return "getAutoId";
-		} else if (action.compareTo("getDepartment") == 0) {
-			return "getDepartment";
-		} else if (action.compareTo("getEmployee") == 0) {
-			return "getEmployee";
-		} else if (action.compareTo("view") == 0) {
-			return "view";
-		} else if (action.compareTo("add") == 0)
-			return "add";
-		else if (action.compareTo("update") == 0)
-			return "update";
-		else if (action.compareTo("delete") == 0)
-			return "delete";
-		else if (action.compareTo("download") == 0)
-			return "download";
-		else
-			return null; // abnormal value
+		switch(action) {
+		case "getAutoId":
+		case "getDepartment":
+		case "getEmployee":
+		case "view":
+		case "add":
+		case "update":
+		case "delete":
+		case "download":
+			request.setAttribute("action", action);
+			return true;
+		default:
+			return false;
+		}
 	}
 
-	public static String target(HttpServletRequest request, HttpServletResponse response) {
+	private boolean target(ServletRequest request, ServletResponse response) {
 		
 		//retrieve
 		String target = request.getParameter("target");
 		request.setAttribute("target", target);
 		
-		//check
-		if(target==null)
-			return null;
-		else if (target.compareTo("department") == 0)
-			return "department";
-		else if (target.compareTo("departmentemployee") == 0)
-			return "departmentemployee";
-		else if (target.compareTo("employee") == 0)
-			return "employee";
-		else if (target.compareTo("log") == 0)
-			return "log";
-		else
-			return null; // abnormal value
+		switch(target) {
+		case "department":
+		case "departmentemployee":
+		case "employee":
+		case "log":
+			request.setAttribute("target", target);
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
+		// TODO Auto-generated method stub
+		if(action(request, response) && target(request, response))
+			chain.doFilter(request, response);
+		else {
+			request.setAttribute("filtered", "is eliminated from filter");
+			RequestDispatcher dispatcher= request.getRequestDispatcher("error.jsp");
+			dispatcher = request.getRequestDispatcher("error.jsp");
+			dispatcher.forward(request, response);
+		}
+
 	}
 
 

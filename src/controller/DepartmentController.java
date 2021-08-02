@@ -21,11 +21,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.postgresql.util.PSQLException;
 
 import model.entity.Department;
 import model.entity.Employee;
+import model.usebean.DepartmentUseBean;
 import sessionbean.DepartmentSessionBeanLocal;
 import sessionbean.EmployeeSessionBeanLocal;
 import utilities.LoggingGeneral;
@@ -44,7 +46,6 @@ public class DepartmentController extends HttpServlet {
 			throws ServletException, IOException {
 		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
 
-		
 		String action = (String) request.getAttribute("action");
 
 		try {
@@ -63,7 +64,9 @@ public class DepartmentController extends HttpServlet {
 				out.print(jo);
 				out.flush();
 			} else if (action.compareTo("add") == 0) {
-				request.setAttribute("id", getAutoId());
+				HttpSession session = request.getSession();
+				session.setAttribute("dub", new DepartmentUseBean(getAutoId()));
+
 				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
@@ -93,70 +96,67 @@ public class DepartmentController extends HttpServlet {
 
 		String action = (String) request.getAttribute("action");
 
-		try {
-			logger.setEntryPoints(request);
-
-			if (action.compareTo("add") == 0) {
-				if (!ValidateManageLogic.departmentContent(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department name", request);
-				} else if (!ValidateManageLogic.departmentID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department id", request);
-				} else {
-					String[] s = { (String) request.getAttribute("id"), (String) request.getAttribute("dept_name") };
-
-					deptbean.addDepartment(s);
+		switch (action) {
+		case "add":
+			DepartmentUseBean dup=new DepartmentUseBean();
+			try {
+				dup.setId(request.getParameter("id"));
+				dup.setDept_name(request.getParameter("dept_name"));
+				
+				if (dup.validate(request)) {
+					deptbean.addDepartment(dup);
 					ValidateManageLogic.navigateJS(response.getWriter(), request);
-					
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + dup.getId());
+					return;
 				}
-
-			} else if (action.compareTo("delete") == 0) {
-				if (!ValidateManageLogic.departmentID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department", request);
-				} else {
-					String id = (String) request.getAttribute("id");
-					deptbean.deleteDepartment(id);
-					ValidateManageLogic.navigateJS(response.getWriter(), request);
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + id);
-				}
-
-			} else if (action.compareTo("update") == 0) {
-				if (!ValidateManageLogic.departmentID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department id", request);
-				} else if (!ValidateManageLogic.departmentContent(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(),
-							"Invalid department name: " + request.getParameter("dept_name"), request);
-				} else {
-					String[] dept = { (String) request.getAttribute("id"), (String) request.getAttribute("dept_name") };
-					deptbean.updateDepartment(dept);
-					ValidateManageLogic.navigateJS(response.getWriter(), request);
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + dept[0]);
-				}
+			} catch (Exception e) {
+				errorRedirect(e, dup);
+			}
+			request.getSession().setAttribute("dub", dup);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("department_add.jsp");
+			dispatcher.forward(request, response);
+			break;
+		case "delete":
+			if (!ValidateManageLogic.departmentID(request, response)) {
+				ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department", request);
 			} else {
-				logger.setContentPoints(request, "Invalid action --> " + action);
+				String id = (String) request.getAttribute("id");
+				deptbean.deleteDepartment(id);
+				ValidateManageLogic.navigateJS(response.getWriter(), request);
+				logger.setContentPoints(request, "Success " + action + " --> ID:" + id);
 			}
-
-		} catch (Exception e) {
-			PSQLException psqle = unwrapCause(PSQLException.class, e);
-			if (psqle != null) {
-				if (psqle.getMessage().contains("too long")) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid input length occur.", request);
-				} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
-					if(psqle.getMessage().contains("primary"))
-							ValidateManageLogic.printErrorNotice(response.getWriter(),
-							"Duplicate department id. Detail -> " + psqle.getMessage().toString() , request);
-					else if(psqle.getMessage().contains("dept_name"))
-							ValidateManageLogic.printErrorNotice(response.getWriter(),
-							"Duplicate department name. Detail -> "+ psqle.getMessage().toString() , request);
-					else
-						ValidateManageLogic.printErrorNotice(response.getWriter(),
-						"Detail -> "+ psqle.getMessage().toString() , request);
-				} else
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Detail ->"+e.getMessage(), request);
+			break;
+		case "update":
+			if (!ValidateManageLogic.departmentID(request, response)) {
+				ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department id", request);
+			} else if (!ValidateManageLogic.departmentContent(request, response)) {
+				ValidateManageLogic.printErrorNotice(response.getWriter(),
+						"Invalid department name: " + request.getParameter("dept_name"), request);
+			} else {
+				String[] dept = { (String) request.getAttribute("id"), (String) request.getAttribute("dept_name") };
+				deptbean.updateDepartment(dept);
+				ValidateManageLogic.navigateJS(response.getWriter(), request);
+				logger.setContentPoints(request, "Success " + action + " --> ID:" + dept[0]);
 			}
-		} finally {
-			logger.setExitPoints(request);
+			break;
+		default:
+			break;
 		}
+
+		logger.setExitPoints(request);
+	}
+
+	public void errorRedirect(Exception e, DepartmentUseBean dup) {
+		PSQLException psqle = unwrapCause(PSQLException.class, e);
+		if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
+			if (psqle.getMessage().contains("primary"))
+				dup.setErrors("id", "Duplicate department id");
+			else if (psqle.getMessage().contains("dept_name"))
+				dup.setErrors("dept_name", "Duplicate department name");
+			else
+				dup.setErrors("unknown", e.getMessage());
+		} else
+			dup.setErrors("unknown", e.getMessage());
 	}
 
 	private String getAutoId() {

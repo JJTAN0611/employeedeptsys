@@ -7,6 +7,7 @@ import javax.ejb.Local;
 
 import model.entity.Department;
 import model.entity.Employee;
+import model.usebean.DepartmentUseBean;
 
 @Local
 public interface DepartmentSessionBeanLocal {
@@ -22,5 +23,5 @@ public interface DepartmentSessionBeanLocal {
 
 	public void deleteDepartment(String id) throws EJBException;
 
-	public void addDepartment(String[] s) throws EJBException;
+	public void addDepartment(DepartmentUseBean s) throws EJBException;
 }

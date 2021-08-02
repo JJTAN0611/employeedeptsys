@@ -17,10 +17,9 @@
 							<h2>
 								<em>Invalid </em><span>Request</span><em>...</em>
 							</h2>
-							
 							<b> You are using invalid request. Don't try to do URL sniffing attack!</b>
 							<hr>
-							<b>Your request:</b><br><br>
+							<b>Your request <%=request.getAttribute("filtered") %>:</b><br><br>
 							<%
 								Map map = request.getParameterMap();
 								Set keSet = map.entrySet();
@@ -36,7 +35,7 @@
 									}
 
 									for (int k = 0; k < value.length; k++) {
-										out.println(ok + "=" + value[k]+"<br>");
+										out.println(ok + " = " + value[k]+"<br>");
 									}
 								}
 							%>

@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import controller.ValidateManageLogic;
 import model.entity.Department;
 import model.entity.Employee;
+import model.usebean.DepartmentUseBean;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -93,11 +94,11 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		em.remove(d);
 	}
 
-	public void addDepartment(String s[]) throws EJBException {
+	public void addDepartment(DepartmentUseBean dup) throws EJBException {
 		// Write some codes here…
 		Department d = new Department();
-		d.setId(s[0]);
-		d.setDeptName(s[1]);
+		d.setId(dup.getId());
+		d.setDeptName(dup.getDept_name());
 		em.persist(d);
 	}
 }
