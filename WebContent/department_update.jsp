@@ -4,14 +4,8 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%
-	Department dept = (Department) request.getAttribute("dept");
-	if (dept == null) {
-		dept = new Department();
-		dept.setId("");
-		dept.setDeptName("");
-	}
-%>
+<jsp:useBean id="dub" type="model.usebean.DepartmentUseBean"
+	scope="session" />
 <%@ include file="header.jsp"%>
 
 <div class="container top-first">
@@ -29,6 +23,8 @@
 		<center>Please update the following details.</center>
 	</h1>
 	<hr>
+	<div class="text-danger"><jsp:getProperty name="dub"
+			property="overall_error" /></div>
 	<br> <br>
 </div>
 
@@ -40,8 +36,11 @@
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
 				<input id="id_placeholder" type="text" class="form-control"
-					placeholder="Enter name" name="id" value="<%=dept.getId()%>"
+					placeholder="Enter name" name="id"
+					value='<jsp:getProperty name="dub" property="id"/>'
 					readonly='readonly'>
+				<div class="text-danger"><jsp:getProperty name="dub"
+						property="id_error" /></div>
 			</div>
 		</div>
 		<br>
@@ -50,7 +49,10 @@
 			<div class="col-8">
 				<input id="name_placeholder" type="text" class="form-control"
 					placeholder="Enter name" name="dept_name"
-					value="<%=dept.getDeptName()%>">
+					value='<jsp:getProperty name="dub" property="dept_name"/>'>
+
+				<div class="text-danger"><jsp:getProperty name="dub"
+						property="dept_name_error" /></div>
 			</div>
 		</div>
 		<br>
@@ -68,7 +70,7 @@
 <!--
 	<div class="input-group">
 					<input id="id_placeholder" type="text" class="form-control"
-						placeholder="Enter name" name="id" value="<%=dept.getId()%>"
+						placeholder="Enter name" name="id" value=""
 						readonly='readonly'>
 					<button class="btn btn-primary" type="button" id="getDept">Search</button>
 				</div>

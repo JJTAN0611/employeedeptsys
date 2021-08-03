@@ -19,9 +19,9 @@ public interface DepartmentSessionBeanLocal {
 
 	public int getNumberOfRows() throws EJBException;
 
-	public void updateDepartment(String[] s) throws EJBException;
+	public boolean updateDepartment(DepartmentUseBean dup) throws EJBException;
 
-	public void deleteDepartment(String id) throws EJBException;
+	public boolean deleteDepartment(DepartmentUseBean dup) throws EJBException;
 
-	public void addDepartment(DepartmentUseBean s) throws EJBException;
+	public void addDepartment(DepartmentUseBean dup) throws EJBException;
 }

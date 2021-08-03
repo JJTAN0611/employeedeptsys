@@ -39,7 +39,7 @@
 								$('#checkdept').attr('class', 'btn btn-info spinner-border');
 								 $.get('MainServlet?target=departmentemployee&action=getDepartment&id='+$('#dept_id').val(), function(data, status){
 									  var aid = $.parseJSON(data);
-									  if(aid.name=='null'){
+									  if(aid.name==''){
 										  $('#deptcontent').hide();
 										  $('#deptname').html('null');
 										  alert('Department ID: ['+$('#dept_id').val()+'] not exist.');

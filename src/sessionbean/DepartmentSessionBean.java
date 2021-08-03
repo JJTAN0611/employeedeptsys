@@ -67,10 +67,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 			d = (Department) q.getSingleResult();
 			return d;
 		} catch (NoResultException e) {
-			d = new Department();
-			d.setId(id);
-			d.setDeptName("null");
-			return d;
+			return null;
 		}
 	}
 
@@ -81,17 +78,23 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		return q.getResultList();
 	}
 
-	public void updateDepartment(String[] s) throws EJBException {
+	public boolean updateDepartment(DepartmentUseBean dup) throws EJBException {
 		// Write some codes here…
-		Department d = findDepartment(s[0]);
-		d.setDeptName(s[1]);
+		Department d = findDepartment(dup.getId());
+		if(d==null)
+			return false;
+		d.setDeptName(dup.getDept_name());
 		em.merge(d);
+		return true;
 	}
 
-	public void deleteDepartment(String id) throws EJBException {
+	public boolean deleteDepartment(DepartmentUseBean dup) throws EJBException {
 		// Write some codes here…
-		Department d = findDepartment(id);
+		Department d = findDepartment(dup.getId());
+		if(d==null)
+			return false;
 		em.remove(d);
+		return true;
 	}
 
 	public void addDepartment(DepartmentUseBean dup) throws EJBException {

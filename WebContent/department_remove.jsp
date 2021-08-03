@@ -4,9 +4,9 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%
-	Department dept = (Department) request.getAttribute("dept");
-%>
+<jsp:useBean id="dub" type="model.usebean.DepartmentUseBean"
+	scope="session" />
+
 <%@ include file="header.jsp"%>
 
 <div class="container top-first">
@@ -25,27 +25,38 @@
 		<center>You are removing following details.</center>
 	</h1>
 	<hr>
+	<div class="text-danger"><jsp:getProperty name="dub"
+			property="overall_error" /></div>
 	<br> <br>
 </div>
 
-<div class="container wow bounceInDown" data-wow-duration="1.5s" data-wow-delay="0.2s">
+<div class="container wow bounceInDown" data-wow-duration="1.5s"
+	data-wow-delay="0.2s">
 	<form method="post" action="MainServlet">
 		<input type="hidden" name="target" value="department" />
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
 				<input type="text" class="form-control" placeholder="Enter name"
-					name="id" value="<%=dept.getId()%>" readonly="readonly">
+					name="id" value='<jsp:getProperty name="dub" property="id"/>'
+					readonly="readonly">
+				<div class="text-danger"><jsp:getProperty name="dub"
+						property="id_error" /></div>
 			</div>
+
 		</div>
 		<br>
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Department name:</label>
 			<div class="col-8">
 				<input type="text" class="form-control" placeholder="Enter name"
-					name="dept_name" value="<%=dept.getDeptName()%>"
+					name="dept_name"
+					value='<jsp:getProperty name="dub" property="dept_name"/>'
 					readonly="readonly">
+				<div class="text-danger"><jsp:getProperty name="dub"
+						property="dept_name_error" /></div>
 			</div>
+
 		</div>
 		<br>
 		<div class="form-group row">
