@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import model.entity.Department;
 import model.entity.Employee;
+import model.usebean.EmployeeUseBean;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -74,72 +75,50 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		return i;
 	}
 
-	public Employee findEmployee(String id) throws EJBException {
+	public Employee findEmployee(Long id) throws EJBException {
 		// Write some codes here…
 		Query q = em.createNamedQuery("Employee.findbyId");
 		Employee em;
 		try {
-			q.setParameter("id", Long.valueOf(id));
+			q.setParameter("id", id);
 			em=(Employee) q.getSingleResult();
 			return em;
 		}catch (NoResultException | NumberFormatException e ) {
-			em = new Employee();
-			em.setId(Long.valueOf(0));
-			em.setFirstName("null");
-			em.setLastName("null");
-			em.setGender("null");
-			try {
-				em.setHireDate(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
-				em.setBirthDate(new SimpleDateFormat("yyyy-MM-dd").parse("0001-01-01"));
-			} catch (ParseException e1) {
-			}
-			return em;
+			return null;
 		}
 	}
 
-	public void updateEmployee(String[] s) throws EJBException {
+	public boolean updateEmployee(EmployeeUseBean eub) throws EJBException {
 		// Write some codes here…
-		Date dob = null;
-		Date hd = null;
-		Employee e = findEmployee(s[0]);
-		try {
-			dob = new SimpleDateFormat("yyyy-MM-dd").parse(s[4]);
-			hd = new SimpleDateFormat("yyyy-MM-dd").parse(s[5]);
-		} catch (Exception ex) {
-		}
-		java.sql.Date DOB = new java.sql.Date(dob.getTime());
-		java.sql.Date HD = new java.sql.Date(hd.getTime());
-		e.setFirstName(s[1]);
-		e.setLastName(s[2]);
-		e.setGender(s[3]);
-		e.setBirthDate(DOB);
-		e.setHireDate(HD);
+		Employee e = findEmployee(eub.getId());
+		if(e==null)
+			return false;
+		e.setFirstName(eub.getFirst_name());
+		e.setLastName(eub.getLast_name());
+		e.setGender(eub.getGender());
+		e.setBirthDate(eub.getBirth_date());
+		e.setHireDate(eub.getHire_date());
 		em.merge(e);
+		return true;
 	}
 
-	public void deleteEmployee(String id) throws EJBException {
+	public boolean deleteEmployee(EmployeeUseBean eub) throws EJBException {
 		// Write some codes here…
-		Employee e = findEmployee(id);
+		Employee e = findEmployee(eub.getId());
+		if(e==null)
+			return false;
 		em.remove(e);
+		return true;
 	}
 
-	public void addEmployee(String[] s) throws EJBException {
+	public void addEmployee(EmployeeUseBean eub) throws EJBException {
 		// Write some codes here…
-		Date dob = null;
-		Date hd = null;
-		try {
-			dob = new SimpleDateFormat("yyyy-MM-dd").parse(s[4]);
-			hd = new SimpleDateFormat("yyyy-MM-dd").parse(s[5]);
-		} catch (Exception ex) {
-		}
 		Employee e = new Employee();
-		java.sql.Date DOB = new java.sql.Date(dob.getTime());
-		java.sql.Date HD = new java.sql.Date(hd.getTime());
-		e.setFirstName(s[1]);
-		e.setLastName(s[2]);
-		e.setGender(s[3]);
-		e.setBirthDate(DOB);
-		e.setHireDate(HD);
+		e.setFirstName(eub.getFirst_name());
+		e.setLastName(eub.getLast_name());
+		e.setGender(eub.getGender());
+		e.setBirthDate(eub.getBirth_date());
+		e.setHireDate(eub.getHire_date());
 		em.persist(e);
 	}
 }

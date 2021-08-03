@@ -7,44 +7,32 @@ import javax.servlet.http.HttpServletRequest;
 import utilities.LoggingGeneral;
 
 public class DepartmentUseBean {
-	private String id;
-	private String dept_name;
+	private String id="";
+	private String dept_name="";
 
-	private String id_error;
-	private String dept_name_error;
-	private String overall_error;
+	private String id_error = "";
+	private String dept_name_error = "";
+	private String overall_error = "";
 
 	public DepartmentUseBean() {
 		this.id = "";
-		this.dept_name = "";
-		id_error = "";
-		dept_name_error = "";
-		overall_error = "";
 	}
 
 	public DepartmentUseBean(String id) {
 		this.id = id;
-		this.dept_name = "";
-		id_error = "";
-		dept_name_error = "";
-		overall_error = "";
 	}
 
 	public DepartmentUseBean(String id, String dept_name) {
 		this.id = id;
 		this.dept_name = dept_name;
-		id_error = "";
-		dept_name_error = "";
-		overall_error = "";
 	}
 
-	public boolean validate(HttpServletRequest request) {
-		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
+	public boolean validate() {
 		boolean allTrue = true;
 		if (id == null || id.equals("")) {
 			id = "";
 			allTrue = false;
-			id_error =  "Please enter a ID.";
+			id_error = "Please enter a ID.";
 		} else if (id.length() < 1 || id.length() > 4) {
 			allTrue = false;
 			id_error = "Please enter 1-4 character ID";
@@ -60,22 +48,20 @@ public class DepartmentUseBean {
 		}
 		return allTrue;
 	}
-	
-	public boolean validateId(HttpServletRequest request) {
-		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
+
+	public boolean validateId() {
 		boolean allTrue = true;
 		System.out.println("aa" + dept_name);
 		if (id == null || id.equals("")) {
 			id = "";
 			allTrue = false;
-			id_error =  "Please enter a ID.";
+			id_error = "Please enter a ID.";
 		} else if (id.length() < 1 || id.length() > 4) {
 			allTrue = false;
 			id_error = "Please enter 1-4 character ID";
 		}
 		return allTrue;
 	}
-
 
 	public String getId() {
 		return id;

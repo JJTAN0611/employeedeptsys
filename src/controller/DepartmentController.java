@@ -85,7 +85,9 @@ public class DepartmentController extends HttpServlet {
 			} else {
 				// download
 			}
-		} catch (EJBException ex) {
+		} catch (Exception ex) {
+			RequestDispatcher req = request.getRequestDispatcher("error.jsp");
+			req.forward(request, response);
 		}
 
 	}
@@ -99,58 +101,58 @@ public class DepartmentController extends HttpServlet {
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
-			DepartmentUseBean dup = new DepartmentUseBean();
+			DepartmentUseBean dub = new DepartmentUseBean();
 			try {
-				dup.setId(request.getParameter("id"));
-				dup.setDept_name(request.getParameter("dept_name"));
-				if (dup.validate(request)) {
-					deptbean.addDepartment(dup);
+				dub.setId(request.getParameter("id"));
+				dub.setDept_name(request.getParameter("dept_name"));
+				if (dub.validate()) {
+					deptbean.addDepartment(dub);
 					ValidateManageLogic.navigateJS(response.getWriter(), request);
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + dup.getId());
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 					return;
 				}
 			} catch (Exception e) {
-				errorRedirect(e, dup);
+				errorRedirect(e, dub);
 			}
-			request.getSession().setAttribute("dub", dup);
+			request.getSession().setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_add.jsp");
 			dispatcher.forward(request, response);
 		} else if (action.compareTo("delete") == 0) {
-			DepartmentUseBean dup = new DepartmentUseBean();
+			DepartmentUseBean dub = new DepartmentUseBean();
 
 			try {
-				dup.setId(request.getParameter("id"));
-				if (dup.validateId(request)) {
-					if (deptbean.deleteDepartment(dup)) {
+				dub.setId(request.getParameter("id"));
+				if (dub.validateId()) {
+					if (deptbean.deleteDepartment(dub)) {
 						ValidateManageLogic.navigateJS(response.getWriter(), request);
-						logger.setContentPoints(request, "Success " + action + " --> ID:" + dup.getId());
+						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 						return;
 					} else
-						dup.setId_error("Department not exist");
+						dub.setId_error("Department not exist");
 				}
 			} catch (Exception e) {
-				errorRedirect(e, dup);
+				errorRedirect(e, dub);
 			}
-			request.getSession().setAttribute("dub", dup);
+			request.getSession().setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_remove.jsp");
 			dispatcher.forward(request, response);
 		} else if (action.compareTo("update") == 0) {
-			DepartmentUseBean dup = new DepartmentUseBean();
+			DepartmentUseBean dub = new DepartmentUseBean();
 			try {
-				dup.setId(request.getParameter("id"));
-				dup.setDept_name(request.getParameter("dept_name"));
-				if (dup.validate(request)) {
-					if (deptbean.updateDepartment(dup)) {
+				dub.setId(request.getParameter("id"));
+				dub.setDept_name(request.getParameter("dept_name"));
+				if (dub.validate()) {
+					if (deptbean.updateDepartment(dub)) {
 						ValidateManageLogic.navigateJS(response.getWriter(), request);
-						logger.setContentPoints(request, "Success " + action + " --> ID:" + dup.getId());
+						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 						return;
 					} else
-						dup.setId_error("Department not exist");
+						dub.setId_error("Department not exist");
 				}
 			} catch (Exception e) {
-				errorRedirect(e, dup);
+				errorRedirect(e, dub);
 			}
-			request.getSession().setAttribute("dub", dup);
+			request.getSession().setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_update.jsp");
 			dispatcher.forward(request, response);
 
@@ -159,18 +161,19 @@ public class DepartmentController extends HttpServlet {
 		logger.setExitPoints(request);
 	}
 
-	public void errorRedirect(Exception e, DepartmentUseBean dup) {
+	public void errorRedirect(Exception e, DepartmentUseBean dub) {
 		PSQLException psqle = unwrapCause(PSQLException.class, e);
-		if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
-			if (psqle.getMessage().contains("primary"))
-				dup.setId_error("Duplicate department id");
-			else if (psqle.getMessage().contains("dept_name"))
-				dup.setDept_name_error("Duplicate department name");
-			else
-				dup.setOverall_error(e.getMessage());
-			return;
-		}
-		dup.setOverall_error(e.getMessage());
+		if (psqle != null)
+			if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+				if (psqle.getMessage().contains("primary"))
+					dub.setId_error("dublicate department id");
+				else if (psqle.getMessage().contains("dept_name"))
+					dub.setDept_name_error("dublicate department name");
+				else
+					dub.setOverall_error(e.getMessage());
+				return;
+			}
+		dub.setOverall_error(e.getMessage());
 	}
 
 	private String getAutoId() {

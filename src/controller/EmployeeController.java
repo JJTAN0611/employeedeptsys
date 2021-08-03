@@ -2,6 +2,8 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -18,8 +20,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.postgresql.util.PSQLException;
+
 import model.entity.Department;
 import model.entity.Employee;
+import model.usebean.DepartmentUseBean;
+import model.usebean.EmployeeUseBean;
 import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
 import utilities.LoggingGeneral;
@@ -44,9 +50,8 @@ public class EmployeeController extends HttpServlet {
 			if (action.compareTo("getAutoId") == 0) {
 				response.getWriter().print(getAutoId());
 			} else if (action.compareTo("getEmployee") == 0) {
-				String id = (String) request.getParameter("id");
-				Employee emp = empbean.findEmployee(id);
-				logger.setContentPoints(request, "hi"+id);
+				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
+				logger.setContentPoints(request, "hi" + emp.getId());
 				JsonObject jo = Json.createObjectBuilder().add("id", emp.getId()).add("first_name", emp.getFirstName())
 						.add("last_name", emp.getLastName()).add("gender", emp.getGender())
 						.add("birth_date", emp.getBirthDate().toString()).add("hire_date", emp.getHireDate().toString())
@@ -55,26 +60,27 @@ public class EmployeeController extends HttpServlet {
 				out.print(jo);
 				out.flush();
 			} else if (action.compareTo("add") == 0) {
-				RequestDispatcher req;
-				req = request.getRequestDispatcher("employee_add.jsp");
+				request.getSession().setAttribute("eub", new EmployeeUseBean());
+				RequestDispatcher req = request.getRequestDispatcher("employee_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
-				RequestDispatcher req;
-				String id = (String) request.getParameter("id");
-				Employee emp = empbean.findEmployee(id);
-				request.setAttribute("emp", emp);
-				req = request.getRequestDispatcher("employee_update.jsp");
+
+				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
+				request.getSession().setAttribute("eub", new EmployeeUseBean(emp));
+				RequestDispatcher req = request.getRequestDispatcher("employee_update.jsp");
+				req.forward(request, response);
+			} else if (action.compareTo("delete") == 0) {
+				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
+				request.getSession().setAttribute("eub", new EmployeeUseBean(emp));
+				RequestDispatcher req = request.getRequestDispatcher("employee_remove.jsp");
 				req.forward(request, response);
 			} else {
-				RequestDispatcher req;
-				String id = (String) request.getParameter("id");
-				Employee emp = empbean.findEmployee(id);
-				request.setAttribute("emp", emp);
-				req = request.getRequestDispatcher("employee_remove.jsp");
-				req.forward(request, response);
+
 			}
 
-		} catch (EJBException ex) {
+		} catch (Exception ex) {
+			RequestDispatcher req = request.getRequestDispatcher("error.jsp");
+			req.forward(request, response);
 		}
 
 	}
@@ -86,60 +92,98 @@ public class EmployeeController extends HttpServlet {
 
 		String action = (String) request.getAttribute("action");
 
-		try {
-			if (action.compareTo("add") == 0) {
-				if (!ValidateManageLogic.employeeContent(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee content", request);
-				} else if (!ValidateManageLogic.employeeID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid department id", request);
-				} else {
-					String[] s = { (String) request.getAttribute("id"), (String) request.getAttribute("first_name"),
-							(String) request.getAttribute("last_name"), (String) request.getAttribute("gender"),
-							(String) request.getAttribute("birth_date"), (String) request.getAttribute("hire_date") };
-					empbean.addEmployee(s);
-					ValidateManageLogic.navigateJS(response.getWriter(), request);
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
-				}
+		if (action.compareTo("add") == 0) {
+			EmployeeUseBean eub = new EmployeeUseBean();
+			try {
+				eub.setFirst_name(request.getParameter("first_name"));
+				eub.setLast_name(request.getParameter("last_name"));
+				eub.setGender(request.getParameter("gender"));
+				eub.setBirth_date(request.getParameter("birth_date"));
+				eub.setHire_date(request.getParameter("hire_date"));
 
-			} else if (action.compareTo("delete") == 0) {
-				if (!ValidateManageLogic.employeeID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee",request);
-				} else {
-					String id = (String) request.getAttribute("id");
-					empbean.deleteEmployee(id);
+				if (eub.validate()) {
+					empbean.addEmployee(eub);
 					ValidateManageLogic.navigateJS(response.getWriter(), request);
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + id);
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
+					return;
 				}
-
-			} else if (action.compareTo("update") == 0) {
-				if (!ValidateManageLogic.employeeID(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee ID", request);
-				}else if (!ValidateManageLogic.employeeContent(request, response)) {
-					ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid employee content.", request);
-				} else {
-					String[] s = { (String) request.getAttribute("id"), (String) request.getAttribute("first_name"),
-							(String) request.getAttribute("last_name"), (String) request.getAttribute("gender"),
-							(String) request.getAttribute("birth_date"), (String) request.getAttribute("hire_date") };
-					empbean.updateEmployee(s);
-					ValidateManageLogic.navigateJS(response.getWriter(), request);
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + s[0]);
-				}
+			} catch (Exception e) {
+				errorRedirect(e, eub);
+				logger.setContentPoints(request, "hi"+eub.getFirst_name()+"|"+eub.getFirst_name_error());
 			}
-		} catch (EJBTransactionRolledbackException rollback) {
-			ValidateManageLogic.printErrorNotice(response.getWriter(),
-					"Duplicate record or extremely large value given!! ", request);
-		} catch (EJBException invalid) {
-			if (invalid.toString().contains("NullPointerException"))
-				ValidateManageLogic.printErrorNotice(response.getWriter(), "Empty input!! " + invalid.toString(),
-						request);
-			else
-				ValidateManageLogic.printErrorNotice(response.getWriter(), "Invalid input!!. " + invalid.toString(),
-						request);
-			logger.setContentPoints(request, "Unsuccess --> " + action + invalid.getStackTrace().toString());
-		} finally {
-			logger.setExitPoints(request);
-		}
+			request.getSession().setAttribute("eub", eub);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_add.jsp");
+			dispatcher.forward(request, response);
 
+		} else if (action.compareTo("delete") == 0) {
+			EmployeeUseBean eub = null;
+			try {
+				eub.setId(request.getParameter("id"));
+				if (empbean.deleteEmployee(eub)) {
+					ValidateManageLogic.navigateJS(response.getWriter(), request);
+					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getId());
+					return;
+				} else
+					eub.setId_error("Employee not exist");
+			} catch (Exception e) {
+				eub = new EmployeeUseBean();
+				errorRedirect(e, eub);
+			}
+			request.getSession().setAttribute("eub", eub);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_remove.jsp");
+			dispatcher.forward(request, response);
+
+		} else if (action.compareTo("update") == 0) {
+			EmployeeUseBean eub = new EmployeeUseBean();
+			try {
+				eub.setId(request.getParameter("id"));
+				eub.setFirst_name(request.getParameter("first_name"));
+				eub.setLast_name(request.getParameter("last_name"));
+				eub.setGender(request.getParameter("gender"));
+				eub.setBirth_date(request.getParameter("birth_date"));
+				eub.setHire_date(request.getParameter("hire_date"));
+
+				if (eub.validate()) {
+					if (empbean.updateEmployee(eub) == true) {
+						ValidateManageLogic.navigateJS(response.getWriter(), request);
+						logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
+						return;
+					}
+
+				}
+			} catch (Exception e) {
+				errorRedirect(e, eub);
+			}
+			request.getSession().setAttribute("eub", eub);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_update.jsp");
+			dispatcher.forward(request, response);
+		}
+		logger.setExitPoints(request);
+	}
+
+	public void errorRedirect(Exception e, EmployeeUseBean eub) {
+
+		if (eub == null) {
+			eub = new EmployeeUseBean();
+		} else {
+			PSQLException psqle = unwrapCause(PSQLException.class, e);
+			if (psqle != null)
+				if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+					if (psqle.getMessage().contains("primary"))
+						eub.setId_error("dublicate employee id");
+					else
+						eub.setOverall_error(e.getMessage());
+					return;
+				}
+		}
+		eub.setOverall_error(e.getMessage());
+	}
+
+	public <T> T unwrapCause(Class<T> clazz, Throwable e) {
+		while (!clazz.isInstance(e) && e.getCause() != null && e != e.getCause()) {
+			e = e.getCause();
+		}
+		return clazz.isInstance(e) ? clazz.cast(e) : null;
 	}
 
 	private int getAutoId() {

@@ -46,8 +46,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 		try {
 			if (action.compareTo("add") == 0) {
-				RequestDispatcher req;
-				req = request.getRequestDispatcher("departmentemployee_add.jsp");
+				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
 				RequestDispatcher req;

@@ -4,6 +4,9 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<jsp:useBean id="eub" type="model.usebean.EmployeeUseBean"
+	scope="session" />
+	
 <%@ include file="header.jsp"%>
 <div class="container top-first">
 	<div class="badge bg-success text-light text-wrap large col-12">
@@ -39,11 +42,13 @@
 			<label class="control-label col-3 text-end">Employee name:</label>
 			<div class="col-4">
 				<input type="text" class="form-control" placeholder="First name"
-					name="first_name" >
+					name="first_name" value='<jsp:getProperty name="eub" property="first_name"/>'>
+				<div class="text-danger"><jsp:getProperty name="eub" property="first_name_error"/></div>
 			</div>
 			<div class="col-4">
 				<input type="text" class="form-control" placeholder="Last name"
-					name="last_name" >
+					name="last_name" value='<jsp:getProperty name="eub" property="last_name"/>'>
+				<div class="text-danger"><jsp:getProperty name="eub" property="last_name_error"/></div>
 			</div>
 		</div>
 		<br>
@@ -52,28 +57,33 @@
 			<div class="col-8">
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio"
-						name="gender" id="rmale" value="M">
+						name="gender" id="rmale" value="M"  ${eub.getCheckedM()}>
 					<label class="form-check-label" for="rmale">Male</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio"
-						name="gender" id="rfemale" value="F">
+						name="gender" id="rfemale" value="F" ${eub.getCheckedF()}>
 					<label class="form-check-label" for="rfemale">Female</label>
 				</div>
+				<div class="text-danger"><jsp:getProperty name="eub" property="gender_error"/></div>
 			</div>
 		</div>
 		<br>
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Birth Date:</label>
 			<div class="col-8">
-				<input type="date" class="form-control" name="birth_date" >
+				<input type="date" class="form-control" name="birth_date" 
+				value='<jsp:getProperty name="eub" property="birth_date"/>'>
+				<div class="text-danger"><jsp:getProperty name="eub" property="birth_date_error"/></div>
 			</div>
 		</div>
 		<br>
 		<div class="form-group row">
 			<label class="control-label col-3 text-end">Hire Date:</label>
 			<div class="col-8">
-				<input type="date" class="form-control" name="hire_date" >
+				<input type="date" class="form-control" name="hire_date"
+				value='<jsp:getProperty name="eub" property="hire_date"/>' >
+				<div class="text-danger"><jsp:getProperty name="eub" property="hire_date_error"/></div>
 			</div>
 		</div>
 		<br>
