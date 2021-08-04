@@ -110,15 +110,15 @@
 						<ul class="nav">
 							<li>
 								<div class="btn-group">
-									<button id="department" type="button"
-										onclick="location.href='MainServlet?target=department&action=view'"
-										class="btn btn-warning">Department View</button>
-									<button type="button"
+									<a id="department" type="button"
+										href='MainServlet?target=department&action=view'
+										class="btn btn-warning">Department View</a>
+									<a type="button"
 										class="btn btn-warning dropdown-toggle dropdown-toggle-split"
 										aria-labelledby="dropdownMenuReference"
 										data-bs-toggle="dropdown" aria-expanded="false">
 										<span class="visually-hidden">Toggle Dropdown</span>
-									</button>
+									</a>
 									<ul class="dropdown-menu">
 										<li><a id="adddepartment" class="dropdown-item"
 											href="MainServlet?target=department&action=add">Add
@@ -128,15 +128,15 @@
 								</div>
 							</li>
 							<li><div class="btn-group">
-									<button id="department_employee" type="button"
-										onclick="location.href='MainServlet?target=departmentemployee&action=view'"
-										class="btn btn-primary">Department Employee View</button>
-									<button type="button"
+									<a id="department_employee" type="button"
+										href='MainServlet?target=departmentemployee&action=view'
+										class="btn btn-primary">Department Employee View</a>
+									<a 
 										class="btn btn-primary dropdown-toggle dropdown-toggle-split"
 										aria-labelledby="dropdownMenuReference"
 										data-bs-toggle="dropdown" aria-expanded="false">
 										<span class="visually-hidden">Toggle Dropdown</span>
-									</button>
+									</a>
 									<ul class="dropdown-menu">
 										<li><a id="adddepartmentemployee" class="dropdown-item"
 											href="MainServlet?target=departmentemployee&action=add">Add
@@ -145,27 +145,27 @@
 									</ul>
 								</div></li>
 							<li><div class="btn-group">
-									<button id="employee" type="button"
-										onclick="location.href='MainServlet?target=employee&action=view'"
-										class="btn btn-success">Employee View</button>
-									<button type="button"
+									<a id="employee" type="button"
+										href='MainServlet?target=employee&action=view'
+										class="btn btn-success">Employee View</a>
+									<a type="button"
 										class="btn btn-success dropdown-toggle dropdown-toggle-split"
 										aria-labelledby="dropdownMenuReference"
 										data-bs-toggle="dropdown" aria-expanded="false">
 										<span class="visually-hidden">Toggle Dropdown</span>
-									</button>
+									</a>
 									<ul class="dropdown-menu">
 										<li><a id="addemployee" class="dropdown-item"
 											href="MainServlet?target=employee&action=add">Add Employee</a></li>
 										<li></li>
 									</ul>
 								</div></li>
-							<li><button type="button"
-									onclick="location.href='MainServlet?target=log&action=view'"
+							<li><a type="button"
+									href='MainServlet?target=log&action=view'
 									class="btn btn-dark text-light  btn-circle"
 									style="border-radius: 30px">
 									Log <i class="fas fa-calendar-week"></i>
-								</button></li>
+								</a></li>
 							<li></li>
 						</ul>
 

@@ -22,12 +22,11 @@ public class DepartmentEmployeeUseBean {
 	private String from_date_error = "";
 	private String to_date_error = "";
 	private String overall_error = "";
+	private String express = "";
 
-	
 	public DepartmentEmployeeUseBean() {
 		this.dept_id = "";
 	}
-
 
 	public DepartmentEmployeeUseBean(DepartmentEmployee deptemp) {
 		this.dept_id = deptemp.getId().getDepartmentId();
@@ -42,25 +41,25 @@ public class DepartmentEmployeeUseBean {
 		if (dept_id == null || dept_id.equals("")) {
 			dept_id = "";
 			allTrue = false;
-			dept_id_error = "Please enter a department ID.";
+			dept_id_error = "Please enter a department ID. Department ID cannot be null";
 		} else if (dept_id.length() < 1 || dept_id.length() > 4) {
 			allTrue = false;
-			dept_id_error = "Please enter 1-4 character department ID";
+			dept_id_error = "Please enter department ID with 1-4 character.";
 		}
 
 		if (emp_id == null) {
 			allTrue = false;
-			emp_id_error = "Please enter a employee ID.";
+			emp_id_error = "Please enter a employee ID. Employee ID cannot be null";
 		}
 
 		if (from_date == null) {
 			allTrue = false;
-			from_date_error = "Please enter a birth date";
+			from_date_error = "Please enter a valid from date.";
 		}
 
 		if (to_date == null) {
 			allTrue = false;
-			to_date_error = "Please enter a hire date";
+			to_date_error = "Please enter a valid to date.";
 		}
 
 		if (from_date != null && to_date != null) {
@@ -79,15 +78,15 @@ public class DepartmentEmployeeUseBean {
 		if (dept_id == null || dept_id.equals("")) {
 			dept_id = "";
 			allTrue = false;
-			dept_id_error = "Please enter a department ID.";
+			dept_id_error = "Please enter a department ID. Department ID cannot be null";
 		} else if (dept_id.length() < 1 || dept_id.length() > 4) {
 			allTrue = false;
-			dept_id_error = "Please enter 1-4 character department ID";
+			dept_id_error = "Please enter department ID with 1-4 character.";
 		}
 
 		if (emp_id == null) {
 			allTrue = false;
-			emp_id_error = "Please enter a employee ID.";
+			emp_id_error = "Please enter a employee ID. Employee ID cannot be null";
 		}
 		return allTrue;
 	}
@@ -175,6 +174,18 @@ public class DepartmentEmployeeUseBean {
 
 	public void setOverall_error(String overall_error) {
 		this.overall_error = overall_error;
+	}
+
+	public String getExpress() {
+		if (!express.equals(""))
+			return "<a href='MainServlet?target=" + express + "&action=add' target='_blank'> Click me to add "
+					+ express + "</a>";
+		else
+			return "";
+	}
+
+	public void setExpress(String express) {
+		this.express = express;
 	}
 
 }

@@ -14,7 +14,8 @@ public class DepartmentUseBean {
 	private String id_error = "";
 	private String dept_name_error = "";
 	private String overall_error = "";
-
+	private String express="";
+	
 	public DepartmentUseBean() {
 	}
 
@@ -35,10 +36,10 @@ public class DepartmentUseBean {
 		if (id == null || id.equals("")) {
 			id = "";
 			allTrue = false;
-			id_error = "Please enter a ID.";
+			id_error = "Please enter an  ID. ID cannot be null";
 		} else if (id.length() < 1 || id.length() > 4) {
 			allTrue = false;
-			id_error = "Please enter 1-4 character ID";
+			id_error = "Please enter an ID with 1-4 character ";
 		}
 
 		if (dept_name == null || dept_name.equals("")) {
@@ -106,6 +107,17 @@ public class DepartmentUseBean {
 
 	public void setOverall_error(String overall_error) {
 		this.overall_error = overall_error;
+	}
+
+	public String getExpress() {
+		if (!express.equals(""))
+			return "<a href='MainServlet?target="+express+"&action=view' target='_blank'> Click me to the table.</a>";
+		else
+			return "";
+	}
+
+	public void setExpress(String express) {
+		this.express = express;
 	}
 
 }

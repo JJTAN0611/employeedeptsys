@@ -43,7 +43,7 @@ public class EmployeeController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		String action = (String) request.getAttribute("action");
 
 		try {
@@ -52,7 +52,7 @@ public class EmployeeController extends HttpServlet {
 				response.getWriter().print(getAutoId());
 			} else if (action.compareTo("getEmployee") == 0) {
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
-				
+
 				JsonObject jo = Json.createObjectBuilder().add("id", emp.getId()).add("first_name", emp.getFirstName())
 						.add("last_name", emp.getLastName()).add("gender", emp.getGender())
 						.add("birth_date", emp.getBirthDate().toString()).add("hire_date", emp.getHireDate().toString())
@@ -72,7 +72,7 @@ public class EmployeeController extends HttpServlet {
 			} else if (action.compareTo("delete") == 0) {
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
 				request.getSession().setAttribute("eub", new EmployeeUseBean(emp));
-				RequestDispatcher req = request.getRequestDispatcher("employee_remove.jsp");
+				RequestDispatcher req = request.getRequestDispatcher("employee_delete.jsp");
 				req.forward(request, response);
 			} else {
 
@@ -107,6 +107,7 @@ public class EmployeeController extends HttpServlet {
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
 					return;
 				}
+				eub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				errorRedirect(e, eub);
 				logger.setContentPoints(request, e.getMessage());
@@ -124,13 +125,16 @@ public class EmployeeController extends HttpServlet {
 					ControllerManagement.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getId());
 					return;
-				} else
+				} else {
 					eub.setId_error("Employee not exist");
+					eub.setOverall_error("Please fix the error below");
+				}
 			} catch (Exception e) {
+				eub=new EmployeeUseBean(empbean.findEmployee(eub.getId()));
 				errorRedirect(e, eub);
 			}
 			request.getSession().setAttribute("eub", eub);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_remove.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_delete.jsp");
 			dispatcher.forward(request, response);
 
 		} else if (action.compareTo("update") == 0) {
@@ -151,6 +155,7 @@ public class EmployeeController extends HttpServlet {
 					}
 
 				}
+				eub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				errorRedirect(e, eub);
 			}
@@ -164,15 +169,23 @@ public class EmployeeController extends HttpServlet {
 	public void errorRedirect(Exception e, EmployeeUseBean eub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
-		if (psqle != null)
-			if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+		if (psqle != null) {
+			if(psqle.getMessage().contains("violates foreign key constraint")) {
+
+				eub.setOverall_error("You may need to clear the related departmentemployee relation record");
+				eub.setId_error("This employee is using in relation table and cannot be deleted");
+				eub.setExpress("departmentemployee");
+			}
+			else if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+				eub.setOverall_error("Duplicate error. Please change the input as annotated below");
 				if (psqle.getMessage().contains("primary"))
 					eub.setId_error("dublicate employee id");
 				else
 					eub.setOverall_error(psqle.getMessage());
 				return;
 			}
-		eub.setOverall_error(e.toString());
+		} else
+			eub.setOverall_error(e.toString());
 	}
 
 	private int getAutoId() {

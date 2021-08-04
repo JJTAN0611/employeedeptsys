@@ -72,16 +72,14 @@ public class DepartmentController extends HttpServlet {
 				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
-				String id = (String) request.getParameter("id");
-				Department dept = deptbean.findDepartment(id);
-				request.getSession().setAttribute("dub", dept);
+				Department dept = deptbean.findDepartment(request.getParameter("id"));
+				request.getSession().setAttribute("dub", new DepartmentUseBean(dept));
 				RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("delete") == 0) {
-				String id = (String) request.getParameter("id");
-				Department dept = deptbean.findDepartment(id);
-				request.getSession().setAttribute("dub", dept);
-				RequestDispatcher req = request.getRequestDispatcher("department_remove.jsp");
+				Department dept = deptbean.findDepartment(request.getParameter("id"));
+				request.getSession().setAttribute("dub", new DepartmentUseBean(dept));
+				RequestDispatcher req = request.getRequestDispatcher("department_delete.jsp");
 				req.forward(request, response);
 			} else {
 				// download
@@ -112,9 +110,11 @@ public class DepartmentController extends HttpServlet {
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 					return;
 				}
+				dub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				errorRedirect(e, dub);
 			}
+
 			request.getSession().setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_add.jsp");
 			dispatcher.forward(request, response);
@@ -131,11 +131,14 @@ public class DepartmentController extends HttpServlet {
 					} else
 						dub.setId_error("Department not exist");
 				}
+				dub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
+				dub=new DepartmentUseBean(deptbean.findDepartment(dub.getId()));
 				errorRedirect(e, dub);
 			}
+
 			request.getSession().setAttribute("dub", dub);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("department_remove.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("department_delete.jsp");
 			dispatcher.forward(request, response);
 		} else if (action.compareTo("update") == 0) {
 			DepartmentUseBean dub = new DepartmentUseBean();
@@ -150,9 +153,11 @@ public class DepartmentController extends HttpServlet {
 					} else
 						dub.setId_error("Department not exist");
 				}
+				dub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				errorRedirect(e, dub);
 			}
+
 			request.getSession().setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_update.jsp");
 			dispatcher.forward(request, response);
@@ -164,17 +169,23 @@ public class DepartmentController extends HttpServlet {
 
 	public void errorRedirect(Exception e, DepartmentUseBean dub) {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
-		if (psqle != null)
-			if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+		if (psqle != null) {
+			if(psqle.getMessage().contains("violates foreign key constraint")) {
+				dub.setOverall_error("You may need to clear the related departmentemployee relation record");
+				dub.setId_error("This department is using in relation table and cannot be deleted");
+				dub.setExpress("departmentemployee");
+			}else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
+				dub.setOverall_error("Duplicate error. Please change the input as annotated below");
 				if (psqle.getMessage().contains("primary"))
-					dub.setId_error("dublicate department id");
+					dub.setId_error("Duplicate department id");
 				else if (psqle.getMessage().contains("dept_name"))
-					dub.setDept_name_error("dublicate department name");
+					dub.setDept_name_error("Duplicate department name");
 				else
-					dub.setOverall_error(e.getMessage());
+					dub.setOverall_error(psqle.getMessage());
 				return;
 			}
-		dub.setOverall_error(e.getMessage());
+		}else
+			dub.setOverall_error(e.getMessage());
 	}
 
 	private String getAutoId() {

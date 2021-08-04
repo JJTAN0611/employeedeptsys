@@ -12,17 +12,17 @@
 		<div class="row">
 			<div class="text-start col" style="font-size: 35px;">
 				Employee Record
-				<div class="badge bg-light text-danger text-wrap">Remove</div>
+				<div class="badge bg-light text-danger text-wrap">Delete</div>
 			</div>
 		</div>
 	</div>
 	<br> <br>
 	<h1>
-		<center>You are removing following details.</center>
+		<center>You are deleting following details.</center>
 	</h1>
 	<hr>
 	<div class="text-danger text-center"><jsp:getProperty name="eub"
-			property="overall_error" /></div>
+			property="overall_error" />  </div>
 	<br> <br>
 </div>
 
@@ -37,7 +37,7 @@
 					name="id" value='<jsp:getProperty name="eub" property="id"/>'
 					readonly="readonly">
 				<div class="text-danger"><jsp:getProperty name="eub"
-						property="id_error" /></div>
+						property="id_error" /> ${eub.getExpress()} </div>
 			</div>
 
 		</div>

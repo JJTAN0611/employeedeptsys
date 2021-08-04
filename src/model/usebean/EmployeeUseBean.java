@@ -26,6 +26,7 @@ public class EmployeeUseBean {
 	private String birth_date_error = "";
 	private String hire_date_error = "";
 	private String overall_error = "";
+	private String express="";
 
 	public EmployeeUseBean() {
 	}
@@ -39,26 +40,23 @@ public class EmployeeUseBean {
 		this.hire_date = (Date) e.getHireDate();
 	}
 
+	// for add or update use
 	public boolean validate() {
 		boolean allTrue = true;
-		if (id == null) {
-			allTrue = false;
-			id_error = "Please enter a ID.";
-		}
 
 		if (first_name == null || first_name.equals("")) {
 			first_name = "";
 			allTrue = false;
-			first_name_error = "Please enter a first name.";
+			first_name_error = "Please enter a first name. First name cannot be null";
 		} else if (first_name.length() < 1 || first_name.length() > 14) {
 			allTrue = false;
-			first_name_error = "Please enter first name within 14 character";
+			first_name_error = "Please enter a first name within 14 character";
 		}
 
 		if (last_name == null || last_name.equals("")) {
 			last_name = "";
 			allTrue = false;
-			last_name_error = "Please enter a last name.";
+			last_name_error = "Please enter a last name. Last name cannot be null";
 		} else if (last_name.length() < 1 || last_name.length() > 14) {
 			allTrue = false;
 			last_name_error = "Please enter last name within 16 character";
@@ -67,20 +65,20 @@ public class EmployeeUseBean {
 		if (gender == null || gender.equals("")) {
 			gender = "";
 			allTrue = false;
-			gender_error = "Please select a gender";
+			gender_error = "Please select a gender. Gender cannot be null";
 		} else if (!(gender.compareTo("M") == 0 || gender.compareTo("F") == 0)) {
 			allTrue = false;
-			gender_error = "Please enter only 'M' or 'F'";
+			gender_error = "Please select only 'M' or 'F'. Dont change the source html!";
 		}
 
 		if (birth_date == null) {
 			allTrue = false;
-			birth_date_error = "Please enter a birth date";
+			birth_date_error = "Please enter a valid birth date.";
 		}
 
 		if (hire_date == null) {
 			allTrue = false;
-			hire_date_error = "Please enter a hire date";
+			hire_date_error = "Please enter a valid hire date.";
 		}
 
 		if (hire_date != null && birth_date != null) {
@@ -97,6 +95,7 @@ public class EmployeeUseBean {
 		return allTrue;
 	}
 
+	//for update and delete use
 	public boolean validateId() {
 		boolean allTrue = true;
 		if (id == null) {
@@ -232,6 +231,18 @@ public class EmployeeUseBean {
 
 	public void setId_error(String id_error) {
 		this.id_error = id_error;
+	}
+
+	public String getExpress() {
+		if (!express.equals(""))
+			return "<a href='MainServlet?target="+express+"&action=view' target='_blank'> Click me to the table.</a>";
+		else
+			return "";
+	}
+
+
+	public void setExpress(String express) {
+		this.express = express;
 	}
 
 }

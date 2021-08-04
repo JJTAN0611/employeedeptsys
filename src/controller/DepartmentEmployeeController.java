@@ -25,6 +25,7 @@ import com.ibm.wsdl.util.StringUtils;
 import model.entity.DepartmentEmployee;
 import model.entity.Employee;
 import model.usebean.DepartmentEmployeeUseBean;
+import model.usebean.DepartmentUseBean;
 import model.usebean.EmployeeUseBean;
 import model.entity.Employee;
 import sessionbean.DepartmentEmployeeSessionBeanLocal;
@@ -63,7 +64,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
 				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
-				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_remove.jsp");
+				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_delete.jsp");
 				req.forward(request, response);
 			}
 
@@ -94,6 +95,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 							"Success " + action + " --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id().toString());
 					return;
 				}
+				deub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				errorRedirect(e, deub);
 				logger.setContentPoints(request, e.getMessage());
@@ -114,13 +116,15 @@ public class DepartmentEmployeeController extends HttpServlet {
 				} else {
 					deub.setDept_id_error("Department not exist");
 					deub.setEmp_id_error("Employee not exist");
+					deub.setOverall_error("Please fix the error below");
 				}
-
+				
 			} catch (Exception e) {
+				deub=new DepartmentEmployeeUseBean(deptempbean.findDepartmentEmployee(deub.getDept_id(),deub.getEmp_id()));
 				errorRedirect(e, deub);
 			}
 			request.getSession().setAttribute("deub", deub);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_remove.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
 			dispatcher.forward(request, response);
 
 		} else if (action.compareTo("update") == 0) {
@@ -138,12 +142,14 @@ public class DepartmentEmployeeController extends HttpServlet {
 							"Success " + action + " --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id().toString());
 					return;
 				}
+				deub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				errorRedirect(e, deub);
 				logger.setContentPoints(request, e.getMessage());
 			}
+			
 			request.getSession().setAttribute("deub", deub);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_update.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
 			dispatcher.forward(request, response);
 
 		}
@@ -153,16 +159,29 @@ public class DepartmentEmployeeController extends HttpServlet {
 	public void errorRedirect(Exception e, DepartmentEmployeeUseBean deub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
-		if (psqle != null)
-			if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+		if (psqle != null) {
+			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
+				deub=new DepartmentEmployeeUseBean(deptempbean.findDepartmentEmployee(deub.getDept_id(),deub.getEmp_id()));
+				deub.setOverall_error("Duplicate error. Please change the input as annotated below");
 				if (psqle.getMessage().contains("primary")) {
 					deub.setDept_id_error("Duplicate combination of department id and employee id");
 					deub.setEmp_id_error("Duplicate combination of department id and employee id");
 				} else
 					deub.setOverall_error(psqle.getMessage());
 				return;
+			}else if(psqle.getMessage().contains("violates foreign key constraint")) {
+				deub.setOverall_error("No related records. Please change the input as annotated below");
+				if (psqle.getMessage().contains("\"department\"")) {
+					deub.setDept_id_error("Department ID not exist in department table");
+					deub.setExpress("department");
+				}else if(psqle.getMessage().contains("\"employee\"")) {
+					deub.setEmp_id_error("Employee ID not exist in employee table");
+					deub.setExpress("employee");
+				}else
+					deub.setOverall_error(psqle.getMessage());
 			}
-		deub.setOverall_error(e.toString());
+		}else
+			deub.setOverall_error(e.toString());
 	}
 
 

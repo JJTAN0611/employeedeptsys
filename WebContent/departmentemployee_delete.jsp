@@ -12,18 +12,18 @@
 		<div class="row">
 			<div class="text-start col" style="font-size: 35px;">
 				Department Employee Record
-				<div class="badge bg-light text-danger text-wrap">Remove</div>
+				<div class="badge bg-light text-danger text-wrap">Delete</div>
 			</div>
 		</div>
 	</div>
 	<br> <br>
 	<h1>
-		<center>You are removing following details.</center>
+		<center>You are deleting following details.</center>
 	</h1>
 	<hr>
 	<center>Click the ID input textbox to see detail.</center>
 		<div class="text-danger text-center"><jsp:getProperty name="deub"
-			property="overall_error" /></div>
+			property="overall_error" /> </div>
 	<br>
 </div>
 
@@ -61,7 +61,7 @@
 
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-						property="dept_id_error" /></div>
+						property="dept_id_error" /> ${deub.getExpress()}</div>
 				<div id="deptcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
@@ -111,7 +111,7 @@
 					
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-							property="emp_id_error" /></div>
+							property="emp_id_error" /> ${deub.getExpress()}</div>
 				<div id="empcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
