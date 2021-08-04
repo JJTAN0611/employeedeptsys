@@ -6,10 +6,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import controller.ValidateManageLogic;
 import model.entity.Department;
 import model.entity.Employee;
 import model.usebean.DepartmentUseBean;
+import utilities.ControllerManagement;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -61,11 +61,10 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	public Department findDepartment(String id) throws EJBException {
 		// Write some codes here…
 		Query q = em.createNamedQuery("Department.findbyId");
-		q.setParameter("id", String.valueOf(id));
-		Department d;
+
 		try {
-			d = (Department) q.getSingleResult();
-			return d;
+			q.setParameter("id", String.valueOf(id));
+			return (Department) q.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}

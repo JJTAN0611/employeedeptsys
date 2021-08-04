@@ -1,5 +1,3 @@
-<%@page import="java.util.List"%>
-<%@page import="model.entity.Employee"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -22,6 +20,7 @@
 		<center>Please fill in the following details.</center>
 	</h1>
 	<hr>
+	<div class="text-danger text-center"><jsp:getProperty name="eub" property="overall_error"/></div>
 	<br> <br>
 </div>
 
@@ -57,12 +56,12 @@
 			<div class="col-8">
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio"
-						name="gender" id="rmale" value="M"  ${eub.getCheckedM()}>
+						name="gender" id="rmale" value="M" ${eub.getChecked("M")} >
 					<label class="form-check-label" for="rmale">Male</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio"
-						name="gender" id="rfemale" value="F" ${eub.getCheckedF()}>
+						name="gender" id="rfemale" value="F" ${eub.getChecked("F")}>
 					<label class="form-check-label" for="rfemale">Female</label>
 				</div>
 				<div class="text-danger"><jsp:getProperty name="eub" property="gender_error"/></div>

@@ -28,11 +28,6 @@ public class EmployeeUseBean {
 	private String overall_error = "";
 
 	public EmployeeUseBean() {
-		id = null;
-	}
-
-	public EmployeeUseBean(Long id) {
-		this.id = id;
 	}
 
 	public EmployeeUseBean(Employee e) {
@@ -46,6 +41,10 @@ public class EmployeeUseBean {
 
 	public boolean validate() {
 		boolean allTrue = true;
+		if (id == null) {
+			allTrue = false;
+			id_error = "Please enter a ID.";
+		}
 
 		if (first_name == null || first_name.equals("")) {
 			first_name = "";
@@ -60,7 +59,7 @@ public class EmployeeUseBean {
 			last_name = "";
 			allTrue = false;
 			last_name_error = "Please enter a last name.";
-		} else if (first_name.length() < 1 || last_name.length() > 14) {
+		} else if (last_name.length() < 1 || last_name.length() > 14) {
 			allTrue = false;
 			last_name_error = "Please enter last name within 16 character";
 		}
@@ -68,7 +67,7 @@ public class EmployeeUseBean {
 		if (gender == null || gender.equals("")) {
 			gender = "";
 			allTrue = false;
-			gender_error = "Please enter a last name.";
+			gender_error = "Please select a gender";
 		} else if (!(gender.compareTo("M") == 0 || gender.compareTo("F") == 0)) {
 			allTrue = false;
 			gender_error = "Please enter only 'M' or 'F'";
@@ -84,32 +83,47 @@ public class EmployeeUseBean {
 			hire_date_error = "Please enter a hire date";
 		}
 
-		if (hire_date.compareTo(birth_date) <= 0) {
-			allTrue = false;
-			hire_date_error = "Hire date must large than birth date";
-			birth_date_error = "Hire date must large than birth date";
+		if (hire_date != null && birth_date != null) {
+			if (hire_date.compareTo(birth_date) <= 0) {
+				allTrue = false;
+				hire_date_error = "Hire date must large than birth date";
+				birth_date_error = "Hire date must large than birth date";
+			}
 		}
+
+		if (!allTrue)
+			overall_error = "Please fix the error below";
 
 		return allTrue;
 	}
 
-	public String getCheckedM() {
-		if(gender.compareTo("M")==0)
+	public boolean validateId() {
+		boolean allTrue = true;
+		if (id == null) {
+			allTrue = false;
+			id_error = "Please enter a ID.";
+		}
+		return allTrue;
+	}
+
+	public String getChecked(String g) {
+		if (gender.compareTo("M") == 0 && g.compareTo("M") == 0)
+			return "checked";
+		else if (gender.compareTo("F") == 0 && g.compareTo("F") == 0)
 			return "checked";
 		return "";
 	}
-	public String getCheckedF() {
-		if(gender.compareTo("F")==0)
-			return "checked";
-		return "";
-	}
-	
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(String id) {
-		this.id = Long.valueOf(id);
+		try {
+			this.id = Long.valueOf(id);
+		} catch (Exception e) {
+		}
+
 	}
 
 	public String getFirst_name() {
@@ -145,9 +159,9 @@ public class EmployeeUseBean {
 		try {
 			dob = new SimpleDateFormat("yyyy-MM-dd").parse(birth_date);
 			this.birth_date = new java.sql.Date(dob.getTime());
-		} catch (ParseException e) {
+		} catch (Exception e) {
 		}
-	
+
 	}
 
 	public Date getHire_date() {
@@ -159,7 +173,7 @@ public class EmployeeUseBean {
 		try {
 			hd = new SimpleDateFormat("yyyy-MM-dd").parse(hire_date);
 			this.hire_date = new java.sql.Date(hd.getTime());
-		} catch (ParseException e) {
+		} catch (Exception e) {
 		}
 
 	}

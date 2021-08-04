@@ -28,6 +28,7 @@ import model.usebean.DepartmentUseBean;
 import model.usebean.EmployeeUseBean;
 import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
+import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/EmployeeController")
@@ -42,7 +43,7 @@ public class EmployeeController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
+		
 		String action = (String) request.getAttribute("action");
 
 		try {
@@ -51,7 +52,7 @@ public class EmployeeController extends HttpServlet {
 				response.getWriter().print(getAutoId());
 			} else if (action.compareTo("getEmployee") == 0) {
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
-				logger.setContentPoints(request, "hi" + emp.getId());
+				
 				JsonObject jo = Json.createObjectBuilder().add("id", emp.getId()).add("first_name", emp.getFirstName())
 						.add("last_name", emp.getLastName()).add("gender", emp.getGender())
 						.add("birth_date", emp.getBirthDate().toString()).add("hire_date", emp.getHireDate().toString())
@@ -64,7 +65,6 @@ public class EmployeeController extends HttpServlet {
 				RequestDispatcher req = request.getRequestDispatcher("employee_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
-
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
 				request.getSession().setAttribute("eub", new EmployeeUseBean(emp));
 				RequestDispatcher req = request.getRequestDispatcher("employee_update.jsp");
@@ -103,30 +103,30 @@ public class EmployeeController extends HttpServlet {
 
 				if (eub.validate()) {
 					empbean.addEmployee(eub);
-					ValidateManageLogic.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
 					return;
 				}
 			} catch (Exception e) {
 				errorRedirect(e, eub);
-				logger.setContentPoints(request, "hi"+eub.getFirst_name()+"|"+eub.getFirst_name_error());
+				logger.setContentPoints(request, e.getMessage());
 			}
 			request.getSession().setAttribute("eub", eub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_add.jsp");
 			dispatcher.forward(request, response);
 
 		} else if (action.compareTo("delete") == 0) {
-			EmployeeUseBean eub = null;
+			EmployeeUseBean eub = new EmployeeUseBean();
 			try {
 				eub.setId(request.getParameter("id"));
+				logger.setContentPoints(request, "aa" + eub.getId());
 				if (empbean.deleteEmployee(eub)) {
-					ValidateManageLogic.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getId());
 					return;
 				} else
 					eub.setId_error("Employee not exist");
 			} catch (Exception e) {
-				eub = new EmployeeUseBean();
 				errorRedirect(e, eub);
 			}
 			request.getSession().setAttribute("eub", eub);
@@ -145,7 +145,7 @@ public class EmployeeController extends HttpServlet {
 
 				if (eub.validate()) {
 					if (empbean.updateEmployee(eub) == true) {
-						ValidateManageLogic.navigateJS(response.getWriter(), request);
+						ControllerManagement.navigateJS(response.getWriter(), request);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
 						return;
 					}
@@ -163,27 +163,16 @@ public class EmployeeController extends HttpServlet {
 
 	public void errorRedirect(Exception e, EmployeeUseBean eub) {
 
-		if (eub == null) {
-			eub = new EmployeeUseBean();
-		} else {
-			PSQLException psqle = unwrapCause(PSQLException.class, e);
-			if (psqle != null)
-				if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
-					if (psqle.getMessage().contains("primary"))
-						eub.setId_error("dublicate employee id");
-					else
-						eub.setOverall_error(e.getMessage());
-					return;
-				}
-		}
-		eub.setOverall_error(e.getMessage());
-	}
-
-	public <T> T unwrapCause(Class<T> clazz, Throwable e) {
-		while (!clazz.isInstance(e) && e.getCause() != null && e != e.getCause()) {
-			e = e.getCause();
-		}
-		return clazz.isInstance(e) ? clazz.cast(e) : null;
+		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
+		if (psqle != null)
+			if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+				if (psqle.getMessage().contains("primary"))
+					eub.setId_error("dublicate employee id");
+				else
+					eub.setOverall_error(psqle.getMessage());
+				return;
+			}
+		eub.setOverall_error(e.toString());
 	}
 
 	private int getAutoId() {

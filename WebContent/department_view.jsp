@@ -44,11 +44,11 @@
 					name="direction">
 					<%
 						if (direction.compareTo("DESC") == 0) {
-							out.println("<option value=\"ASC\">ascending</option>");
-							out.println("<option value=\"DESC\" selected>descending</option>");
+							out.println("<option value=\"ASC\">Ascending by department id</option>");
+							out.println("<option value=\"DESC\" selected>Descending by department id</option>");
 						} else {
-							out.println("<option value=\"ASC\" selected>ascending</option>");
-							out.println("<option value=\"DESC\">descending</option>");
+							out.println("<option value=\"ASC\" selected>Ascending by department id</option>");
+							out.println("<option value=\"DESC\">Descending by department id</option>");
 						}
 					%>
 				</select>

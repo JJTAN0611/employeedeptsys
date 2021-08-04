@@ -1,10 +1,9 @@
-<%@page import="java.util.List"%>
-<%@page import="model.entity.DepartmentEmployee"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-
+<jsp:useBean id="deub" type="model.usebean.DepartmentEmployeeUseBean"
+	scope="session" />
 <%@ include file="header.jsp"%>
 
 <div class="container top-first">
@@ -21,6 +20,8 @@
 		<center>Please fill in the following details.</center>
 	</h1>
 	<hr>
+	<div class="text-danger text-center"><jsp:getProperty name="deub"
+			property="overall_error" /></div>
 	<br> <br>
 </div>
 
@@ -32,9 +33,12 @@
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
 				<div class="input-group">
-					<input id="dept_id" type="text" class="form-control" name="dept_id">
+					<input id="dept_id" type="text" class="form-control" name="dept_id"
+						value='<jsp:getProperty name="deub" property="dept_id"/>'>
 					<div class="input-group-append">
-					<button id="checkdept" class="btn btn-info" data-bs-toggle='collapse' data-bs-target='#deptcontent' type="button"
+						<button id="checkdept" class="btn btn-info"
+							data-bs-toggle='collapse' data-bs-target='#deptcontent'
+							type="button"
 							onclick="
 								$('#checkdept').attr('class', 'btn btn-info spinner-border');
 								 $.get('MainServlet?target=departmentemployee&action=getDepartment&id='+$('#dept_id').val(), function(data, status){
@@ -52,12 +56,16 @@
 									});
 						">Check</button>
 					</div>
-				</div>
 
+				</div>
+				<div class="text-danger"><jsp:getProperty name="deub"
+						property="dept_id_error" /></div>
 				<div id="deptcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
-						<li id="dept_name" class='list-group-item list-group-item-action list-group-item-dark'>Department Name:&emsp;</li>
+						<li id="dept_name"
+							class='list-group-item list-group-item-action list-group-item-dark'>Department
+							Name:&emsp;</li>
 					</ul>
 				</div>
 			</div>
@@ -67,9 +75,12 @@
 			<label class="control-label col-3 text-end">Employee ID:</label>
 			<div class="col-8">
 				<div class="input-group">
-					<input id="emp_id" type="text" class="form-control" name="emp_id">
+					<input id="emp_id" type="number" class="form-control" name="emp_id"
+						value='<jsp:getProperty name="deub" property="emp_id"/>'>
 					<div class="input-group-append">
-						<button id="checkemp" class="btn btn-info" data-bs-toggle='collapse' data-bs-target='#empcontent' type="button"
+						<button id="checkemp" class="btn btn-info"
+							data-bs-toggle='collapse' data-bs-target='#empcontent'
+							type="button"
 							onclick="
 								$('#checkemp').attr('class', 'btn btn-info spinner-border');
 						  $.get('MainServlet?target=departmentemployee&action=getEmployee&id='+$('#emp_id').val(), function(data, status){
@@ -95,16 +106,19 @@
 							  });
 						">Check</button>
 					</div>
+					
 				</div>
+				<div class="text-danger"><jsp:getProperty name="deub"
+							property="emp_id_error" /></div>
 				<div id="empcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
 						<li id="empfname"
 							class='list-group-item list-group-item-dark  list-group-item-action'>First
 							Name: &emsp;</li>
-						<li  id="emplname"
-							class='list-group-item list-group-item-dark  list-group-item-action'>Last Name
-							Name: &emsp;</li>
+						<li id="emplname"
+							class='list-group-item list-group-item-dark  list-group-item-action'>Last
+							Name Name: &emsp;</li>
 						<li id="empgender"
 							class='list-group-item list-group-item-dark  list-group-item-action'>Gender:
 							&emsp;</li>
@@ -121,16 +135,22 @@
 		<br>
 
 		<div class="form-group row">
-			<label class="control-label col-3 text-end">Birth Date:</label>
+			<label class="control-label col-3 text-end">From Date:</label>
 			<div class="col-8">
-				<input type="date" class="form-control" name="from_date">
+				<input type="date" class="form-control" name="from_date"
+					value='<jsp:getProperty name="deub" property="from_date"/>'>
+				<div class="text-danger"><jsp:getProperty name="deub"
+						property="from_date_error" /></div>
 			</div>
 		</div>
 		<br>
 		<div class="form-group row">
-			<label class="control-label col-3 text-end">Hire Date:</label>
+			<label class="control-label col-3 text-end">To Date:</label>
 			<div class="col-8">
-				<input type="date" class="form-control" name="to_date">
+				<input type="date" class="form-control" name="to_date"
+					value='<jsp:getProperty name="deub" property="to_date"/>'>
+				<div class="text-danger"><jsp:getProperty name="deub"
+						property="to_date_error" /></div>
 			</div>
 		</div>
 		<br>

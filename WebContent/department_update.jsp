@@ -1,5 +1,3 @@
-<%@page import="java.util.List"%>
-<%@page import="model.entity.Department"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -23,7 +21,7 @@
 		<center>Please update the following details.</center>
 	</h1>
 	<hr>
-	<div class="text-danger"><jsp:getProperty name="dub"
+	<div class="text-danger text-center"><jsp:getProperty name="dub"
 			property="overall_error" /></div>
 	<br> <br>
 </div>

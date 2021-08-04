@@ -4,31 +4,34 @@ import java.util.Hashtable;
 
 import javax.servlet.http.HttpServletRequest;
 
+import model.entity.Department;
 import utilities.LoggingGeneral;
 
 public class DepartmentUseBean {
-	private String id="";
-	private String dept_name="";
+	private String id = "";
+	private String dept_name = "";
 
 	private String id_error = "";
 	private String dept_name_error = "";
 	private String overall_error = "";
 
 	public DepartmentUseBean() {
-		this.id = "";
 	}
 
+	// For auto generate use
+	// Only apply for this useBean
 	public DepartmentUseBean(String id) {
 		this.id = id;
 	}
 
-	public DepartmentUseBean(String id, String dept_name) {
-		this.id = id;
-		this.dept_name = dept_name;
+	public DepartmentUseBean(Department d) {
+		this.id = d.getId();
+		this.dept_name = d.getDeptName();
 	}
 
 	public boolean validate() {
 		boolean allTrue = true;
+
 		if (id == null || id.equals("")) {
 			id = "";
 			allTrue = false;
@@ -46,12 +49,14 @@ public class DepartmentUseBean {
 			allTrue = false;
 			dept_name_error = "Please enter department name within 40 character";
 		}
+
+		if (!allTrue)
+			overall_error = "Please fix the error below";
 		return allTrue;
 	}
 
 	public boolean validateId() {
 		boolean allTrue = true;
-		System.out.println("aa" + dept_name);
 		if (id == null || id.equals("")) {
 			id = "";
 			allTrue = false;

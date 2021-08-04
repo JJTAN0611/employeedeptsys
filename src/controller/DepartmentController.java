@@ -30,6 +30,7 @@ import model.entity.Employee;
 import model.usebean.DepartmentUseBean;
 import sessionbean.DepartmentSessionBeanLocal;
 import sessionbean.EmployeeSessionBeanLocal;
+import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/DepartmentController")
@@ -73,13 +74,13 @@ public class DepartmentController extends HttpServlet {
 			} else if (action.compareTo("update") == 0) {
 				String id = (String) request.getParameter("id");
 				Department dept = deptbean.findDepartment(id);
-				request.getSession().setAttribute("dub", new DepartmentUseBean(dept.getId(), dept.getDeptName()));
+				request.getSession().setAttribute("dub", dept);
 				RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("delete") == 0) {
 				String id = (String) request.getParameter("id");
 				Department dept = deptbean.findDepartment(id);
-				request.getSession().setAttribute("dub", new DepartmentUseBean(dept.getId(), dept.getDeptName()));
+				request.getSession().setAttribute("dub", dept);
 				RequestDispatcher req = request.getRequestDispatcher("department_remove.jsp");
 				req.forward(request, response);
 			} else {
@@ -107,7 +108,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setDept_name(request.getParameter("dept_name"));
 				if (dub.validate()) {
 					deptbean.addDepartment(dub);
-					ValidateManageLogic.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(response.getWriter(), request);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 					return;
 				}
@@ -124,7 +125,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setId(request.getParameter("id"));
 				if (dub.validateId()) {
 					if (deptbean.deleteDepartment(dub)) {
-						ValidateManageLogic.navigateJS(response.getWriter(), request);
+						ControllerManagement.navigateJS(response.getWriter(), request);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 						return;
 					} else
@@ -143,7 +144,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setDept_name(request.getParameter("dept_name"));
 				if (dub.validate()) {
 					if (deptbean.updateDepartment(dub)) {
-						ValidateManageLogic.navigateJS(response.getWriter(), request);
+						ControllerManagement.navigateJS(response.getWriter(), request);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 						return;
 					} else
@@ -162,7 +163,7 @@ public class DepartmentController extends HttpServlet {
 	}
 
 	public void errorRedirect(Exception e, DepartmentUseBean dub) {
-		PSQLException psqle = unwrapCause(PSQLException.class, e);
+		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null)
 			if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
 				if (psqle.getMessage().contains("primary"))
@@ -185,10 +186,4 @@ public class DepartmentController extends HttpServlet {
 		return "d" + String.format("%03d", t + 1);
 	}
 
-	public <T> T unwrapCause(Class<T> clazz, Throwable e) {
-		while (!clazz.isInstance(e) && e.getCause() != null && e != e.getCause()) {
-			e = e.getCause();
-		}
-		return clazz.isInstance(e) ? clazz.cast(e) : null;
-	}
 }

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import controller.ValidateManageLogic;
+import utilities.ControllerManagement;
 
 @WebServlet(name = "log", urlPatterns = { "/log" })
 public class log extends HttpServlet {
@@ -59,7 +59,7 @@ public class log extends HttpServlet {
 			        bw.write("");
 			        bw.flush();
 			        bw.close();
-			    	ValidateManageLogic.navigateJS(response.getWriter(), request);
+			    	ControllerManagement.navigateJS(response.getWriter(), request);
 			    }catch(IOException ioe){
 			        ioe.printStackTrace();
 			    }

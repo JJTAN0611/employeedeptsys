@@ -2,6 +2,7 @@ package sessionbean;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -9,6 +10,7 @@ import model.entity.Department;
 import model.entity.DepartmentEmployee;
 import model.entity.DepartmentEmployeePK;
 import model.entity.Employee;
+import model.usebean.DepartmentEmployeeUseBean;
 
 import java.math.BigInteger;
 import java.sql.SQLException;
@@ -40,30 +42,31 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		// TODO Auto-generated constructor stub
 	}
 
-	
 	public List<DepartmentEmployee> getAllDepartmentEmployees() throws EJBException {
 		// Write some codes here…
 		return em.createNamedQuery("DepartmentEmployee.findAll").getResultList();
 	}
 
-	public List<DepartmentEmployee> readDepartmentEmployee(int currentPage, int recordsPerPage, String keyword,String direction) throws EJBException {
+	public List<DepartmentEmployee> readDepartmentEmployee(int currentPage, int recordsPerPage, String keyword,
+			String direction) throws EJBException {
 		// Write some codes here…
 		Query q = null;
 		int start = 0;
 		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id", DepartmentEmployee.class);
+			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id " + direction,
+					DepartmentEmployee.class);
 
 			start = currentPage * recordsPerPage - recordsPerPage;
 		} else {
 			q = em.createNativeQuery(
 					"SELECT * from employees.department_employee de, employees.department d, employees.employee e "
-					+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
-					+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
-					+ "LIKE lower(?) order by de.department_id "+direction,
+							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
+							+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
+							+ "LIKE lower(?) order by de.department_id " + direction,
 					DepartmentEmployee.class);
 			q.setParameter(1, "%" + keyword + "%");
 			start = currentPage * recordsPerPage - recordsPerPage;
-	
+
 		}
 		List<DepartmentEmployee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
 		return results;
@@ -75,10 +78,11 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		if (keyword.isEmpty()) {
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department_employee");
 		} else {
-			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow from employees.department_employee de, employees.department d, employees.employee e "
-					+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
-					+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
-					+ "LIKE lower(?)");
+			q = em.createNativeQuery(
+					"SELECT COUNT(*) AS totalrow from employees.department_employee de, employees.department d, employees.employee e "
+							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
+							+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
+							+ "LIKE lower(?)");
 			q.setParameter(1, "%" + keyword + "%");
 		}
 		BigInteger results = (BigInteger) q.getSingleResult();
@@ -86,59 +90,46 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		return i;
 	}
 
-	public DepartmentEmployee findDepartmentEmployee(String[] id) throws EJBException {
+	public DepartmentEmployee findDepartmentEmployee(String dept_id, Long emp_id) throws EJBException {
 		// Write some codes here…
 		Query q = em.createNamedQuery("DepartmentEmployee.findbyId");
-		q.setParameter("id", new DepartmentEmployeePK(String.valueOf(id[0]),Long.valueOf(id[1])));
-		
-		return (DepartmentEmployee) q.getSingleResult();
+		try {
+			q.setParameter("id", new DepartmentEmployeePK(dept_id, emp_id));
+			return (DepartmentEmployee) q.getSingleResult();
+		} catch (NoResultException | NumberFormatException e) {
+			return null;
+		}
+
 	}
 
-	public void updateDepartmentEmployee(String[] s) throws EJBException {
+	public boolean updateDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
 		// Write some codes here…
-		Date from_date = null;
-		Date to_date = null;
-		try {
-			from_date = new SimpleDateFormat("yyyy-MM-dd").parse(s[2]);
-			to_date = new SimpleDateFormat("yyyy-MM-dd").parse(s[3]);
-		} catch (Exception ex) {
-		}
-		
-		java.sql.Date fd = new java.sql.Date(from_date.getTime());
-		java.sql.Date td = new java.sql.Date(to_date.getTime());
-	
-
-		DepartmentEmployeePK depk = new DepartmentEmployeePK(s[0],Long.valueOf(s[1]));
-		DepartmentEmployee de = new DepartmentEmployee();
-		de.setId(depk);
-		de.setFromDate(fd);
-		de.setToDate(td);
+		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
+		if (de == null)
+			return false;
+		de.setFromDate(deub.getFrom_date());
+		de.setToDate(deub.getTo_date());
 		em.merge(de);
+		return true;
 	}
 
-	public void deleteDepartmentEmployee(String[] id) throws EJBException {
+	public boolean deleteDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
 		// Write some codes here…
-		DepartmentEmployee de = findDepartmentEmployee(id);
+		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
+		if (de == null)
+			return false;
 		em.remove(de);
+		return true;
 	}
 
-	public void addDepartmentEmployee(String[] s) throws EJBException {
+	public void addDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
 		// Write some codes here…
-		Date from_date = null;
-		Date to_date = null;
-		try {
-			from_date = new SimpleDateFormat("yyyy-MM-dd").parse(s[2]);
-			to_date = new SimpleDateFormat("yyyy-MM-dd").parse(s[3]);
-		} catch (Exception ex) {
-		}
-		java.sql.Date fd = new java.sql.Date(from_date.getTime());
-		java.sql.Date td = new java.sql.Date(to_date.getTime());
-	
-		DepartmentEmployeePK depk = new DepartmentEmployeePK(s[0],Long.valueOf(s[1]));
+
+		DepartmentEmployeePK depk = new DepartmentEmployeePK(deub.getDept_id(), deub.getEmp_id());
 		DepartmentEmployee de = new DepartmentEmployee();
 		de.setId(depk);
-		de.setFromDate(fd);
-		de.setToDate(td);
+		de.setFromDate(deub.getFrom_date());
+		de.setToDate(deub.getTo_date());
 		em.persist(de);
 	}
 }

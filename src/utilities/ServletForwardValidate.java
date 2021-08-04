@@ -1,3 +1,4 @@
+package utilities;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
@@ -13,8 +14,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import controller.ValidateManageLogic;
 
 @WebFilter(filterName="MainFilter",urlPatterns="/MainServlet",dispatcherTypes= {DispatcherType.REQUEST})
 public class ServletForwardValidate implements Filter{

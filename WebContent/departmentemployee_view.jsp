@@ -101,7 +101,7 @@ button[aria-expanded=false] .fa-chevron-down {
 								</div>
 								<div class="col-6 item-aligns-center">
 									<div class="row">
-										<div class="col">Direction:</div>
+										<div class="col">Direction (by Department Id):</div>
 										<div class="col">
 											<div class="form-check">
 												<input class="form-check-input" type="radio" value="ASC"

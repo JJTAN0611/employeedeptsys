@@ -47,7 +47,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		int start = 0;
 		direction = " " + direction;
 		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.employee order by id"+direction, Employee.class);
+			q = em.createNativeQuery("SELECT * FROM employees.employee order by id "+direction, Employee.class);
 			start = currentPage * recordsPerPage - recordsPerPage;
 		} else {
 			q = em.createNativeQuery(
@@ -78,11 +78,10 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 	public Employee findEmployee(Long id) throws EJBException {
 		// Write some codes here…
 		Query q = em.createNamedQuery("Employee.findbyId");
-		Employee em;
+
 		try {
 			q.setParameter("id", id);
-			em=(Employee) q.getSingleResult();
-			return em;
+			return (Employee) q.getSingleResult();
 		}catch (NoResultException | NumberFormatException e ) {
 			return null;
 		}

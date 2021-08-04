@@ -64,14 +64,18 @@ button[aria-expanded=false] .fa-chevron-down {
 						type="hidden" name=action value="view" />
 
 					<div class="card text-dark bg-light">
-						<div class="card-header"><h5>Filter by keyword</h5> (You may leave
-							empty), (Case is not sensitive)</div>
+						<div class="card-header">
+							<h5>Filter by keyword</h5>
+							(You may leave empty), (Case is not sensitive)
+						</div>
 						<div class="card-body">
 							<div class="row">
-								<div class="col-2 float-end"><b>Keyword:</b></div>
+								<div class="col-2 float-end">
+									<b>Keyword:</b>
+								</div>
 								<div class="col-10">
-									<input class="form-control border-info border-5" type="text" aria-label="Search"
-										name="keyword" value="<%=keyword%>"
+									<input class="form-control border-info border-5" type="text"
+										aria-label="Search" name="keyword" value="<%=keyword%>"
 										placeholder="Enter keyword. (Id, name, etc)" /><br> <i>**You
 										may use <b>%</b> for searching mask. For example, <b>Georgi
 											Facello%M%1956</b>.
@@ -82,13 +86,17 @@ button[aria-expanded=false] .fa-chevron-down {
 					</div>
 					<hr>
 					<div class="card  text-dark bg-light">
-						<div class="card-header"><h5>Page Sorting</h5></div>
+						<div class="card-header">
+							<h5>Page Sorting</h5>
+						</div>
 						<div class="card-body">
 							<div class="row">
 								<div
 									class="col-6 item-aligns-center border-end border-dark border-5">
 									<div class="row">
-										<div class="col"><b>Record per Page:</b></div>
+										<div class="col">
+											<b>Record per Page:</b>
+										</div>
 										<div class="col">
 											<input class="form-control-range" type="range"
 												name="recordsPerPage" style="color: red" min="1" max="100"
@@ -101,7 +109,9 @@ button[aria-expanded=false] .fa-chevron-down {
 								</div>
 								<div class="col-6 item-aligns-center">
 									<div class="row">
-										<div class="col"><b>Direction:</b></div>
+										<div class="col">
+											<b>Direction (by Employee Id):</b>
+										</div>
 										<div class="col">
 											<div class="form-check">
 												<input class="form-check-input" type="radio" value="ASC"
@@ -163,7 +173,8 @@ button[aria-expanded=false] .fa-chevron-down {
 						out.println("<td>" + t.getId() + "</td>");
 						out.println("<td>" + t.getFirstName() + "</td>");
 						out.println("<td>" + t.getLastName() + "</td>");
-						out.println("<td>" + t.getGender() + "</td>");
+						out.println("<td>" + (t.getGender().compareTo("M")==0 ? "Male" : "Female") + "&emsp;<i class='fas fa-"
+								+ (t.getGender().compareTo("M")==0 ? "mars" : "venus") + "'></i></td>");
 						out.println("<td>" + t.getBirthDate() + "</td>");
 						out.println("<td>" + t.getHireDate() + "</td>");
 						out.println("<td><a href=\"MainServlet?target=employee&action=update&id=" + t.getId()
