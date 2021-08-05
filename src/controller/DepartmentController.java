@@ -106,7 +106,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setDept_name(request.getParameter("dept_name"));
 				if (dub.validate()) {
 					deptbean.addDepartment(dub);
-					ControllerManagement.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(request,response);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 					return;
 				}
@@ -125,7 +125,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setId(request.getParameter("id"));
 				if (dub.validateId()) {
 					if (deptbean.deleteDepartment(dub)) {
-						ControllerManagement.navigateJS(response.getWriter(), request);
+						ControllerManagement.navigateJS(request,response);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 						return;
 					} else
@@ -147,7 +147,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setDept_name(request.getParameter("dept_name"));
 				if (dub.validate()) {
 					if (deptbean.updateDepartment(dub)) {
-						ControllerManagement.navigateJS(response.getWriter(), request);
+						ControllerManagement.navigateJS(request,response);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 						return;
 					} else

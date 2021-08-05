@@ -103,7 +103,7 @@ public class EmployeeController extends HttpServlet {
 
 				if (eub.validate()) {
 					empbean.addEmployee(eub);
-					ControllerManagement.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(request,response);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
 					return;
 				}
@@ -122,7 +122,7 @@ public class EmployeeController extends HttpServlet {
 				eub.setId(request.getParameter("id"));
 				logger.setContentPoints(request, "aa" + eub.getId());
 				if (empbean.deleteEmployee(eub)) {
-					ControllerManagement.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(request,response);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getId());
 					return;
 				} else {
@@ -149,7 +149,7 @@ public class EmployeeController extends HttpServlet {
 
 				if (eub.validate()) {
 					if (empbean.updateEmployee(eub) == true) {
-						ControllerManagement.navigateJS(response.getWriter(), request);
+						ControllerManagement.navigateJS(request,response);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
 						return;
 					}

@@ -1,3 +1,4 @@
+<%@ page errorPage="error.jsp"%>
 <%@page import="java.util.List"%>
 <%@page import="model.entity.Employee"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -169,27 +170,31 @@ button[aria-expanded=false] .fa-chevron-down {
 				List<Employee> staffs = (List<Employee>) request.getAttribute("employees");
 				if (staffs.size() != 0) {
 					for (Employee t : staffs) {
-						out.println("<tr>");
-						out.println("<td>" + t.getId() + "</td>");
-						out.println("<td>" + t.getFirstName() + "</td>");
-						out.println("<td>" + t.getLastName() + "</td>");
-						out.println("<td>" + (t.getGender().compareTo("M")==0 ? "Male" : "Female") + "&emsp;<i class='fas fa-"
-								+ (t.getGender().compareTo("M")==0 ? "mars" : "venus") + "'></i></td>");
-						out.println("<td>" + t.getBirthDate() + "</td>");
-						out.println("<td>" + t.getHireDate() + "</td>");
-						out.println("<td><a href=\"MainServlet?target=employee&action=update&id=" + t.getId()
-								+ "\" class=\"text-primary\" ><i class=\"fas fa-marker\"></i>Update</a></td>");
-						out.println("<td><a href=\"MainServlet?target=employee&action=delete&id=" + t.getId()
-								+ "\" class=\"text-danger\" ><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
-						out.println("</tr>");
-					}
+			%>
+
+			<tr>
+				<td><%=t.getId()%></td>
+				<td><%=t.getFirstName()%></td>
+				<td><%=t.getLastName()%></td>
+				<td><%=(t.getGender().compareTo("M") == 0 ? "Male" : "Female")%><i
+					class='fas fa-<%=(t.getGender().compareTo("M") == 0 ? "mars" : "venus")%>'></i></td>
+				<td><%=t.getBirthDate()%></td>
+				<td><%=t.getHireDate()%></td>
+				<td><a
+					href='MainServlet?target=employee&action=update&id=<%=t.getId()%>'
+					class='text-primary'><i class='fas fa-marker'></i>Update</a></td>
+				<td><a
+					href='MainServlet?target=employee&action=delete&id=<%=t.getId()%>'
+					class='text-danger'><i class='fas fa-trash-alt'></i>Delete</a></td>
+			</tr>
+			<%
+				}
 				} else {
-					out.println("<tr>");
-					String status = "No records";
-					for (int i = 0; i < 8; i++) {
-						out.println("<td>" + status + "</td>");
-					}
-					out.println("</tr>");
+			%>
+			<tr>
+				<td colspan=8 class='text-center'>No records</td>
+			</tr>
+			<%
 				}
 			%>
 		</table>
@@ -198,109 +203,54 @@ button[aria-expanded=false] .fa-chevron-down {
 				<ul class="pagination">
 					<%
 						if (currentPage != 1 && nOfPages != 0) {
-							out.println("<li class=\"page-item\">");
-							out.println("<a class=\"page-link\" href=\"" + "MainServlet?target=employee&action=view&recordsPerPage="
-									+ recordsPerPage + "&currentPage=1" + "&keyword=" + keyword + "&direction=" + direction
-									+ "\">First</a>");
-							out.println("</li><li class=\"page-item\">");
-							out.println("<a class=\"page-link\" href=\"" + "MainServlet?target=employee&action=view&recordsPerPage="
-									+ recordsPerPage + "&currentPage=" + (currentPage - 1) + "&keyword=" + keyword + "&direction="
-									+ direction + "&direction=" + direction + "\">Previous</a>	</li>");
+					%>
+					<li class="page-item"><a class="page-link"
+						href="MainServlet?target=employee&action=view&recordsPerPage=<%=recordsPerPage%>&currentPage=1&keyword=<%=keyword%>&direction=<%=direction%>">First</a>
+					</li>
+					<li class="page-item"><a class="page-link"
+						href="MainServlet?target=employee&action=view&recordsPerPage=<%=recordsPerPage%>&currentPage=<%=(currentPage - 1)%>&keyword=<%=keyword%>&direction=<%=direction%>">Previous</a>
+					</li>
+					<%
 						} else {
-							out.println("<li class=\"page-item disabled\">");
-							out.println("<a class=\"page-link disabled\">First</a>");
-							out.println("</li>");
-							out.println("<li class=\"page-item disabled\">");
-							out.println("<a class=\"page-link disabled\" disabled>Previous</a>");
-							out.println("</li>");
+					%>
+					<li class="page-item disabled"><a class="page-link disabled">First</a>
+					</li>
+					<li class="page-item disabled"><a class="page-link disabled"
+						disabled>Previous</a></li>
+					<%
 						}
 						if (currentPage < nOfPages) {
-							out.println("<li class=\"page-item\">");
-							out.println("<a class=\"page-link\" href=\"" + "MainServlet?target=employee&action=view&recordsPerPage="
-									+ recordsPerPage + "&currentPage=" + (currentPage + 1) + "&keyword=" + keyword + "&direction="
-									+ direction + "\">Next</a>");
-							out.println("</li>");
-							out.println("<li class=\"page-item\">");
-							out.println("<a class=\"page-link \" href=\""
-									+ "MainServlet?target=employee&action=view&recordsPerPage=" + recordsPerPage + "&currentPage="
-									+ nOfPages + "&keyword=" + keyword + "&direction=" + direction + "\">Last</a>");
-							out.println("</li>");
+					%>
+
+					<li class="page-item"><a class="page-link"
+						href="MainServlet?target=employee&action=view&recordsPerPage=<%=recordsPerPage%>&currentPage=<%=(currentPage + 1)%>&keyword=<%=keyword%>&direction=<%=direction%>">Next</a>
+					</li>
+
+					<li class="page-item"><a class="page-link"
+						href="MainServlet?target=employee&action=view&recordsPerPage=<%=recordsPerPage%>&currentPage=<%=nOfPages%>&keyword=<%=keyword%>&direction=<%=direction%>">Last</a>
+					</li>
+					<%
 						} else {
-							out.println("<li class=\"page-item disabled\">");
-							out.println("<a class=\"page-link disabled\">Next</a>");
-							out.println("</li>");
-							out.println("<li class=\"page-item disabled\">");
-							out.println("<a class=\"page-link disabled\" disabled>Last</a>");
-							out.println("</li>");
+					%>
+
+					<li class="page-item disabled"><a class="page-link disabled">Next</a>
+
+					</li>
+					<li class="page-item disabled"><a class="page-link disabled"
+						disabled>Last</a></li>
+					<%
 						}
 					%>
 
 
 				</ul>
 			</nav>
-			<%
-				if (nOfPages != 0) {
-					out.println("<div class=\"pageref col-6 text-end\">");
-					out.println(currentPage + " of " + nOfPages);
-					out.println("</div>");
-				}
-			%>
+			<div class='pageref col-6 text-end'><%=currentPage%>
+				of
+				<%=nOfPages%></div>
 		</div>
 	</div>
 
 
 </div>
-
-
-
-
-
-
 <%@ include file="footer.jsp"%>
-<!-- 
-							<div class="row">
-								<div class="col-3 float-end">ID</div>
-								<div class="col-9">
-									<input class="form-control" type="text" aria-label="Search"
-										name="keyword" value="" placeholder="Enter id" />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-3 float-end">Name</div>
-								<div class="col-9">
-									<input class="form-control" type="text" aria-label="Search"
-										name="name" value="" placeholder="Enter name" />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-3 float-end">Gender</div>
-								<div class="col-9">
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="checkbox" value="Male"
-											id="male" checked> <label
-											class="form-check-label" for="male">
-											Male</label>
-									</div>
-									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="checkbox" value="Female"
-											id="female" checked> <label
-											class="form-check-label" for="female">
-											Female</label>
-									</div>
-								</div>
-							</div>
-							<div class="row align-items-center">
-								<div class="col-3 float-end">DOB</div>
-								<div class="col-9">
-									<input class="form-control" type="date" aria-label="Search"
-										name="dob" value="" />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-3 float-end">Hired date</div>
-								<div class="col-9">
-									<input class="form-control" type="date" aria-label="Search"
-										name="dob" value="" />
-								</div>
-							</div>
- -->

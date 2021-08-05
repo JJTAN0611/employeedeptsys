@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,13 +27,9 @@ public class ControllerManagement {
 
 	// this method is used to notify a user that a record has been updated and to
 	// redirect to another page
-	public static void navigateJS(PrintWriter out, HttpServletRequest request) {
-		out.println("<SCRIPT type=\"text/javascript\">");
-		out.println("alert(\"Your [" + request.getAttribute("action") + "] action to [" + request.getAttribute("target")
-				+ "] is successful.\")");
-		out.println(
-				"window.location.assign(\"MainServlet?target=" + request.getAttribute("target") + "&action=view\")");
-		out.println("</SCRIPT>");
+	public static void navigateJS(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("success.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	public static void test(HttpServletResponse response) {

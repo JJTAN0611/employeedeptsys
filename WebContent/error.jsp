@@ -1,3 +1,4 @@
+<%@ page errorPage = "404.jsp" %>
 <%@ include file="header.jsp"%>
 <%@page import="java.util.Enumeration"%>
 <%@page import="java.util.List"%>

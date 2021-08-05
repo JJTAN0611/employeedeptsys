@@ -1,3 +1,4 @@
+<%@ page errorPage = "error.jsp" %>
 <%@ include file="header.jsp" %>  
 <div></div>
 

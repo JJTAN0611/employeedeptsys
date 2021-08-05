@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -112,12 +113,11 @@
 								<div class="btn-group">
 									<a id="department" type="button"
 										href='MainServlet?target=department&action=view'
-										class="btn btn-warning">Department View</a>
-									<a type="button"
+										class="btn btn-warning">Department View</a> <a type="button"
 										class="btn btn-warning dropdown-toggle dropdown-toggle-split"
 										aria-labelledby="dropdownMenuReference"
-										data-bs-toggle="dropdown" aria-expanded="false">
-										<span class="visually-hidden">Toggle Dropdown</span>
+										data-bs-toggle="dropdown" aria-expanded="false"> <span
+										class="visually-hidden">Toggle Dropdown</span>
 									</a>
 									<ul class="dropdown-menu">
 										<li><a id="adddepartment" class="dropdown-item"
@@ -130,12 +130,11 @@
 							<li><div class="btn-group">
 									<a id="department_employee" type="button"
 										href='MainServlet?target=departmentemployee&action=view'
-										class="btn btn-primary">Department Employee View</a>
-									<a 
+										class="btn btn-primary">Department Employee View</a> <a
 										class="btn btn-primary dropdown-toggle dropdown-toggle-split"
 										aria-labelledby="dropdownMenuReference"
-										data-bs-toggle="dropdown" aria-expanded="false">
-										<span class="visually-hidden">Toggle Dropdown</span>
+										data-bs-toggle="dropdown" aria-expanded="false"> <span
+										class="visually-hidden">Toggle Dropdown</span>
 									</a>
 									<ul class="dropdown-menu">
 										<li><a id="adddepartmentemployee" class="dropdown-item"
@@ -147,25 +146,25 @@
 							<li><div class="btn-group">
 									<a id="employee" type="button"
 										href='MainServlet?target=employee&action=view'
-										class="btn btn-success">Employee View</a>
-									<a type="button"
+										class="btn btn-success">Employee View</a> <a type="button"
 										class="btn btn-success dropdown-toggle dropdown-toggle-split"
 										aria-labelledby="dropdownMenuReference"
-										data-bs-toggle="dropdown" aria-expanded="false">
-										<span class="visually-hidden">Toggle Dropdown</span>
+										data-bs-toggle="dropdown" aria-expanded="false"> <span
+										class="visually-hidden">Toggle Dropdown</span>
 									</a>
 									<ul class="dropdown-menu">
 										<li><a id="addemployee" class="dropdown-item"
-											href="MainServlet?target=employee&action=add">Add Employee</a></li>
+											href="MainServlet?target=employee&action=add">Add
+												Employee</a></li>
 										<li></li>
 									</ul>
 								</div></li>
 							<li><a type="button"
-									href='MainServlet?target=log&action=view'
-									class="btn btn-dark text-light  btn-circle"
-									style="border-radius: 30px">
-									Log <i class="fas fa-calendar-week"></i>
-								</a></li>
+								href='MainServlet?target=log&action=view'
+								class="btn btn-dark text-light  btn-circle"
+								style="border-radius: 30px"> Log <i
+									class="fas fa-calendar-week"></i>
+							</a></li>
 							<li></li>
 						</ul>
 

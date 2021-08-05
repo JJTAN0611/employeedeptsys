@@ -1,7 +1,9 @@
 <%@page import="java.util.List"%>
 <%@page import="model.entity.Department"%>
+<%@ page errorPage="error.jsp"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
@@ -74,28 +76,27 @@
 				List<Department> departments = (List<Department>) request.getAttribute("departments");
 				if (departments.size() != 0) {
 					for (Department t : departments) {
-						out.println("<tr>");
-						out.println("<td>" + t.getId() + "</td>");
-						out.println("<td>" + t.getDeptName() + "</td>");
-						out.println("<td><a href=\"MainServlet?id=" + t.getId()
-								+ "&target=department&action=update\" class=\"text-primary\"><i class=\"fas fa-marker\"></i>Update</a></td>");
-						out.println("<td><a href=\"MainServlet?id=" + t.getId()
-								+ "&target=department&action=delete\" class=\"text-danger\"><i class=\"fas fa-trash-alt\"></i>Delete</a></td>");
-						out.println("</tr>");
-					}
+			%>
+			<tr>
+				<td><%=t.getId()%></td>
+				<td><%=t.getDeptName()%></td>
+				<td><a href='MainServlet?target=department&action=update&id=<%=t.getId()%>' class='text-primary'><i class='fas fa-marker'></i>Update</a></td>
+				<td><a href='MainServlet?target=department&action=delete&id=<%=t.getId()%>' class='text-danger'><i class='fas fa-trash-alt'></i>Delete</a></td>
+			</tr>
+			<%
+				}
 				} else {
-					out.println("<tr>");
-					String status = "No records";
-					for (int i = 0; i < 8; i++) {
-						out.println("<td>" + status + "</td>");
-					}
-					out.println("</tr>");
+			%>
+			<tr>
+				<td colspan=4 class='text-center'>No records</td>
+			</tr>
+			<%
 				}
 			%>
 		</table>
 	</div>
 </div>
-</div>
+
 
 
 <%@ include file="footer.jsp"%>

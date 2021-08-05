@@ -21,6 +21,7 @@ import sessionbean.DepartmentSessionBeanLocal;
 import sessionbean.EmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
+import utilities.PaginationValidate;
 
 @WebServlet("/DepartmentEmployeePaginationServlet")
 public class DepartmentEmployeePaginationServlet extends HttpServlet {

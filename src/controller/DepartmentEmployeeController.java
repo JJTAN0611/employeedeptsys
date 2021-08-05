@@ -90,7 +90,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 				if (deub.validate()) {
 					deptempbean.addDepartmentEmployee(deub);
-					ControllerManagement.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(request,response);
 					logger.setContentPoints(request,
 							"Success " + action + " --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id().toString());
 					return;
@@ -110,7 +110,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				deub.setDept_id(request.getParameter("dept_id"));
 				deub.setEmp_id(request.getParameter("emp_id"));
 				if (deptempbean.deleteDepartmentEmployee(deub)) {
-					ControllerManagement.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(request,response);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + deub.getDept_id());
 					return;
 				} else {
@@ -137,7 +137,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 				if (deub.validate()) {
 					deptempbean.updateDepartmentEmployee(deub);
-					ControllerManagement.navigateJS(response.getWriter(), request);
+					ControllerManagement.navigateJS(request,response);
 					logger.setContentPoints(request,
 							"Success " + action + " --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id().toString());
 					return;

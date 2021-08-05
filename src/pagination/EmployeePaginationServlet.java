@@ -18,6 +18,7 @@ import model.entity.DepartmentEmployee;
 import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
 import utilities.LoggingGeneral;
+import utilities.PaginationValidate;
 
 
 @WebServlet("/EmployeePaginationServlet")
