@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -23,6 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.DeserializationConfig.Feature;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.Department;
@@ -67,6 +71,20 @@ public class DepartmentController extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.print(jo);
 				out.flush();
+			} else if (action.compareTo("ajax") == 0) {
+				PrintWriter out = response.getWriter();
+				Department dept = deptbean.findDepartment(request.getParameter("id"));
+				List<Department> h = new ArrayList<Department>();
+				h.add(dept);
+
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+
+				if (h != null) {
+					ObjectMapper mapper = new ObjectMapper();
+					mapper.writeValue(out, h);
+				} 
+				return;
 			} else if (action.compareTo("add") == 0) {
 				request.getSession().setAttribute("dub", new DepartmentUseBean(getAutoId()));
 				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
@@ -85,8 +103,7 @@ public class DepartmentController extends HttpServlet {
 				// download
 			}
 		} catch (Exception ex) {
-			RequestDispatcher req = request.getRequestDispatcher("error.jsp");
-			req.forward(request, response);
+
 		}
 
 	}
@@ -182,7 +199,6 @@ public class DepartmentController extends HttpServlet {
 					dub.setDept_name_error("Duplicate department name");
 				else
 					dub.setOverall_error(psqle.getMessage());
-				return;
 			}
 		}else
 			dub.setOverall_error(e.getMessage());

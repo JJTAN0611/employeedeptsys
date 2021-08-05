@@ -25,13 +25,15 @@ public class ServletForwardValidate implements Filter{
 	private boolean action(ServletRequest request, ServletResponse response) {
 		//retrieve
 		String action = request.getParameter("action");
-		request.setAttribute("action", action);
+		if(action==null)
+			return false;
 		
 		//check
 		switch(action) {
 		case "getAutoId":
 		case "getDepartment":
 		case "getEmployee":
+		case "ajax":
 		case "view":
 		case "add":
 		case "update":
@@ -48,7 +50,8 @@ public class ServletForwardValidate implements Filter{
 		
 		//retrieve
 		String target = request.getParameter("target");
-		request.setAttribute("target", target);
+		if(target==null)
+			return false;
 		
 		switch(target) {
 		case "department":
@@ -65,6 +68,7 @@ public class ServletForwardValidate implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+
 		// TODO Auto-generated method stub
 		if(action(request, response) && target(request, response))
 			chain.doFilter(request, response);

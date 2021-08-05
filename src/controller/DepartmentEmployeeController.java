@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -18,10 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import com.ibm.wsdl.util.StringUtils;
 
+import model.entity.Department;
 import model.entity.DepartmentEmployee;
 import model.entity.Employee;
 import model.usebean.DepartmentEmployeeUseBean;
@@ -53,6 +56,21 @@ public class DepartmentEmployeeController extends HttpServlet {
 				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean());
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_add.jsp");
 				req.forward(request, response);
+			} else if (action.compareTo("ajax") == 0) {
+				PrintWriter out = response.getWriter();
+				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
+						Long.valueOf(request.getParameter("emp_id")));
+				List<DepartmentEmployee> h = new ArrayList<DepartmentEmployee>();
+				h.add(deptemp);
+
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+
+				if (h != null) {
+					ObjectMapper mapper = new ObjectMapper();
+					mapper.writeValue(out, h);
+				}
+				return;
 			} else if (action.compareTo("update") == 0) {
 				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean());
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
@@ -90,7 +108,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 				if (deub.validate()) {
 					deptempbean.addDepartmentEmployee(deub);
-					ControllerManagement.navigateJS(request,response);
+					ControllerManagement.navigateJS(request, response);
 					logger.setContentPoints(request,
 							"Success " + action + " --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id().toString());
 					return;
@@ -110,7 +128,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				deub.setDept_id(request.getParameter("dept_id"));
 				deub.setEmp_id(request.getParameter("emp_id"));
 				if (deptempbean.deleteDepartmentEmployee(deub)) {
-					ControllerManagement.navigateJS(request,response);
+					ControllerManagement.navigateJS(request, response);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + deub.getDept_id());
 					return;
 				} else {
@@ -118,9 +136,10 @@ public class DepartmentEmployeeController extends HttpServlet {
 					deub.setEmp_id_error("Employee not exist");
 					deub.setOverall_error("Please fix the error below");
 				}
-				
+
 			} catch (Exception e) {
-				deub=new DepartmentEmployeeUseBean(deptempbean.findDepartmentEmployee(deub.getDept_id(),deub.getEmp_id()));
+				deub = new DepartmentEmployeeUseBean(
+						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
 				errorRedirect(e, deub);
 			}
 			request.getSession().setAttribute("deub", deub);
@@ -137,7 +156,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 				if (deub.validate()) {
 					deptempbean.updateDepartmentEmployee(deub);
-					ControllerManagement.navigateJS(request,response);
+					ControllerManagement.navigateJS(request, response);
 					logger.setContentPoints(request,
 							"Success " + action + " --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id().toString());
 					return;
@@ -147,7 +166,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				errorRedirect(e, deub);
 				logger.setContentPoints(request, e.getMessage());
 			}
-			
+
 			request.getSession().setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
 			dispatcher.forward(request, response);
@@ -161,7 +180,8 @@ public class DepartmentEmployeeController extends HttpServlet {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
-				deub=new DepartmentEmployeeUseBean(deptempbean.findDepartmentEmployee(deub.getDept_id(),deub.getEmp_id()));
+				deub = new DepartmentEmployeeUseBean(
+						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
 				deub.setOverall_error("Duplicate error. Please change the input as annotated below");
 				if (psqle.getMessage().contains("primary")) {
 					deub.setDept_id_error("Duplicate combination of department id and employee id");
@@ -169,20 +189,19 @@ public class DepartmentEmployeeController extends HttpServlet {
 				} else
 					deub.setOverall_error(psqle.getMessage());
 				return;
-			}else if(psqle.getMessage().contains("violates foreign key constraint")) {
+			} else if (psqle.getMessage().contains("violates foreign key constraint")) {
 				deub.setOverall_error("No related records. Please change the input as annotated below");
 				if (psqle.getMessage().contains("\"department\"")) {
 					deub.setDept_id_error("Department ID not exist in department table");
 					deub.setExpress("department");
-				}else if(psqle.getMessage().contains("\"employee\"")) {
+				} else if (psqle.getMessage().contains("\"employee\"")) {
 					deub.setEmp_id_error("Employee ID not exist in employee table");
 					deub.setExpress("employee");
-				}else
+				} else
 					deub.setOverall_error(psqle.getMessage());
 			}
-		}else
+		} else
 			deub.setOverall_error(e.toString());
 	}
-
 
 }

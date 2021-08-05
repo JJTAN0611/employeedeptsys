@@ -59,7 +59,7 @@ public class log extends HttpServlet {
 			        bw.write("");
 			        bw.flush();
 			        bw.close();
-			    	ControllerManagement.navigateJS(response.getWriter(), request);
+			    	ControllerManagement.navigateJS(request,response);
 			    }catch(IOException ioe){
 			        ioe.printStackTrace();
 			    }

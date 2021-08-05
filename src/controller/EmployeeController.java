@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.Department;
@@ -44,6 +46,9 @@ public class EmployeeController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
+		logger.setEntryPoints(request);
+
 		String action = (String) request.getAttribute("action");
 
 		try {
@@ -52,7 +57,6 @@ public class EmployeeController extends HttpServlet {
 				response.getWriter().print(getAutoId());
 			} else if (action.compareTo("getEmployee") == 0) {
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
-
 				JsonObject jo = Json.createObjectBuilder().add("id", emp.getId()).add("first_name", emp.getFirstName())
 						.add("last_name", emp.getLastName()).add("gender", emp.getGender())
 						.add("birth_date", emp.getBirthDate().toString()).add("hire_date", emp.getHireDate().toString())
@@ -60,6 +64,20 @@ public class EmployeeController extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.print(jo);
 				out.flush();
+			} else if (action.compareTo("ajax") == 0) {
+				PrintWriter out = response.getWriter();
+				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
+				List<Employee> h = new ArrayList<Employee>();
+				h.add(emp);
+
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+
+				if (h != null) {
+					ObjectMapper mapper = new ObjectMapper();
+					mapper.writeValue(out, h);
+				} 
+				return;
 			} else if (action.compareTo("add") == 0) {
 				request.getSession().setAttribute("eub", new EmployeeUseBean());
 				RequestDispatcher req = request.getRequestDispatcher("employee_add.jsp");
@@ -79,8 +97,7 @@ public class EmployeeController extends HttpServlet {
 			}
 
 		} catch (Exception ex) {
-			RequestDispatcher req = request.getRequestDispatcher("error.jsp");
-			req.forward(request, response);
+				System.out.println(ex.getMessage());
 		}
 
 	}
@@ -103,7 +120,7 @@ public class EmployeeController extends HttpServlet {
 
 				if (eub.validate()) {
 					empbean.addEmployee(eub);
-					ControllerManagement.navigateJS(request,response);
+					ControllerManagement.navigateJS(request, response);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
 					return;
 				}
@@ -122,7 +139,7 @@ public class EmployeeController extends HttpServlet {
 				eub.setId(request.getParameter("id"));
 				logger.setContentPoints(request, "aa" + eub.getId());
 				if (empbean.deleteEmployee(eub)) {
-					ControllerManagement.navigateJS(request,response);
+					ControllerManagement.navigateJS(request, response);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getId());
 					return;
 				} else {
@@ -130,7 +147,7 @@ public class EmployeeController extends HttpServlet {
 					eub.setOverall_error("Please fix the error below");
 				}
 			} catch (Exception e) {
-				eub=new EmployeeUseBean(empbean.findEmployee(eub.getId()));
+				eub = new EmployeeUseBean(empbean.findEmployee(eub.getId()));
 				errorRedirect(e, eub);
 			}
 			request.getSession().setAttribute("eub", eub);
@@ -149,7 +166,7 @@ public class EmployeeController extends HttpServlet {
 
 				if (eub.validate()) {
 					if (empbean.updateEmployee(eub) == true) {
-						ControllerManagement.navigateJS(request,response);
+						ControllerManagement.navigateJS(request, response);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + eub.getFirst_name());
 						return;
 					}
@@ -170,19 +187,16 @@ public class EmployeeController extends HttpServlet {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
-			if(psqle.getMessage().contains("violates foreign key constraint")) {
-
+			if (psqle.getMessage().contains("violates foreign key constraint")) {
 				eub.setOverall_error("You may need to clear the related departmentemployee relation record");
 				eub.setId_error("This employee is using in relation table and cannot be deleted");
 				eub.setExpress("departmentemployee");
-			}
-			else if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+			} else if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
 				eub.setOverall_error("Duplicate error. Please change the input as annotated below");
 				if (psqle.getMessage().contains("primary"))
 					eub.setId_error("dublicate employee id");
 				else
 					eub.setOverall_error(psqle.getMessage());
-				return;
 			}
 		} else
 			eub.setOverall_error(e.toString());

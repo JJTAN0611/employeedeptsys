@@ -36,7 +36,7 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
-
+		logger.setContentPoints(request,request.getParameter("id")+"az");
 		response.setContentType("text/html;charset=UTF-8");
 
 		RequestDispatcher dispatcher = null;
@@ -49,6 +49,7 @@ public class MainServlet extends HttpServlet {
 		if (target.compareTo("department") == 0)
 			switch (action) {
 			case "getAutoId":
+			case "ajax":
 				dispatcher = request.getRequestDispatcher("DepartmentController");
 				break;
 			case "view": // check display's parameter
@@ -64,6 +65,7 @@ public class MainServlet extends HttpServlet {
 		else if (target.compareTo("employee") == 0) {
 			switch (action) {
 			case "getAutoId":
+			case "ajax":
 				dispatcher = request.getRequestDispatcher("EmployeeController");
 				break;
 			case "view": // check display's parameter
@@ -79,6 +81,7 @@ public class MainServlet extends HttpServlet {
 		} else if (target.compareTo("departmentemployee") == 0) {
 			switch (action) {
 			case "getAutoId":
+			case "ajax":
 				dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 				break;
 			case "getDepartment":

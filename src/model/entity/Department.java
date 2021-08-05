@@ -9,6 +9,7 @@ import java.util.List;
  * The persistent class for the department database table.
  * 
  */
+
 @Entity
 @NamedQuery(name="Department.findAll", query="SELECT d FROM Department d")
 @NamedQuery(name = "Department.findbyId", query = "SELECT d FROM Department d WHERE d.id = :id")

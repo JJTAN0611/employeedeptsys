@@ -81,12 +81,12 @@ public class DepartmentEmployeeUseBean {
 			dept_id_error = "Please enter a department ID. Department ID cannot be null";
 		} else if (dept_id.length() < 1 || dept_id.length() > 4) {
 			allTrue = false;
-			dept_id_error = "Please enter department ID with 1-4 character.";
+			dept_id_error = "Please enter a valid department ID with 1-4 character.";
 		}
 
 		if (emp_id == null) {
 			allTrue = false;
-			emp_id_error = "Please enter a employee ID. Employee ID cannot be null";
+			emp_id_error = "Please enter a valid employee ID (digit).";
 		}
 		return allTrue;
 	}

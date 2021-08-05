@@ -10,6 +10,7 @@ import java.util.List;
  * The persistent class for the employee database table.
  * 
  */
+
 @Entity
 @NamedQuery(name="Employee.findAll", query="SELECT e FROM Employee e")
 @NamedQuery(name = "Employee.findbyId", query = "SELECT e FROM Employee e WHERE e.id = :id")

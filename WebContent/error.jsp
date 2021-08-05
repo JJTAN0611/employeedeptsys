@@ -20,7 +20,7 @@
 							</h2>
 							<b> You are using invalid request. Don't try to do URL sniffing attack!</b>
 							<hr>
-							<b>Your request <%=request.getAttribute("filtered") %>:</b><br><br>
+							<b>Your request <%=request.getAttribute("filtered") %></b><br><br>
 							<%
 								Map map = request.getParameterMap();
 								Set keSet = map.entrySet();

@@ -120,4 +120,5 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		e.setHireDate(eub.getHire_date());
 		em.persist(e);
 	}
+
 }
