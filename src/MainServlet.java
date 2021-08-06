@@ -50,6 +50,7 @@ public class MainServlet extends HttpServlet {
 			switch (action) {
 			case "getAutoId":
 			case "ajax":
+			case "report":
 			case "download":
 				dispatcher = request.getRequestDispatcher("DepartmentController");
 				break;
@@ -67,6 +68,8 @@ public class MainServlet extends HttpServlet {
 			switch (action) {
 			case "getAutoId":
 			case "ajax":
+			case "report":
+			case "download":
 				dispatcher = request.getRequestDispatcher("EmployeeController");
 				break;
 			case "view": // check display's parameter
@@ -83,6 +86,8 @@ public class MainServlet extends HttpServlet {
 			switch (action) {
 			case "getAutoId":
 			case "ajax":
+			case "report":
+			case "download":
 				dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 				break;
 			case "getDepartment":

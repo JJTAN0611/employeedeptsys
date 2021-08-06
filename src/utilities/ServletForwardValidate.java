@@ -39,6 +39,7 @@ public class ServletForwardValidate implements Filter{
 		case "update":
 		case "delete":
 		case "download":
+		case "report":
 			request.setAttribute("action", action);
 			return true;
 		default:

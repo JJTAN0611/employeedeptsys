@@ -64,12 +64,10 @@
 	<div class="wow fadeInRight" data-wow-duration="1s"
 		data-wow-delay="0.5s">
 		<a type="button"
-			onclick='javascript:window.open("department_report.jsp", "_blank", "scrollbars=1,resizable=1,height=600,width=550");'
+			onclick='javascript:window.open("MainServlet?target=department&action=report", "_blank", "scrollbars=1,resizable=1,height=600,width=550");'
 			class="btn btn-info btn-circle float-end" style="border-radius: 30px">Report
 			<i class="fas fa-file"></i>
-		</a> <a id="department_employee" type="button"
-			href='MainServlet?target=department&action=download'
-			class="btn btn-primary">Excel</a> <br>
+		</a> <br>
 		<br>
 		<table
 			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg">

@@ -101,19 +101,23 @@ public class DepartmentController extends HttpServlet {
 				request.getSession().setAttribute("dub", new DepartmentUseBean(dept));
 				RequestDispatcher req = request.getRequestDispatcher("department_delete.jsp");
 				req.forward(request, response);
+			} else if (action.compareTo("report") == 0) {
+				// report
+				RequestDispatcher req = request.getRequestDispatcher("department_report.jsp");
+				req.forward(request, response);
+
 			} else {
-				// download
-				response.setContentType("application/vnd.ms-excel");
-				response.setHeader("Content-Disposition", "attachment; filename=Department.xls; charset=UTF-8");
 				PrintWriter out = response.getWriter();
+				response.setContentType("application/vnd.ms-excel");
+				response.setHeader("Content-Disposition", "attachment; filename=DepartmentReport.xls; charset=UTF-8");
+
 				List<Department> list = deptbean.getAllDepartment();
 				if (list != null && list.size() != 0) {
 					out.println("\tDepartment ID\tDepartment Name");
 					for (int i = 0; i < list.size(); i++)
-						out.println(i+"\t"+list.get(i).getId() + "\t" + list.get(i).getDeptName());
-				}else
+						out.println(i + "\t" + list.get(i).getId() + "\t" + list.get(i).getDeptName());
+				} else
 					out.println("No record found");
-				
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());

@@ -26,18 +26,24 @@
 <div class="container">
 	<div class="row wow fadeInLeft" data-wow-duration="1s"
 		data-wow-delay="0.5s">
-		<div class="col"><a type="button" onclick='javascript:window.open("department_report.jsp", "_blank", "scrollbars=1,resizable=1,height=600,width=550");'
-				class="btn btn-dark btn-circle float-end"
-				style="border-radius: 30px">Download <i
-				class="fas fa-file-download"></i>
-		</a></div>
-		<div class="col"></div>
-		
+		<div class="text-center">If no any download box prompted,</div>
+		<div class="text-center">Please click the below download button.</div>
+		<a id="download" type="button"
+			href='MainServlet?target=department&action=download'
+			class="btn btn-dark btn-circle float-end" style="border-radius: 30px">Download
+			<i class="fas fa-file-download"></i>
+		</a>
+
 	</div>
 	<br> <br>
-	
+
 </div>
 
 
 
 <%@ include file="footer.jsp"%>
+<script>
+	window.onload = function() {
+		document.getElementById('download').click();
+	}
+</script>
