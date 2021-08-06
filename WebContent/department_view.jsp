@@ -63,6 +63,14 @@
 	<br> <br>
 	<div class="wow fadeInRight" data-wow-duration="1s"
 		data-wow-delay="0.5s">
+		<a type="button"
+			onclick='javascript:window.open("department_report.jsp", "_blank", "scrollbars=1,resizable=1,height=600,width=550");'
+			class="btn btn-info btn-circle float-end" style="border-radius: 30px">Report
+			<i class="fas fa-file"></i>
+		</a> <a id="department_employee" type="button"
+			href='MainServlet?target=department&action=download'
+			class="btn btn-primary">Excel</a> <br>
+		<br>
 		<table
 			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg">
 			<tr class="table-dark">
@@ -80,8 +88,12 @@
 			<tr>
 				<td><%=t.getId()%></td>
 				<td><%=t.getDeptName()%></td>
-				<td><a href='MainServlet?target=department&action=update&id=<%=t.getId()%>' class='text-primary'><i class='fas fa-marker'></i>Update</a></td>
-				<td><a href='MainServlet?target=department&action=delete&id=<%=t.getId()%>' class='text-danger'><i class='fas fa-trash-alt'></i>Delete</a></td>
+				<td><a
+					href='MainServlet?target=department&action=update&id=<%=t.getId()%>'
+					class='text-primary'><i class='fas fa-marker'></i>Update</a></td>
+				<td><a
+					href='MainServlet?target=department&action=delete&id=<%=t.getId()%>'
+					class='text-danger'><i class='fas fa-trash-alt'></i>Delete</a></td>
 			</tr>
 			<%
 				}

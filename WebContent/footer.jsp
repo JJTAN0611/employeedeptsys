@@ -22,8 +22,13 @@
 	window.onload = function() {
 		var x = readCookie('oedrsUserId');
 		document.getElementById("userId").innerHTML = x;
-		console.log("aa"+x);
-		
+		console.log("ID" + x);
+<%String z = request.getHeader("user-agent");
+			if (!(z.contains("Chrome"))&&!((boolean)request.getSession().getAttribute("browserNotified"))) {
+				request.getSession().setAttribute("browserNotified",true);
+			%>
+	alert("Optimised view is in Chrome browser!");
+<%}%>
 	}
 	function readCookie(name) {
 		var nameEQ = name + "=";
@@ -38,5 +43,6 @@
 		return null;
 	}
 </script>
+
 </body>
 </html>

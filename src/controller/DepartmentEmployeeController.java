@@ -52,17 +52,12 @@ public class DepartmentEmployeeController extends HttpServlet {
 		String action = (String) request.getAttribute("action");
 
 		try {
-			if (action.compareTo("add") == 0) {
-				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean());
-				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_add.jsp");
-				req.forward(request, response);
-			} else if (action.compareTo("ajax") == 0) {
+			if (action.compareTo("ajax") == 0) {
 				PrintWriter out = response.getWriter();
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
 				List<DepartmentEmployee> h = new ArrayList<DepartmentEmployee>();
 				h.add(deptemp);
-
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 
@@ -71,6 +66,10 @@ public class DepartmentEmployeeController extends HttpServlet {
 					mapper.writeValue(out, h);
 				}
 				return;
+			} else if (action.compareTo("add") == 0) {
+				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean());
+				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_add.jsp");
+				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
 				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean());
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
@@ -86,7 +85,8 @@ public class DepartmentEmployeeController extends HttpServlet {
 				req.forward(request, response);
 			}
 
-		} catch (EJBException ex) {
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
 		}
 
 	}

@@ -10,20 +10,22 @@
 		target = "index";
 	String color;
 	switch (target) {
-	case "department":
-		color = "#ffffee";
-		break;
-	case "departmentemployee":
-		color = "#d9edf3";
-		break;
-	case "employee":
-		color = "#d6f8d6";
-		break;
-	default:
-		color = "gainsboro";
-		break;
+		case "department" :
+			color = "#ffffee";
+			break;
+		case "departmentemployee" :
+			color = "#d9edf3";
+			break;
+		case "employee" :
+			color = "#d6f8d6";
+			break;
+		default :
+			color = "gainsboro";
+			break;
 	}
 %>
+
+
 
 <%
 	Cookie[] cookies = request.getCookies();
@@ -44,6 +46,7 @@
 		nc.setMaxAge(-1);
 		response.addCookie(nc);
 	}
+	
 %>
 
 <!DOCTYPE html>
@@ -73,7 +76,6 @@
 <link rel="stylesheet" href="assets/css/owl.css">
 <script src="https://kit.fontawesome.com/5641842b84.js"
 	crossorigin="anonymous"></script>
-
 
 </head>
 

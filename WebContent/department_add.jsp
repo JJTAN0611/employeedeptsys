@@ -79,7 +79,5 @@
 		</div>
 	</form>
 </div>
-<%
-	session.invalidate();
-%>
+
 <%@ include file="footer.jsp"%>

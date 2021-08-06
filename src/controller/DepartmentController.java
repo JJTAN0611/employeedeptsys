@@ -30,6 +30,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.Department;
+import model.entity.DepartmentEmployee;
 import model.entity.Employee;
 import model.usebean.DepartmentUseBean;
 import sessionbean.DepartmentSessionBeanLocal;
@@ -83,8 +84,9 @@ public class DepartmentController extends HttpServlet {
 				if (h != null) {
 					ObjectMapper mapper = new ObjectMapper();
 					mapper.writeValue(out, h);
-				} 
-				return;
+				} else
+
+					return;
 			} else if (action.compareTo("add") == 0) {
 				request.getSession().setAttribute("dub", new DepartmentUseBean(getAutoId()));
 				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
@@ -101,8 +103,20 @@ public class DepartmentController extends HttpServlet {
 				req.forward(request, response);
 			} else {
 				// download
+				response.setContentType("application/vnd.ms-excel");
+				response.setHeader("Content-Disposition", "attachment; filename=Department.xls; charset=UTF-8");
+				PrintWriter out = response.getWriter();
+				List<Department> list = deptbean.getAllDepartment();
+				if (list != null && list.size() != 0) {
+					out.println("\tDepartment ID\tDepartment Name");
+					for (int i = 0; i < list.size(); i++)
+						out.println(i+"\t"+list.get(i).getId() + "\t" + list.get(i).getDeptName());
+				}else
+					out.println("No record found");
+				
 			}
 		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
 
 		}
 
@@ -123,7 +137,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setDept_name(request.getParameter("dept_name"));
 				if (dub.validate()) {
 					deptbean.addDepartment(dub);
-					ControllerManagement.navigateJS(request,response);
+					ControllerManagement.navigateJS(request, response);
 					logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 					return;
 				}
@@ -142,7 +156,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setId(request.getParameter("id"));
 				if (dub.validateId()) {
 					if (deptbean.deleteDepartment(dub)) {
-						ControllerManagement.navigateJS(request,response);
+						ControllerManagement.navigateJS(request, response);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 						return;
 					} else
@@ -150,7 +164,7 @@ public class DepartmentController extends HttpServlet {
 				}
 				dub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
-				dub=new DepartmentUseBean(deptbean.findDepartment(dub.getId()));
+				dub = new DepartmentUseBean(deptbean.findDepartment(dub.getId()));
 				errorRedirect(e, dub);
 			}
 
@@ -164,7 +178,7 @@ public class DepartmentController extends HttpServlet {
 				dub.setDept_name(request.getParameter("dept_name"));
 				if (dub.validate()) {
 					if (deptbean.updateDepartment(dub)) {
-						ControllerManagement.navigateJS(request,response);
+						ControllerManagement.navigateJS(request, response);
 						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
 						return;
 					} else
@@ -187,11 +201,11 @@ public class DepartmentController extends HttpServlet {
 	public void errorRedirect(Exception e, DepartmentUseBean dub) {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
-			if(psqle.getMessage().contains("violates foreign key constraint")) {
+			if (psqle.getMessage().contains("violates foreign key constraint")) {
 				dub.setOverall_error("You may need to clear the related departmentemployee relation record");
 				dub.setId_error("This department is using in relation table and cannot be deleted");
 				dub.setExpress("departmentemployee");
-			}else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
+			} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
 				dub.setOverall_error("Duplicate error. Please change the input as annotated below");
 				if (psqle.getMessage().contains("primary"))
 					dub.setId_error("Duplicate department id");
@@ -200,7 +214,7 @@ public class DepartmentController extends HttpServlet {
 				else
 					dub.setOverall_error(psqle.getMessage());
 			}
-		}else
+		} else
 			dub.setOverall_error(e.getMessage());
 	}
 

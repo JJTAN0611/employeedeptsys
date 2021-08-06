@@ -65,10 +65,11 @@
 						<input type="hidden" name=target value="department" /> <input
 							type="hidden" name=action value="ajax" /> <input type="text"
 							id="id" name="id" placeholder="Department ID" value="" /> <input
-							type="button" id="dsearch" value="Search" />
+							type="submit" id="dsearch" value="Search" />
 					</form>
 					<div id='doutput'></div>
 				</div>
+				<br>
 			</div>
 			<div class="col-lg-4 wow fadeInRight" data-wow-duration="0.5s"
 				data-wow-delay="0.25s">
@@ -80,11 +81,12 @@
 							type="hidden" name=action value="ajax" /> <input type="text"
 							id="dept_id" name="dept_id" placeholder="Department ID" value="" />
 						<input type="number" id="emp_id" name="emp_id"
-							placeholder="Employee ID" value="" /><input type="button"
+							placeholder="Employee ID" value="" /><input type="submit"
 							id="desearch" value="Search" />
 					</form>
 					<div id='deoutput'></div>
 				</div>
+				<br>
 			</div>
 			<div class="col-lg-4 wow fadeInRight" data-wow-duration="0.5s"
 				data-wow-delay="0.25s">
@@ -95,10 +97,11 @@
 						<input type="hidden" name=target value="employee" /> <input
 							type="hidden" name=action value="ajax" /> <input type="number"
 							id="id" name="id" placeholder="Employee ID" value="" /> <input
-							type="button" id="esearch" value="Search" />
+							type="submit" id="esearch" value="Search" />
 					</form>
 					<div id='eoutput'></div>
 				</div>
+				<br>
 			</div>
 		</div>
 	</div>
@@ -130,7 +133,6 @@
 						<div class="showed-content">
 							<img src="assets/images/department.png" alt="">
 						</div>
-
 					</a>
 				</div>
 			</div>
@@ -146,7 +148,6 @@
 						<div class="showed-content">
 							<img src="assets/images/departmentemployee.png" alt="">
 						</div>
-
 					</a>
 				</div>
 			</div>
@@ -162,9 +163,9 @@
 						<div class="showed-content">
 							<img src="assets/images/employee.png" alt="">
 						</div>
-
 					</a>
 				</div>
+				<br>
 			</div>
 		</div>
 	</div>
@@ -212,70 +213,31 @@
 </div>
 <%@ include file="footer.jsp"%>
 <script>
-	$("#esearch").click(
-			function() {
-				$("#eoutput").empty();
-				$.ajax({
-					url : 'MainServlet',
-					type : 'GET',
-					dataType : 'json',
-					data : $("#eform").serialize(),
-					success : function(data) {
-						if (data === null) {
-							alert("Invalid employee id");
-						} else {
-							$('#esform').trigger("reset");
-							$("#eoutput").append("<hr>");
-							$("#eoutput").append(
-									"<br>The employee id: " + data[0].id);
-							$("#eoutput").append(
-									"<br>The employee name: "
-											+ data[0].firstName+" "+ data[0].lastName);
-						
-							$("#eoutput").append(
-									"<br>The employee gender: " + data[0].gender);
-							$("#eoutput").append(
-									"<br>The employee birth date: "
-											+ data[0].hireDate);
-							$("#eoutput").append(
-									"<br>The employee hired date: "
-											+ data[0].birthDate);
-						}
-					},
-					error : function() {
-						alert('Invalid id no or an error occurred');
-					}
-				});
-				return false;
-			});
-
 	$("#dsearch").click(
 			function() {
 				$("#doutput").empty();
 				$.ajax({
-							url : 'MainServlet',
-							type : 'GET',
-							dataType : 'json',
-							data : $("#dform").serialize(),
-							success : function(data) {
-								if (data === null) {
-									alert("Invalid department id");
-								} else {
-									$('#dform').trigger("reset");
-									$("#doutput").append("<hr>");
-									$("#doutput").append(
-											"<br>The department id: "
-													+ data[0].id);
-									$("#doutput").append(
-											"<br>The department name: "
-													+ data[0].deptName);
+					url : 'MainServlet',
+					type : 'GET',
+					dataType : 'json',
+					data : $("#dform").serialize(),
+					success : function(data) {
+						if (data[0]==null) {
+							alert("Invalid department id");
+						} else {
+							$("#doutput").append("<hr>");
+							$("#doutput").append(
+									"<br>The department id: " + data[0].id);
+							$("#doutput").append(
+									"<br>The department name: "
+											+ data[0].deptName);
 
-								}
-							},
-							error : function() {
-								alert('Invalid id no or an error occurred');
-							}
-						});
+						}
+					},
+					error : function() {
+						alert('Invalid department id');
+					}
+				});
 				return false;
 			});
 
@@ -288,27 +250,68 @@
 					dataType : 'json',
 					data : $("#deform").serialize(),
 					success : function(data) {
-						if (data === null) {
-							alert("Invalid ids");
+						if (data[0] == null) {
+							alert("Invalid department id and employee id");
 						} else {
-							$('#deform').trigger("reset");
 							$("#deoutput").append("<hr>");
 							$("#deoutput").append(
 									"<br>The department: "
-											+ data[0].id.departmentId);
+											+ data[0].department.id + " | "
+											+ data[0].department.deptName);
 							$("#deoutput").append(
-									"<br>The employee: "
-											+ data[0].id.employeeId);
+									"<br>The employee: " + data[0].employee.id
+											+ " | "
+											+ data[0].employee.firstName + " "
+											+ data[0].employee.lastName + " | "
+											+ data[0].employee.gender);
 							$("#deoutput").append(
 									"<br>The position from date: "
 											+ data[0].fromDate);
 							$("#deoutput").append(
-									"<br>The position to date: " + data[0].toDate);
+									"<br>The position to date: "
+											+ data[0].toDate);
 
 						}
 					},
 					error : function() {
-						alert('Invalid ids no or an error occurred');
+						alert('Invalid department id and employee id');
+					}
+				});
+				return false;
+			});
+	$("#esearch").click(
+			function() {
+				$("#eoutput").empty();
+				$.ajax({
+					url : 'MainServlet',
+					type : 'GET',
+					dataType : 'json',
+					data : $("#eform").serialize(),
+					success : function(data) {
+						if (data[0] == null) {
+							alert("Invalid employee id");
+						} else {
+							$("#eoutput").append("<hr>");
+							$("#eoutput").append(
+									"<br>The employee id: " + data[0].id);
+							$("#eoutput").append(
+									"<br>The employee name: "
+											+ data[0].firstName + " "
+											+ data[0].lastName);
+
+							$("#eoutput").append(
+									"<br>The employee gender: "
+											+ data[0].gender);
+							$("#eoutput").append(
+									"<br>The employee birth date: "
+											+ data[0].hireDate);
+							$("#eoutput").append(
+									"<br>The employee hired date: "
+											+ data[0].birthDate);
+						}
+					},
+					error : function() {
+						alert('Invalid employee id');
 					}
 				});
 				return false;

@@ -2,6 +2,9 @@ package model.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.codehaus.jackson.annotate.JsonBackReference;
+
 import java.util.Date;
 
 

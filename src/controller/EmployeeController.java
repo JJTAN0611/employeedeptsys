@@ -53,9 +53,7 @@ public class EmployeeController extends HttpServlet {
 
 		try {
 
-			if (action.compareTo("getAutoId") == 0) {
-				response.getWriter().print(getAutoId());
-			} else if (action.compareTo("getEmployee") == 0) {
+			if (action.compareTo("getEmployee") == 0) {
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
 				JsonObject jo = Json.createObjectBuilder().add("id", emp.getId()).add("first_name", emp.getFirstName())
 						.add("last_name", emp.getLastName()).add("gender", emp.getGender())
@@ -64,6 +62,7 @@ public class EmployeeController extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.print(jo);
 				out.flush();
+				return;
 			} else if (action.compareTo("ajax") == 0) {
 				PrintWriter out = response.getWriter();
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
@@ -76,7 +75,7 @@ public class EmployeeController extends HttpServlet {
 				if (h != null) {
 					ObjectMapper mapper = new ObjectMapper();
 					mapper.writeValue(out, h);
-				} 
+				}
 				return;
 			} else if (action.compareTo("add") == 0) {
 				request.getSession().setAttribute("eub", new EmployeeUseBean());
@@ -97,7 +96,7 @@ public class EmployeeController extends HttpServlet {
 			}
 
 		} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+			System.out.println(ex.getMessage());
 		}
 
 	}
@@ -202,9 +201,4 @@ public class EmployeeController extends HttpServlet {
 			eub.setOverall_error(e.toString());
 	}
 
-	private int getAutoId() {
-		List<Employee> ds = empbean.readEmployee(1, 1, "", "DESC");
-		int id = ds.get(0).getId().intValue();
-		return id + 1;
-	}
 }

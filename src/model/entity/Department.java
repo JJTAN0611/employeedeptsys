@@ -2,6 +2,9 @@ package model.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.util.List;
 
 
@@ -24,6 +27,7 @@ public class Department implements Serializable {
 	private String deptName;
 
 	//bi-directional many-to-one association to DepartmentEmployee
+	@JsonIgnore
 	@OneToMany(mappedBy="department")
 	private List<DepartmentEmployee> departmentEmployees;
 
