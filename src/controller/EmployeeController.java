@@ -5,7 +5,9 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -53,17 +55,7 @@ public class EmployeeController extends HttpServlet {
 
 		try {
 
-			if (action.compareTo("getEmployee") == 0) {
-				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
-				JsonObject jo = Json.createObjectBuilder().add("id", emp.getId()).add("first_name", emp.getFirstName())
-						.add("last_name", emp.getLastName()).add("gender", emp.getGender())
-						.add("birth_date", emp.getBirthDate().toString()).add("hire_date", emp.getHireDate().toString())
-						.build();
-				PrintWriter out = response.getWriter();
-				out.print(jo);
-				out.flush();
-				return;
-			} else if (action.compareTo("ajax") == 0) {
+			if (action.compareTo("getEmployeeAjax") == 0) {
 				PrintWriter out = response.getWriter();
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
 				List<Employee> h = new ArrayList<Employee>();
@@ -72,27 +64,75 @@ public class EmployeeController extends HttpServlet {
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 
-				if (h != null) {
-					ObjectMapper mapper = new ObjectMapper();
-					mapper.writeValue(out, h);
-				}
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.writeValue(out, h);
+
 				return;
 			} else if (action.compareTo("add") == 0) {
-				request.getSession().setAttribute("eub", new EmployeeUseBean());
+				request.setAttribute("eub", new EmployeeUseBean());
 				RequestDispatcher req = request.getRequestDispatcher("employee_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
-				request.getSession().setAttribute("eub", new EmployeeUseBean(emp));
+				request.setAttribute("eub", new EmployeeUseBean(emp));
 				RequestDispatcher req = request.getRequestDispatcher("employee_update.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("delete") == 0) {
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
-				request.getSession().setAttribute("eub", new EmployeeUseBean(emp));
+				request.setAttribute("eub", new EmployeeUseBean(emp));
 				RequestDispatcher req = request.getRequestDispatcher("employee_delete.jsp");
 				req.forward(request, response);
-			} else {
+			} else if (action.compareTo("report") == 0) {
+				// check the validity of session
+				// if found user do two things in once set error
+				// usually will pass cause the search view(pagination) will automatic refresh
+				// once it pressed report button
+				String verificationToken = (String) request.getSession().getAttribute("everificationToken");
+				
+				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
+					request.getSession().setAttribute("ereportVerify", "false");
+				} else {
+					request.getSession().setAttribute("ereportVerify", "true");
+					int row = empbean.getNumberOfRows((String) request.getSession().getAttribute("ekeyword"));
+					if (row > 0) {
+						request.getSession().setAttribute("employeeReportSize", row);
+					} else
+						request.getSession().setAttribute("employeeReportSize", 0);
+				}
+				RequestDispatcher req = request.getRequestDispatcher("employee_report.jsp");
+				req.forward(request, response);
+			} else if (action.compareTo("download") == 0) {
+				// check the validity of session
+				// if found user do two things in once set error
+				String verificationToken = (String) request.getSession().getAttribute("everificationToken");
+				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
+					request.getSession().setAttribute("ereportVerify", "false");
+					RequestDispatcher req = request.getRequestDispatcher("employee_report.jsp");
+					req.forward(request, response);
+					return;
+				}
 
+				PrintWriter out = response.getWriter();
+				response.setContentType("application/vnd.ms-excel");
+				response.setHeader("Content-Disposition", "attachment; filename=EmployeeReport.xls; charset=UTF-8");
+				
+				String keyword=(String) request.getSession().getAttribute("ekeyword");
+				String direction=(String) request.getSession().getAttribute("edirection");
+				List<Object[]> list = empbean.getEmployeeReport(keyword, direction);
+				if (list != null && list.size() != 0) {
+					System.out.println("heree");
+					out.println("\tEmployee ID\tFirst Name\tLast Name\tGender\tBirth Date\tHire Date");
+					for (int i = 0; i < list.size(); i++)
+						out.println((i+1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString() + "\t"
+								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString() + "\t"
+								+ list.get(i)[4].toString() + "\t" + list.get(i)[5].toString());
+					out.println("");
+					out.println("");
+					out.println("\tKeyword Filter:\t" + (keyword.equals("")?"No filter":keyword) );
+					out.println("\tOrder Direction:\t" + direction);
+					out.println("\tTotal Records:\t" + request.getSession().getAttribute("employeeReportSize"));
+				} else
+					out.println("No record found");
 			}
 
 		} catch (Exception ex) {
@@ -128,7 +168,7 @@ public class EmployeeController extends HttpServlet {
 				errorRedirect(e, eub);
 				logger.setContentPoints(request, e.getMessage());
 			}
-			request.getSession().setAttribute("eub", eub);
+			request.setAttribute("eub", eub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_add.jsp");
 			dispatcher.forward(request, response);
 
@@ -149,7 +189,7 @@ public class EmployeeController extends HttpServlet {
 				eub = new EmployeeUseBean(empbean.findEmployee(eub.getId()));
 				errorRedirect(e, eub);
 			}
-			request.getSession().setAttribute("eub", eub);
+			request.setAttribute("eub", eub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_delete.jsp");
 			dispatcher.forward(request, response);
 
@@ -175,7 +215,7 @@ public class EmployeeController extends HttpServlet {
 			} catch (Exception e) {
 				errorRedirect(e, eub);
 			}
-			request.getSession().setAttribute("eub", eub);
+			request.setAttribute("eub", eub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_update.jsp");
 			dispatcher.forward(request, response);
 		}

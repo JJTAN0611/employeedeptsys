@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -61,18 +63,7 @@ public class DepartmentController extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				out.print(jo);
 				out.flush();
-			} else if (action.compareTo("getDepartment") == 0) {
-				String id = (String) request.getParameter("id");
-				Department dept = deptbean.findDepartment(id);
-				JsonObject jo;
-				if (dept != null)
-					jo = Json.createObjectBuilder().add("id", dept.getId()).add("name", dept.getDeptName()).build();
-				else
-					jo = Json.createObjectBuilder().add("id", "").add("name", "").build();
-				PrintWriter out = response.getWriter();
-				out.print(jo);
-				out.flush();
-			} else if (action.compareTo("ajax") == 0) {
+			} else if (action.compareTo("getDepartmentAjax") == 0) {
 				PrintWriter out = response.getWriter();
 				Department dept = deptbean.findDepartment(request.getParameter("id"));
 				List<Department> h = new ArrayList<Department>();
@@ -81,47 +72,75 @@ public class DepartmentController extends HttpServlet {
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 
-				if (h != null) {
-					ObjectMapper mapper = new ObjectMapper();
-					mapper.writeValue(out, h);
-				} else
-
-					return;
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.writeValue(out, h);
+				return;
 			} else if (action.compareTo("add") == 0) {
-				request.getSession().setAttribute("dub", new DepartmentUseBean(getAutoId()));
+				request.setAttribute("dub", new DepartmentUseBean(getAutoId()));
 				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
 				Department dept = deptbean.findDepartment(request.getParameter("id"));
-				request.getSession().setAttribute("dub", new DepartmentUseBean(dept));
+				request.setAttribute("dub", new DepartmentUseBean(dept));
 				RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("delete") == 0) {
 				Department dept = deptbean.findDepartment(request.getParameter("id"));
-				request.getSession().setAttribute("dub", new DepartmentUseBean(dept));
+				request.setAttribute("dub", new DepartmentUseBean(dept));
 				RequestDispatcher req = request.getRequestDispatcher("department_delete.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("report") == 0) {
-				// report
+				// check the validity of session
+				// if found user do two things in once set error
+				// usually will pass cause the search view(pagination) will automatic refresh
+				// once it pressed report button
+				String verificationToken = (String) request.getSession().getAttribute("dverificationToken");
+				System.out.println(verificationToken);
+				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
+					request.getSession().setAttribute("dreportVerify", "false");
+				} else {
+					request.getSession().setAttribute("dreportVerify", "true");
+					if (deptbean.getNumberOfRows() > 0) {
+						request.getSession().setAttribute("departmentReportSize", deptbean.getNumberOfRows());
+					} else
+						request.getSession().setAttribute("departmentReportSize", 0);
+				}
 				RequestDispatcher req = request.getRequestDispatcher("department_report.jsp");
 				req.forward(request, response);
-
-			} else {
+			} else if (action.compareTo("download") == 0) {
+				// check the validity of session
+				// if found user do two things in once set error
+				String verificationToken = (String) request.getSession().getAttribute("dverificationToken");
+				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
+					request.getSession().setAttribute("dreportVerify", "false");
+					RequestDispatcher req = request.getRequestDispatcher("department_report.jsp");
+					req.forward(request, response);
+					return;
+				}
 				PrintWriter out = response.getWriter();
 				response.setContentType("application/vnd.ms-excel");
 				response.setHeader("Content-Disposition", "attachment; filename=DepartmentReport.xls; charset=UTF-8");
 
-				List<Department> list = deptbean.getAllDepartment();
+				List<Department> list = deptbean
+						.readDepartment((String) request.getSession().getAttribute("ddirection"));
 				if (list != null && list.size() != 0) {
 					out.println("\tDepartment ID\tDepartment Name");
 					for (int i = 0; i < list.size(); i++)
-						out.println(i + "\t" + list.get(i).getId() + "\t" + list.get(i).getDeptName());
+						out.println((i + 1) + "\t" + list.get(i).getId() + "\t" + list.get(i).getDeptName());
+					out.println("");
+					out.println("");
+					out.println("\tKeyword Filter:\t No filter");
+					out.println("\tOrder Direction:\t" + request.getSession().getAttribute("ddirection"));
+					out.println("\tTotal Records:\t" + request.getSession().getAttribute("departmentReportSize"));
 				} else
 					out.println("No record found");
 			}
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+		} catch (
 
+		Exception ex) {
+			System.out.println(ex.getMessage());
+			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
+			dispatcher.forward(request, response);
 		}
 
 	}
@@ -150,7 +169,7 @@ public class DepartmentController extends HttpServlet {
 				errorRedirect(e, dub);
 			}
 
-			request.getSession().setAttribute("dub", dub);
+			request.setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_add.jsp");
 			dispatcher.forward(request, response);
 		} else if (action.compareTo("delete") == 0) {
@@ -172,7 +191,7 @@ public class DepartmentController extends HttpServlet {
 				errorRedirect(e, dub);
 			}
 
-			request.getSession().setAttribute("dub", dub);
+			request.setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_delete.jsp");
 			dispatcher.forward(request, response);
 		} else if (action.compareTo("update") == 0) {
@@ -193,7 +212,7 @@ public class DepartmentController extends HttpServlet {
 				errorRedirect(e, dub);
 			}
 
-			request.getSession().setAttribute("dub", dub);
+			request.setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_update.jsp");
 			dispatcher.forward(request, response);
 
@@ -228,7 +247,10 @@ public class DepartmentController extends HttpServlet {
 		for (Department d : ds)
 			if (Integer.valueOf(d.getId().substring(1, 4)) > t)
 				t = Integer.valueOf(d.getId().substring(1, 4));
-		return "d" + String.format("%03d", t + 1);
+		if (t <= 999)
+			return "d" + String.format("%03d", t + 1);
+		else
+			return "allUsed";
 	}
 
 }

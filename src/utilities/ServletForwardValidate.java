@@ -31,8 +31,9 @@ public class ServletForwardValidate implements Filter{
 		//check
 		switch(action) {
 		case "getAutoId":
-		case "getDepartment":
-		case "getEmployee":
+		case "getDepartmentAjax":
+		case "getEmployeeAjax":
+		case "getDepartmentEmployeeAjax":
 		case "ajax":
 		case "view":
 		case "add":
@@ -74,7 +75,7 @@ public class ServletForwardValidate implements Filter{
 		if(action(request, response) && target(request, response))
 			chain.doFilter(request, response);
 		else {
-			request.setAttribute("filtered", "is eliminated from filter");
+			request.setAttribute("filtered", "is eliminated from main filter");
 			RequestDispatcher dispatcher= request.getRequestDispatcher("error.jsp");
 			dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);

@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.Tuple;
 
 import model.entity.Department;
 import model.entity.DepartmentEmployee;
@@ -42,9 +43,21 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<DepartmentEmployee> getAllDepartmentEmployees() throws EJBException {
+	public List<Object[]> getDepartmentEmployeeReport(String keyword,String direction) throws EJBException {
 		// Write some codes here…
-		return em.createNamedQuery("DepartmentEmployee.findAll").getResultList();
+		Query q = null;
+		if (keyword.isEmpty()) {
+			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id " + direction);
+		} else {
+			q = em.createNativeQuery(
+					"SELECT * from employees.department_employee de, employees.department d, employees.employee e "
+							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
+							+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
+							+ "LIKE lower(?) order by de.department_id " + direction);
+			q.setParameter(1, "%" + keyword + "%");
+		}
+		
+		return q.getResultList();
 	}
 
 	public List<DepartmentEmployee> readDepartmentEmployee(int currentPage, int recordsPerPage, String keyword,

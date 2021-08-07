@@ -9,10 +9,10 @@
 
 <div class="container top-first wow fadeIn" data-wow-duration="2s"
 	data-wow-delay="0.4s">
-	<div class="badge bg-warning text-dark text-wrap large col-12">
+	<div class="badge bg-primary text-dark text-wrap large col-12">
 		<div class="row">
 			<div class="text-start col" style="font-size: 35px;">
-				Department Record
+				Department Employee Record
 				<div class="badge bg-light text-info text-wrap">Report</div>
 			</div>
 		</div>
@@ -21,9 +21,8 @@
 	<hr>
 	<br> <br>
 </div>
-
 <%
-	if (((String) request.getSession().getAttribute("dreportVerify")).equals("true")) {
+	if (((String) request.getSession().getAttribute("dereportVerify")).equals("true")) {
 %>
 <div class="container  wow fadeInLeft" data-wow-duration="1s"
 	data-wow-delay="0.5s">
@@ -31,8 +30,8 @@
 		<div class="text-center">If no any download box prompted,</div>
 		<div class="text-center">Please click the below download button.</div>
 		<a id="download" type="button"
-			href='<%=response.encodeURL("MainServlet?target=department&action=download&verificationToken="
-						+ ((String) request.getSession().getAttribute("dverificationToken")))%>'
+			href='<%=response.encodeURL("MainServlet?target=departmentemployee&action=download&verificationToken="
+						+ ((String) request.getSession().getAttribute("deverificationToken")))%>'
 			class="btn btn-dark btn-circle float-end" style="border-radius: 30px">Download
 			<i class="fas fa-file-download"></i>
 		</a>
@@ -45,15 +44,16 @@
 			</h2>
 		</div>
 		<div class="text-center">
-			Keyword Filter: No filter<br>
+			Keyword Filter:
+			<%=request.getSession().getAttribute("dekeyword").equals("")
+						? "No filter"
+						: request.getSession().getAttribute("dekeyword")%><br>
 			Order Direction:
-			<%=request.getSession().getAttribute("ddirection")%><br> Total
+			<%=request.getSession().getAttribute("dedirection")%><br> Total
 			Records:
-			<%=request.getSession().getAttribute("departmentReportSize")%><br>
-
+			<%=request.getSession().getAttribute("departmentEmployeeReportSize")%><br>
 		</div>
 	</div>
-
 	<br>
 	<hr>
 	<div class="text-center">
@@ -62,6 +62,8 @@
 		<%=request.getSession().getId()%><br> The unique ID:
 		<%=((String) request.getParameter("verificationToken"))%>
 	</div>
+	<br> <br>
+
 </div>
 <%
 	} else {

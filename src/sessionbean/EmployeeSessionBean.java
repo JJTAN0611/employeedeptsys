@@ -36,16 +36,24 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<Employee> getAllEmployees() throws EJBException {
+	public List<Object[]> getEmployeeReport(String keyword,String direction) throws EJBException {
+		Query q = null;
 		// Write some codes here…
-		return em.createNamedQuery("Employee.findAll").getResultList();
+		if (keyword.isEmpty()) {
+			q = em.createNativeQuery("SELECT * FROM employees.employee order by id "+direction);
+		} else {
+			q = em.createNativeQuery(
+					"SELECT * from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?) order by id "+direction);
+			q.setParameter(1, "%" + keyword + "%");
+		}
+		
+		return q.getResultList();
 	}
 
 	public List<Employee> readEmployee(int currentPage, int recordsPerPage, String keyword,String direction) throws EJBException {
 		// Write some codes here…
 		Query q = null;
 		int start = 0;
-		direction = " " + direction;
 		if (keyword.isEmpty()) {
 			q = em.createNativeQuery("SELECT * FROM employees.employee order by id "+direction, Employee.class);
 			start = currentPage * recordsPerPage - recordsPerPage;

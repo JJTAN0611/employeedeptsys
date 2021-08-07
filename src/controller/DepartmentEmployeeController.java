@@ -52,7 +52,9 @@ public class DepartmentEmployeeController extends HttpServlet {
 		String action = (String) request.getAttribute("action");
 
 		try {
-			if (action.compareTo("ajax") == 0) {
+
+			if (action.compareTo("getDepartmentEmployeeAjax") == 0) {
+				System.out.println(action);
 				PrintWriter out = response.getWriter();
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
@@ -60,29 +62,82 @@ public class DepartmentEmployeeController extends HttpServlet {
 				h.add(deptemp);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-
+				System.out.println(deptemp.getId() + "");
 				if (h != null) {
 					ObjectMapper mapper = new ObjectMapper();
 					mapper.writeValue(out, h);
 				}
 				return;
 			} else if (action.compareTo("add") == 0) {
-				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean());
+				request.setAttribute("deub", new DepartmentEmployeeUseBean());
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_add.jsp");
 				req.forward(request, response);
 			} else if (action.compareTo("update") == 0) {
-				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean());
+				request.setAttribute("deub", new DepartmentEmployeeUseBean());
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
-				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
+				request.setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_update.jsp");
 				req.forward(request, response);
-			} else {
+			} else if (action.compareTo("delete") == 0) {
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
-				request.getSession().setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
+				request.setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_delete.jsp");
 				req.forward(request, response);
+			} else if (action.compareTo("report") == 0) {
+				// check the validity of session
+				// if found user do two things in once set error
+				// usually will pass cause the search view(pagination) will automatic refresh
+				// once it pressed report button
+				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
+
+				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
+					request.getSession().setAttribute("dereportVerify", "false");
+				} else {
+					request.getSession().setAttribute("dereportVerify", "true");
+					int row = deptempbean.getNumberOfRows((String) request.getSession().getAttribute("dekeyword"));
+					if (row > 0) {
+						request.getSession().setAttribute("departmentEmployeeReportSize", row);
+					} else
+						request.getSession().setAttribute("dempartmentEmployeeReportSize", 0);
+				}
+				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
+				req.forward(request, response);
+
+			} else if (action.compareTo("download") == 0) {
+				// check the validity of session
+				// if found user do two things in once set error
+				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
+				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
+					request.getSession().setAttribute("dereportVerify", "false");
+					RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
+					req.forward(request, response);
+					return;
+				}
+
+				PrintWriter out = response.getWriter();
+				response.setContentType("application/vnd.ms-excel");
+				response.setHeader("Content-Disposition",
+						"attachment; filename=DepartmentEmployeeRelationReport.xls; charset=UTF-8");
+				
+				String keyword=(String) request.getSession().getAttribute("dekeyword");
+				String direction=(String) request.getSession().getAttribute("dedirection");
+				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction);
+
+				if (list != null && list.size() != 0) {
+					out.println("\tDepartment ID\tEmployee ID\tFrom Date\tTo Date");
+					for (int i = 0; i < list.size(); i++)
+						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString() + "\t"
+								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString());
+					out.println("");
+					out.println("");
+					out.println("\tKeyword Filter:\t" + (keyword.equals("")?"No filter":keyword));
+					out.println("\tOrder Direction:\t" + direction);
+					out.println(
+							"\tTotal Records:\t" + request.getSession().getAttribute("departmentEmployeeReportSize"));
+				} else
+					out.println("No record found");
 			}
 
 		} catch (Exception ex) {
@@ -118,7 +173,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				errorRedirect(e, deub);
 				logger.setContentPoints(request, e.getMessage());
 			}
-			request.getSession().setAttribute("deub", deub);
+			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_add.jsp");
 			dispatcher.forward(request, response);
 
@@ -142,7 +197,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
 				errorRedirect(e, deub);
 			}
-			request.getSession().setAttribute("deub", deub);
+			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
 			dispatcher.forward(request, response);
 
@@ -167,7 +222,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				logger.setContentPoints(request, e.getMessage());
 			}
 
-			request.getSession().setAttribute("deub", deub);
+			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
 			dispatcher.forward(request, response);
 

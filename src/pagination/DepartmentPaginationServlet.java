@@ -1,7 +1,9 @@
 package pagination;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -45,12 +47,14 @@ public class DepartmentPaginationServlet extends HttpServlet {
 			if (!PaginationValidate.singlePageView(request, response))
 				throw new Exception();
 
-			String direction = (String) request.getAttribute("direction");
-
-			List<Department> lists = deptbean.readDepartment(direction); // Ask bean to give list
-			request.setAttribute("departments", lists);
+			String direction = (String) request.getSession().getAttribute("ddirection");
+			List<Department> list = deptbean.readDepartment(direction); // Ask bean to give list
+			request.setAttribute("departmentList",list);		
 			
 			dispatcher = request.getRequestDispatcher("department_view.jsp");
+			
+			//set checker for report
+			request.getSession().setAttribute("dverificationToken", String.valueOf(System.currentTimeMillis()));
 			logger.setContentPoints(request, "Success view");
 			
 		} catch (Exception ex) {

@@ -38,7 +38,12 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	public List<Department> getAllDepartment() throws EJBException {
 		// Write some codes here…
-		return em.createNamedQuery("Department.findAll").getResultList();
+		try {
+			return em.createNamedQuery("Department.findAll").getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+		
 	}
 
 	public List<Department> readDepartment(String direction) throws EJBException {

@@ -6,11 +6,15 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
-	int currentPage = (int) request.getAttribute("currentPage");
-	int recordsPerPage = (int) request.getAttribute("recordsPerPage");
+	//per request
 	int nOfPages = (int) request.getAttribute("nOfPages");
-	String keyword = (String) request.getAttribute("keyword");
-	String direction = (String) request.getAttribute("direction");
+	//get from session
+	int currentPage = (int) request.getSession().getAttribute("ecurrentPage");
+	int recordsPerPage = (int) request.getSession().getAttribute("erecordsPerPage");
+	String keyword = (String) request.getSession().getAttribute("ekeyword");
+	String direction = (String) request.getSession().getAttribute("edirection");
+
+	String verificationToken = (String) request.getSession().getAttribute("everificationToken");
 %>
 <%@ include file="header.jsp"%>
 <style>
@@ -65,38 +69,28 @@ button[aria-expanded=false] .fa-chevron-down {
 						type="hidden" name=action value="view" />
 
 					<div class="card text-dark bg-light">
-						<div class="card-header">
-							<h5>Filter by keyword</h5>
-							(You may leave empty), (Case is not sensitive)
-						</div>
 						<div class="card-body">
 							<div class="row">
 								<div class="col-2 float-end">
-									<b>Keyword:</b>
+									<h5>Keyword:</h5>
 								</div>
 								<div class="col-10">
 									<input class="form-control border-info border-5" type="text"
 										aria-label="Search" name="keyword" value="<%=keyword%>"
-										placeholder="Enter keyword. (Id, name, etc)" /><br> <i>**You
-										may use <b>%</b> for searching mask. For example, <b>Georgi
-											Facello%M%1956</b>.
-									</i>
+										placeholder="Enter keyword. (Id, name, etc)" /> </i>
 								</div>
 							</div>
 						</div>
 					</div>
 					<hr>
 					<div class="card  text-dark bg-light">
-						<div class="card-header">
-							<h5>Page Sorting</h5>
-						</div>
 						<div class="card-body">
 							<div class="row">
 								<div
 									class="col-6 item-aligns-center border-end border-dark border-5">
 									<div class="row">
 										<div class="col">
-											<b>Record per Page:</b>
+											<h5>Record per Page:</h5>
 										</div>
 										<div class="col">
 											<input class="form-control-range" type="range"
@@ -111,7 +105,8 @@ button[aria-expanded=false] .fa-chevron-down {
 								<div class="col-6 item-aligns-center">
 									<div class="row">
 										<div class="col">
-											<b>Direction (by Employee Id):</b>
+											<h5>Direction</h5>
+											(by Employee Id):
 										</div>
 										<div class="col">
 											<div class="form-check">
@@ -135,22 +130,37 @@ button[aria-expanded=false] .fa-chevron-down {
 						</div>
 					</div>
 					<br>
-					<button class="btn btn-primary btn-info float-end" type="submit">Go</button>
-
+					<div class="row">
+						<div class="col-10">
+							<div class="text-light">
+								**You may use <b>department name</b> or <b>employee name</b>
+								instead of use <b>id</b> to search. <br> **You may use <b>%</b>
+								for searching mask. For example, <b>Georgi Facello%M%1956</b>. <br>
+								**Please enable cookie for record your session preference.
+							</div>
+						</div>
+						<div class="col-2">
+							<button class="btn btn-primary btn-info float-end" type="submit">Go</button>
+						</div>
+					</div>
 				</form>
 			</div>
 
 		</div>
-
-
-
-
-
 	</div>
-	<br>
-
-	<div class=" wow fadeInRight " data-wow-duration="1s"
+	<br> <br>
+	<div class=" wow fadeInRight" data-wow-duration="1s"
 		data-wow-delay="0.5s">
+		<div class="row">
+			<a type="button"
+				title="URL encoding used here. This feature compulsory require session"
+				onclick='alert("Report generating. Please hold on."); javascript:window.open("<%=response.encodeURL("MainServlet?target=employee&action=report&verificationToken="
+					+ ((String) request.getSession().getAttribute("everificationToken")))%>", "_blank", "scrollbars=1,resizable=1,height=700,width=600");'
+				class="btn btn-info btn-circle float-end shadow-lg"
+				style="border-radius: 30px">Report <i class="fas fa-file"></i>
+			</a>
+		</div>
+		<br>
 		<table
 			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg"
 			style="background: white">
@@ -167,16 +177,16 @@ button[aria-expanded=false] .fa-chevron-down {
 
 			</tr>
 			<%
-				List<Employee> staffs = (List<Employee>) request.getAttribute("employees");
-				if (staffs.size() != 0) {
-					for (Employee t : staffs) {
+				List<Employee> employee = (List<Employee>) request.getAttribute("employeeList");
+				if (employee.size() != 0) {
+					for (Employee t : employee) {
 			%>
 
 			<tr>
 				<td><%=t.getId()%></td>
 				<td><%=t.getFirstName()%></td>
 				<td><%=t.getLastName()%></td>
-				<td><%=(t.getGender().compareTo("M") == 0 ? "Male" : "Female")%><i
+				<td><%=(t.getGender().compareTo("M") == 0 ? "Male" : "Female")%> <i
 					class='fas fa-<%=(t.getGender().compareTo("M") == 0 ? "mars" : "venus")%>'></i></td>
 				<td><%=t.getBirthDate()%></td>
 				<td><%=t.getHireDate()%></td>

@@ -6,11 +6,12 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
-	int currentPage = (int) request.getAttribute("currentPage");
-	int recordsPerPage = (int) request.getAttribute("recordsPerPage");
 	int nOfPages = (int) request.getAttribute("nOfPages");
-	String keyword = (String) request.getAttribute("keyword");
-	String direction = (String) request.getAttribute("direction");
+
+	int currentPage = (int) request.getSession().getAttribute("decurrentPage");
+	int recordsPerPage = (int) request.getSession().getAttribute("derecordsPerPage");
+	String keyword = (String) request.getSession().getAttribute("dekeyword");
+	String direction = (String) request.getSession().getAttribute("dedirection");
 %>
 <%@ include file="header.jsp"%>
 <style>
@@ -66,37 +67,30 @@ button[aria-expanded=false] .fa-chevron-down {
 
 
 					<div class="card text-dark bg-light">
-						<div class="card-header">
-							<h5>Filter by keyword</h5>
-							(You may leave empty), (Case is not sensitive)
-						</div>
 						<div class="card-body">
 							<div class="row">
-								<div class="col-2 float-end">Keyword:</div>
+								<div class="col-2 float-end">
+									<h5>Keyword:</h5>
+								</div>
 								<div class="col-10">
 									<input class="form-control border-info border-5" type="text"
 										aria-label="Search" name="keyword" value="<%=keyword%>"
-										placeholder="Enter keyword. (Id, name, etc)" /><br> <i>**You
-										may use <b>department name</b> or <b>employee name</b> instead
-										of use <b>id</b> to search.
-									</i><br> <i>**You may use <b>%</b> for searching mask. For
-										example, <b>Marketing%Ekawit Diderrich</b>.
-									</i>
+										placeholder="Enter keyword. (Id, name, etc) [Case not sensitive]" />
+
 								</div>
 							</div>
 						</div>
 					</div>
 					<hr>
 					<div class="card  text-dark bg-light">
-						<div class="card-header">
-							<h5>Page Sorting</h5>
-						</div>
 						<div class="card-body">
 							<div class="row">
 								<div
 									class="col-6 item-aligns-center border-end border-dark border-5">
 									<div class="row">
-										<div class="col">Record per Page:</div>
+										<div class="col">
+											<h5>Record per Page:</h5>
+										</div>
 										<div class="col">
 											<input class="form-control-range" type="range"
 												name="recordsPerPage" min="1" max="100"
@@ -109,7 +103,10 @@ button[aria-expanded=false] .fa-chevron-down {
 								</div>
 								<div class="col-6 item-aligns-center">
 									<div class="row">
-										<div class="col">Direction (by Department Id):</div>
+										<div class="col">
+											<h5>Direction</h5>
+											(by Department Id):
+										</div>
 										<div class="col">
 											<div class="form-check">
 												<input class="form-check-input" type="radio" value="ASC"
@@ -132,7 +129,20 @@ button[aria-expanded=false] .fa-chevron-down {
 						</div>
 					</div>
 					<br>
-					<button class="btn btn-primary btn-info float-end" type="submit">Go</button>
+					<div class="row">
+						<div class="col-10">
+							<div class="text-light">
+								**You may use <b>department name</b> or <b>employee name</b>
+								instead of use <b>id</b> to search. <br> **You may use <b>%</b>
+								for searching mask. For example, <b>Marketing%Ekawit
+									Diderrich</b>. <br> **Will be remember by session to give you
+								a wonderful experience.
+							</div>
+						</div>
+						<div class="col-2">
+							<button class="btn btn-primary btn-info float-end" type="submit">Go</button>
+						</div>
+					</div>
 
 				</form>
 			</div>
@@ -140,10 +150,19 @@ button[aria-expanded=false] .fa-chevron-down {
 		</div>
 
 	</div>
-	<br>
+	<br> <br>
 
 	<div class="wow fadeInRight" data-wow-duration="1s"
 		data-wow-delay="0.5s">
+		<div class="row">
+			<a type="button"
+				onclick='alert("Report generating. Please hold on."); javascript:window.open("<%=response.encodeURL("MainServlet?target=departmentemployee&action=report&verificationToken="
+					+ ((String) request.getSession().getAttribute("deverificationToken")))%>", "_blank", "scrollbars=1,resizable=1,height=700,width=600"); '
+				class="btn btn-info btn-circle float-end shadow-lg"
+				style="border-radius: 30px">Report <i class="fas fa-file"></i>
+			</a>
+		</div>
+		<br>
 		<table
 			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg"
 			style="background: white">
@@ -159,7 +178,7 @@ button[aria-expanded=false] .fa-chevron-down {
 
 			</tr>
 			<%
-				List<DepartmentEmployee> des = (List<DepartmentEmployee>) request.getAttribute("departmentemployee");
+				List<DepartmentEmployee> des = (List<DepartmentEmployee>) request.getAttribute("departmentEmployeeList");
 				if (des.size() != 0) {
 					for (DepartmentEmployee de : des) {
 			%>

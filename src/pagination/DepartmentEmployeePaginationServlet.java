@@ -49,13 +49,13 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 
 			if(!PaginationValidate.multiplePageView(request, response))
 				throw new EJBException();
-			// Write some codes here…
+		
 			int nOfPages = 0;
-			int currentPage = (int) request.getAttribute("currentPage");
-			int recordsPerPage = (int) request.getAttribute("recordsPerPage");
-			String keyword = (String) request.getAttribute("keyword");
-			String direction = (String) request.getAttribute("direction");
-
+			int currentPage = (int) request.getSession().getAttribute("decurrentPage");
+			int recordsPerPage = (int) request.getSession().getAttribute("derecordsPerPage");
+			String keyword = (String) request.getSession().getAttribute("dekeyword");
+			String direction = (String) request.getSession().getAttribute("dedirection");
+	
 			int rows = deptembbean.getNumberOfRows(keyword);
 			nOfPages = rows / recordsPerPage;
 			if (rows % recordsPerPage != 0) {
@@ -65,12 +65,16 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 				currentPage = nOfPages; //if larger than total page, set to maximum
 			}
 			
-			List<DepartmentEmployee> lists = deptembbean.readDepartmentEmployee(currentPage, recordsPerPage, keyword,
+			List<DepartmentEmployee> list = deptembbean.readDepartmentEmployee(currentPage, recordsPerPage, keyword,
 					direction); // Ask bean to give list
 			
-			request.setAttribute("departmentemployee", lists);
+			request.setAttribute("departmentEmployeeList", list);
 			request.setAttribute("nOfPages", nOfPages);
 			dispatcher = request.getRequestDispatcher("departmentemployee_view.jsp");
+			
+			//set checker for report
+			request.getSession().setAttribute("deverificationToken", String.valueOf(System.currentTimeMillis()));
+			
 			logger.setContentPoints(request, "Success view");
 		} catch (Exception ex) {
 			dispatcher = request.getRequestDispatcher("error.jsp");

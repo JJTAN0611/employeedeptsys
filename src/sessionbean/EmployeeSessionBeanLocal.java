@@ -10,7 +10,7 @@ import model.usebean.EmployeeUseBean;
 
 @Local
 public interface EmployeeSessionBeanLocal {
-	public List<Employee> getAllEmployees() throws EJBException;
+	public List<Object[]> getEmployeeReport(String keyword,String direction) throws EJBException;
 
 	public Employee findEmployee(Long id) throws EJBException;
 

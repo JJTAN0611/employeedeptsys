@@ -7,7 +7,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
-	String direction = (String) request.getAttribute("direction");
+	String direction = (String) request.getSession().getAttribute("ddirection");
+	String verificationToken = (String) request.getSession().getAttribute("dverificationToken");
 %>
 <%@ include file="header.jsp"%>
 
@@ -63,11 +64,14 @@
 	<br> <br>
 	<div class="wow fadeInRight" data-wow-duration="1s"
 		data-wow-delay="0.5s">
-		<a type="button"
-			onclick='javascript:window.open("MainServlet?target=department&action=report", "_blank", "scrollbars=1,resizable=1,height=600,width=550");'
-			class="btn btn-info btn-circle float-end" style="border-radius: 30px">Report
-			<i class="fas fa-file"></i>
-		</a> <br>
+		<div class="row">
+			<a type="button"
+				onclick='alert("Report generating. Please hold on."); javascript:window.open("<%=response.encodeURL("MainServlet?target=department&action=report&verificationToken="
+					+ ((String) request.getSession().getAttribute("dverificationToken")))%>", "_blank", "scrollbars=1,resizable=1,height=700,width=600"); '
+				class="btn btn-info btn-circle float-end shadow-lg"
+				style="border-radius: 30px">Report <i class="fas fa-file"></i>
+			</a>
+		</div>
 		<br>
 		<table
 			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg">
@@ -79,7 +83,7 @@
 			<tr class="table-info">
 			</tr>
 			<%
-				List<Department> departments = (List<Department>) request.getAttribute("departments");
+				List<Department> departments = (List<Department>) request.getAttribute("departmentList");
 				if (departments.size() != 0) {
 					for (Department t : departments) {
 			%>

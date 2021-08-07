@@ -36,7 +36,7 @@ public class MainServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
-		logger.setContentPoints(request,request.getParameter("id")+"az");
+		logger.setContentPoints(request, request.getParameter("id") + "az");
 		response.setContentType("text/html;charset=UTF-8");
 
 		RequestDispatcher dispatcher = null;
@@ -45,11 +45,12 @@ public class MainServlet extends HttpServlet {
 
 		String target = (String) request.getAttribute("target");
 		String action = (String) request.getAttribute("action");
+
 		// department
 		if (target.compareTo("department") == 0)
 			switch (action) {
 			case "getAutoId":
-			case "ajax":
+			case "getDepartmentAjax":
 			case "report":
 			case "download":
 				dispatcher = request.getRequestDispatcher("DepartmentController");
@@ -57,6 +58,7 @@ public class MainServlet extends HttpServlet {
 			case "view": // check display's parameter
 				dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
 				break;
+			// main cud function
 			case "add":
 			case "update": // check edit's parameter
 			case "delete": // check remove's parameter
@@ -67,7 +69,7 @@ public class MainServlet extends HttpServlet {
 		else if (target.compareTo("employee") == 0) {
 			switch (action) {
 			case "getAutoId":
-			case "ajax":
+			case "getEmployeeAjax":
 			case "report":
 			case "download":
 				dispatcher = request.getRequestDispatcher("EmployeeController");
@@ -75,6 +77,7 @@ public class MainServlet extends HttpServlet {
 			case "view": // check display's parameter
 				dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
 				break;
+			// main cud function
 			case "add":
 			case "update": // check edit's parameter
 			case "delete": // check remove's parameter
@@ -85,20 +88,21 @@ public class MainServlet extends HttpServlet {
 		} else if (target.compareTo("departmentemployee") == 0) {
 			switch (action) {
 			case "getAutoId":
-			case "ajax":
+			case "getDepartmentEmployeeAjax":
 			case "report":
 			case "download":
 				dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
 				break;
-			case "getDepartment":
+			case "getDepartmentAjax":
 				dispatcher = request.getRequestDispatcher("DepartmentController");
 				break;
-			case "getEmployee":
+			case "getEmployeeAjax":
 				dispatcher = request.getRequestDispatcher("EmployeeController");
 				break;
 			case "view": // check display's parameter
 				dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");
 				break;
+			// main cud function
 			case "add":
 			case "update": // check edit's parameter
 			case "delete": // check remove's parameter

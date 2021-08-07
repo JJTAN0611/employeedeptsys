@@ -6,9 +6,9 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ include file="header.jsp"%>
-<%!String checked;%>
+
 <%
-	checked = (String) request.getAttribute("log_refresh");
+	String checked = (String) request.getAttribute("log_refresh");
 	if(checked.compareTo("true")==0){
 		response.setHeader("Refresh", "3");
 	}
@@ -40,17 +40,18 @@
 				onchange="
 					if ($('#flexSwitchCheckChecked').is(':checked')) {
 						document.cookie = 'log_refresh=true';
+						location.reload();
 					}else{
+						window.stop();
 						document.cookie = 'log_refresh=false';
 					}
-					location.reload();
 					"
 				<%=checked.compareTo("true") == 0 ? "checked" : ""%>></input>
 
 		</div>
 
 	</div>
-		<div class="text-end">**This page use cookie to perform better</div>
+		<div class="text-end">**This log page use cookie to perform better.<br>Please enable cookie to record your preferences.</div>
 	<hr>
 	<div class="row">
 		<div class="col">

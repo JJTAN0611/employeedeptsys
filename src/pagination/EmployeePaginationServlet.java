@@ -2,7 +2,9 @@ package pagination;
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -48,13 +50,13 @@ public class EmployeePaginationServlet extends HttpServlet {
 
 			if(!PaginationValidate.multiplePageView(request, response))
 				throw new Exception();
-			
+	
 			int nOfPages = 0;
-			int currentPage = (int) request.getAttribute("currentPage");
-			int recordsPerPage = (int) request.getAttribute("recordsPerPage");
-			String keyword = (String) request.getAttribute("keyword");
-			String direction = (String) request.getAttribute("direction");
-			
+			int currentPage = (int) request.getSession().getAttribute("ecurrentPage");
+			int recordsPerPage = (int) request.getSession().getAttribute("erecordsPerPage");
+			String keyword = (String) request.getSession().getAttribute("ekeyword");
+			String direction = (String) request.getSession().getAttribute("edirection");
+	
 			int rows = empbean.getNumberOfRows(keyword);
 			nOfPages = rows / recordsPerPage;
 			if (rows % recordsPerPage != 0) {
@@ -63,11 +65,16 @@ public class EmployeePaginationServlet extends HttpServlet {
 			if (currentPage > nOfPages && nOfPages != 0) {
 				currentPage = nOfPages; //if larger than total page, set to maximum
 			}
-			List<Employee> lists = empbean.readEmployee(currentPage, recordsPerPage,keyword,direction); //Ask bean to give list
-			request.setAttribute("employees", lists);
+			
+			List<Employee> list = empbean.readEmployee(currentPage, recordsPerPage,keyword,direction); //Ask bean to give list
+			request.setAttribute("employeeList",list);
 			request.setAttribute("nOfPages", nOfPages);
 			
 			dispatcher = request.getRequestDispatcher("employee_view.jsp");
+			
+			//set checker for report
+			request.getSession().setAttribute("everificationToken", String.valueOf(System.currentTimeMillis()));
+			
 			logger.setContentPoints(request, "Success view");
 		} catch (Exception ex) {
 			dispatcher = request.getRequestDispatcher("error.jsp");

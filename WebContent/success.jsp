@@ -31,7 +31,7 @@
 	</div>
 	<br>
 	<div class="text-center">
-		<a class="btn btn-dark"
+		<a class="btn btn-dark" id="skip"
 			href="MainServlet?target=<%=request.getAttribute("target")%>&action=view">Skip</a>
 	</div>
 	<br> <br>
@@ -43,16 +43,16 @@
 	$(document).ready(function() {
 		var counter = 5;
 		var interval = setInterval(function() {
-		    counter--;
-		    // Display 'counter' wherever you want to display it.
-		    if (counter < 0) {
-		    	window.location.href = "MainServlet?target=<%=request.getAttribute("target")%>&action=view";
-									} else {
-										$('#countdown').html(counter);
-									}
-								}, 1000);
+			counter--;
+			// Display 'counter' wherever you want to display it.
+			if (counter < 0) {
+				$("#skip")[0].click();
+			} else {
+				$('#countdown').html(counter);
+			}
+		}, 1000);
 
-					});
+	});
 	$(document).ready(function() {
 		$(".progress-bar").animate({
 			width : "100%"

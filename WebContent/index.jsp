@@ -63,8 +63,8 @@
 					<hr>
 					<form id="dform">
 						<input type="hidden" name=target value="department" /> <input
-							type="hidden" name=action value="ajax" /> <input type="text"
-							id="id" name="id" placeholder="Department ID" value="" /> <input
+							type="hidden" name=action value="getDepartmentAjax" /> <input type="text"
+							id="id" name="id" placeholder="Department ID, eg. d009" value="" /> <input
 							type="submit" id="dsearch" value="Search" />
 					</form>
 					<div id='doutput'></div>
@@ -78,10 +78,10 @@
 					<hr>
 					<form id="deform">
 						<input type="hidden" name=target value="departmentemployee" /> <input
-							type="hidden" name=action value="ajax" /> <input type="text"
-							id="dept_id" name="dept_id" placeholder="Department ID" value="" />
+							type="hidden" name=action value="getDepartmentEmployeeAjax" /> <input type="text"
+							id="dept_id" name="dept_id" placeholder="Department ID, eg. d009" value="" />
 						<input type="number" id="emp_id" name="emp_id"
-							placeholder="Employee ID" value="" /><input type="submit"
+							placeholder="Employee ID, eg. 100001" value="" /><input type="submit"
 							id="desearch" value="Search" />
 					</form>
 					<div id='deoutput'></div>
@@ -95,8 +95,8 @@
 					<hr>
 					<form id="eform">
 						<input type="hidden" name=target value="employee" /> <input
-							type="hidden" name=action value="ajax" /> <input type="number"
-							id="id" name="id" placeholder="Employee ID" value="" /> <input
+							type="hidden" name=action value="getEmployeeAjax" /> <input type="number"
+							id="id" name="id" placeholder="Employee ID, eg. 100001" value="" /> <input
 							type="submit" id="esearch" value="Search" />
 					</form>
 					<div id='eoutput'></div>
@@ -223,7 +223,7 @@
 					data : $("#dform").serialize(),
 					success : function(data) {
 						if (data[0]==null) {
-							alert("Invalid department id");
+							alert("Invalid department id. Not exist!");
 						} else {
 							$("#doutput").append("<hr>");
 							$("#doutput").append(
@@ -235,7 +235,7 @@
 						}
 					},
 					error : function() {
-						alert('Invalid department id');
+						alert('Invalid department id. Not exist. Error occur!');
 					}
 				});
 				return false;
@@ -251,7 +251,7 @@
 					data : $("#deform").serialize(),
 					success : function(data) {
 						if (data[0] == null) {
-							alert("Invalid department id and employee id");
+							alert("Invalid department id and employee id. Not exist!");
 						} else {
 							$("#deoutput").append("<hr>");
 							$("#deoutput").append(
@@ -274,7 +274,7 @@
 						}
 					},
 					error : function() {
-						alert('Invalid department id and employee id');
+						alert('Invalid department id and employee id. Not exist. Error occur!');
 					}
 				});
 				return false;
@@ -289,7 +289,7 @@
 					data : $("#eform").serialize(),
 					success : function(data) {
 						if (data[0] == null) {
-							alert("Invalid employee id");
+							alert("Invalid employee id. Not exist!");
 						} else {
 							$("#eoutput").append("<hr>");
 							$("#eoutput").append(
@@ -311,7 +311,7 @@
 						}
 					},
 					error : function() {
-						alert('Invalid employee id');
+						alert('Invalid employee id. Not exist. Error occur!');
 					}
 				});
 				return false;

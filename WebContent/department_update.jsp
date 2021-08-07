@@ -4,7 +4,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <jsp:useBean id="dub" type="model.usebean.DepartmentUseBean"
-	scope="session" />
+	scope="request" />
 <%@ include file="header.jsp"%>
 
 <div class="container top-first">

@@ -11,7 +11,7 @@ import model.usebean.DepartmentEmployeeUseBean;
 
 @Local
 public interface DepartmentEmployeeSessionBeanLocal {
-	public List<DepartmentEmployee> getAllDepartmentEmployees() throws EJBException;
+	public List<Object[]> getDepartmentEmployeeReport(String keyword,String direction) throws EJBException;
 
 	public DepartmentEmployee findDepartmentEmployee(String dept_id, Long emp_id) throws EJBException;
 

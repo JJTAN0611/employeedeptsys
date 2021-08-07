@@ -14,7 +14,6 @@ import java.util.Date;
  */
 @Entity
 @Table(name="department_employee", schema="employees")
-@NamedQuery(name="DepartmentEmployee.findAll", query="SELECT de FROM DepartmentEmployee de")
 @NamedQuery(name = "DepartmentEmployee.findbyId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id=:id")
 public class DepartmentEmployee implements Serializable {
 	private static final long serialVersionUID = 1L;

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import utilities.ControllerManagement;
 
-@WebServlet(name = "log", urlPatterns = { "/log" })
+@WebServlet("/log")
 public class log extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -81,10 +81,11 @@ public class log extends HttpServlet {
 						response.addCookie(nc);
 					}
 				}
-			} else {
+			} else { //This case may be first initialize or cookie is blocked
 				Cookie nc = new Cookie("log_refresh", String.valueOf(String.valueOf("true")));
 				nc.setMaxAge(-1);
 				response.addCookie(nc);
+				request.setAttribute("log_refresh", "true");
 			}
 			RequestDispatcher req = request.getRequestDispatcher("log_view.jsp");
 			req.forward(request, response);

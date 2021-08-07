@@ -131,7 +131,7 @@
 							</li>
 							<li><div class="btn-group">
 									<a id="department_employee" type="button"
-										href='MainServlet?target=departmentemployee&action=view'
+										href='MainServlet?target=departmentemployee&action=view&keyword='
 										class="btn btn-primary">Department Employee View</a> <a
 										class="btn btn-primary dropdown-toggle dropdown-toggle-split"
 										aria-labelledby="dropdownMenuReference"
@@ -147,7 +147,7 @@
 								</div></li>
 							<li><div class="btn-group">
 									<a id="employee" type="button"
-										href='MainServlet?target=employee&action=view'
+										href='MainServlet?target=employee&action=view&keyword='
 										class="btn btn-success">Employee View</a> <a type="button"
 										class="btn btn-success dropdown-toggle dropdown-toggle-split"
 										aria-labelledby="dropdownMenuReference"
