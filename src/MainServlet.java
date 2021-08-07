@@ -33,16 +33,13 @@ public class MainServlet extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException {	
 
-		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
-		logger.setContentPoints(request, request.getParameter("id") + "az");
 		response.setContentType("text/html;charset=UTF-8");
 
 		RequestDispatcher dispatcher = null;
 
-		// compulsory to check
-
+		// check process done from filter
 		String target = (String) request.getAttribute("target");
 		String action = (String) request.getAttribute("action");
 
@@ -122,10 +119,11 @@ public class MainServlet extends HttpServlet {
 		if (dispatcher == null) {
 			request.setAttribute("filtered", "is eliminated from servlet");
 			dispatcher = request.getRequestDispatcher("error.jsp");
-		}
+			LoggingGeneral.setContentPoints(request, "Denied, Not valid");
+		}else
+			LoggingGeneral.setContentPoints(request, "Success: target: "+target+" | action: "+action+". Proceed.");
 
 		dispatcher.forward(request, response);
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

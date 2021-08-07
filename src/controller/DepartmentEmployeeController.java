@@ -54,65 +54,143 @@ public class DepartmentEmployeeController extends HttpServlet {
 		try {
 
 			if (action.compareTo("getDepartmentEmployeeAjax") == 0) {
-				System.out.println(action);
-				PrintWriter out = response.getWriter();
+
+				// Get department
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
 				List<DepartmentEmployee> h = new ArrayList<DepartmentEmployee>();
 				h.add(deptemp);
+
+				// Set response type
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-				System.out.println(deptemp.getId() + "");
-				if (h != null) {
-					ObjectMapper mapper = new ObjectMapper();
-					mapper.writeValue(out, h);
-				}
+
+				PrintWriter out = response.getWriter();
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.writeValue(out, h);
+
+				if (deptemp != null)
+					LoggingGeneral.setContentPoints(request,
+							"The departmentEmployee ID: " + deptemp.getId().getDepartmentId() + " | "
+									+ deptemp.getId().getEmployeeId() + ". Completed.");
+				else
+					LoggingGeneral.setContentPoints(request, "ID not found. Failed.");
+
+				LoggingGeneral.setExitPoints(request);
 				return;
+
 			} else if (action.compareTo("add") == 0) {
+
+				// Prepare a empty use bean (except with id)
 				request.setAttribute("deub", new DepartmentEmployeeUseBean());
+
+				// Forward
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_add.jsp");
 				req.forward(request, response);
+
+				LoggingGeneral.setContentPoints(request, "Done add preparation. Completed");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
 			} else if (action.compareTo("update") == 0) {
-				request.setAttribute("deub", new DepartmentEmployeeUseBean());
+
+				// Find the department
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
+
+				// If not exist
+				if (deptemp == null) {
+					// Forward to error page
+					RequestDispatcher req = request.getRequestDispatcher("error.jsp");
+					req.forward(request, response);
+
+					LoggingGeneral.setContentPoints(request,
+							"Failed prepare departmentemployee update pre-input. Not exist.");
+					LoggingGeneral.setExitPoints(request);
+					return;
+				}
+
+				// If exist, prepare use bean with pre-input data
 				request.setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_update.jsp");
 				req.forward(request, response);
+
+				LoggingGeneral.setContentPoints(request, "Prepared departmentemployee update pre-input"
+						+ deptemp.getId().getDepartmentId() + " | " + deptemp.getId().getEmployeeId() + ". Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
 			} else if (action.compareTo("delete") == 0) {
+				
+				// Find the department
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
+
+				// If not exist
+				if (deptemp == null) {
+					// Forward to error page
+					RequestDispatcher req = request.getRequestDispatcher("error.jsp");
+					req.forward(request, response);
+
+					LoggingGeneral.setContentPoints(request,
+							"Failed prepare departmentemployee delete reference. Not exist.");
+					LoggingGeneral.setExitPoints(request);
+					return;
+				}
+
+				// If exist, prepare use bean with reference data
 				request.setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_delete.jsp");
 				req.forward(request, response);
-			} else if (action.compareTo("report") == 0) {
-				// check the validity of session
-				// if found user do two things in once set error
-				// usually will pass cause the search view(pagination) will automatic refresh
-				// once it pressed report button
-				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
+				
+				LoggingGeneral.setContentPoints(request, "Prepared department delete reference"
+						+ deptemp.getId().getDepartmentId() + " | " + deptemp.getId().getEmployeeId() + ". Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
 
+			} else if (action.compareTo("report") == 0) {
+				/*
+				 * check the validity of session. if found user do two things in once, set error.
+				 * for report page usually will pass cause the search view(pagination) will
+				 * automatic refresh once it pressed report button
+				 */
+
+				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
+				boolean dereportVerify;
 				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
-					request.getSession().setAttribute("dereportVerify", "false");
+					dereportVerify = false;
 				} else {
-					request.getSession().setAttribute("dereportVerify", "true");
+					dereportVerify = true;
 					int row = deptempbean.getNumberOfRows((String) request.getSession().getAttribute("dekeyword"));
 					if (row > 0) {
 						request.getSession().setAttribute("departmentEmployeeReportSize", row);
 					} else
 						request.getSession().setAttribute("dempartmentEmployeeReportSize", 0);
 				}
+
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
 				req.forward(request, response);
 
+				LoggingGeneral.setContentPoints(request, "Verification result: " + dereportVerify + ". Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
 			} else if (action.compareTo("download") == 0) {
-				// check the validity of session
-				// if found user do two things in once set error
+				/*
+				 * check the validity of session. if found user do two things in once, make
+				 * report page show error. if found user do two things in once set error
+				 */
+
 				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
 				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
 					request.getSession().setAttribute("dereportVerify", "false");
+
 					RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
 					req.forward(request, response);
+
+					LoggingGeneral.setContentPoints(request,
+							"Verification result: false. Report not generated. Completed.");
+					LoggingGeneral.setExitPoints(request);
 					return;
 				}
 
@@ -120,9 +198,9 @@ public class DepartmentEmployeeController extends HttpServlet {
 				response.setContentType("application/vnd.ms-excel");
 				response.setHeader("Content-Disposition",
 						"attachment; filename=DepartmentEmployeeRelationReport.xls; charset=UTF-8");
-				
-				String keyword=(String) request.getSession().getAttribute("dekeyword");
-				String direction=(String) request.getSession().getAttribute("dedirection");
+
+				String keyword = (String) request.getSession().getAttribute("dekeyword");
+				String direction = (String) request.getSession().getAttribute("dedirection");
 				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction);
 
 				if (list != null && list.size() != 0) {
@@ -132,119 +210,161 @@ public class DepartmentEmployeeController extends HttpServlet {
 								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString());
 					out.println("");
 					out.println("");
-					out.println("\tKeyword Filter:\t" + (keyword.equals("")?"No filter":keyword));
+					out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
 					out.println("\tOrder Direction:\t" + direction);
 					out.println(
 							"\tTotal Records:\t" + request.getSession().getAttribute("departmentEmployeeReportSize"));
 				} else
 					out.println("No record found");
-			}
 
+				LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
+			}
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
+			dispatcher.forward(request, response);
+
+			LoggingGeneral.setContentPoints(request, "Abnormal process occur: " + ex.getMessage());
+			LoggingGeneral.setExitPoints(request);
 		}
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
-		logger.setEntryPoints(request);
 
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
+
+			// Prepare new use bean
 			DepartmentEmployeeUseBean deub = new DepartmentEmployeeUseBean();
 			try {
+				// Fill in the use bean
 				deub.setDept_id(request.getParameter("dept_id"));
 				deub.setEmp_id(request.getParameter("emp_id"));
 				deub.setFrom_date(request.getParameter("from_date"));
 				deub.setTo_date(request.getParameter("to_date"));
 
-				if (deub.validate()) {
+				// Call for validate
+				if (deub.validateId()) {
+					// When it success, write into database
 					deptempbean.addDepartmentEmployee(deub);
 					ControllerManagement.navigateJS(request, response);
-					logger.setContentPoints(request,
-							"Success " + action + " --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id().toString());
+					LoggingGeneral.setContentPoints(request,
+							"Success add --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id() + ". Completed.");
+					LoggingGeneral.setExitPoints(request);
 					return;
 				}
+
+				// Error in validate
 				deub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
+				// Normally is database SQL violation, after validate
 				errorRedirect(e, deub);
-				logger.setContentPoints(request, e.getMessage());
 			}
 			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_add.jsp");
 			dispatcher.forward(request, response);
 
-		} else if (action.compareTo("delete") == 0) {
-			DepartmentEmployeeUseBean deub = new DepartmentEmployeeUseBean();
-			try {
-				deub.setDept_id(request.getParameter("dept_id"));
-				deub.setEmp_id(request.getParameter("emp_id"));
-				if (deptempbean.deleteDepartmentEmployee(deub)) {
-					ControllerManagement.navigateJS(request, response);
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + deub.getDept_id());
-					return;
-				} else {
-					deub.setDept_id_error("Department not exist");
-					deub.setEmp_id_error("Employee not exist");
-					deub.setOverall_error("Please fix the error below");
-				}
-
-			} catch (Exception e) {
-				deub = new DepartmentEmployeeUseBean(
-						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
-				errorRedirect(e, deub);
-			}
-			request.setAttribute("deub", deub);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
-			dispatcher.forward(request, response);
+			LoggingGeneral.setContentPoints(request, "Failed add.");
 
 		} else if (action.compareTo("update") == 0) {
+
+			// Prepare new use bean
 			DepartmentEmployeeUseBean deub = new DepartmentEmployeeUseBean();
 			try {
+				// Fill in the use bean
 				deub.setDept_id(request.getParameter("dept_id"));
 				deub.setEmp_id(request.getParameter("emp_id"));
 				deub.setFrom_date(request.getParameter("from_date"));
 				deub.setTo_date(request.getParameter("to_date"));
 
-				if (deub.validate()) {
-					deptempbean.updateDepartmentEmployee(deub);
-					ControllerManagement.navigateJS(request, response);
-					logger.setContentPoints(request,
-							"Success " + action + " --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id().toString());
-					return;
+				// Call for validate
+				if (deub.validateId()) {
+					// try to update. sessionbean will return false when id not exist
+					if (deptempbean.updateDepartmentEmployee(deub)) {
+						ControllerManagement.navigateJS(request, response);
+						LoggingGeneral.setContentPoints(request, "Success update --> ID:" + deub.getDept_id() + " | "
+								+ deub.getEmp_id() + ". Completed.");
+						LoggingGeneral.setExitPoints(request);
+						return;
+					}else {
+						// Not exist
+						deub.setDept_id_error("Department and employee combination not exist");
+						deub.setEmp_id_error("Department and employee combination not exist");
+						deub.setOverall_error("This combination not exist");
+					}
 				}
+
+				// Any errors
 				deub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
+				// Normally is database SQL violation.
 				errorRedirect(e, deub);
-				logger.setContentPoints(request, e.getMessage());
 			}
 
+			request.setAttribute("deub", deub);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_update.jsp");
+			dispatcher.forward(request, response);
+
+			LoggingGeneral.setContentPoints(request, "Failed update.");
+			
+		} else if (action.compareTo("delete") == 0) {
+
+			// Prepare new use bean
+			DepartmentEmployeeUseBean deub = new DepartmentEmployeeUseBean();
+			try {
+				// Fill in the use bean
+				deub.setDept_id(request.getParameter("dept_id"));
+				deub.setEmp_id(request.getParameter("emp_id"));
+
+				// Validate the id
+				if (deub.validateId()) {
+					// try to delete. sessionbean will return false when id not exist
+					if (deptempbean.deleteDepartmentEmployee(deub)) {
+						ControllerManagement.navigateJS(request, response);
+
+						LoggingGeneral.setContentPoints(request, "Success delete --> ID:" + deub.getDept_id() + " | "
+								+ deub.getEmp_id() + ". Completed.");
+						LoggingGeneral.setExitPoints(request);
+						return;
+					} else {
+						// Not exist
+						deub.setDept_id_error("Department and employee combination not exist");
+						deub.setEmp_id_error("Department and employee combination not exist");
+						deub.setOverall_error("This combination not exist");
+					}
+				}
+
+			} catch (Exception e) {
+				deub = new DepartmentEmployeeUseBean(
+						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
+				errorRedirect(e, deub);
+			}
 			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
 			dispatcher.forward(request, response);
 
-		}
+			LoggingGeneral.setContentPoints(request, "Failed delete.");
 
+		}
+		LoggingGeneral.setExitPoints(request);
 	}
 
 	public void errorRedirect(Exception e, DepartmentEmployeeUseBean deub) {
-
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
-				deub = new DepartmentEmployeeUseBean(
-						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
+				// add
 				deub.setOverall_error("Duplicate error. Please change the input as annotated below");
-				if (psqle.getMessage().contains("primary")) {
-					deub.setDept_id_error("Duplicate combination of department id and employee id");
-					deub.setEmp_id_error("Duplicate combination of department id and employee id");
-				} else
-					deub.setOverall_error(psqle.getMessage());
+				deub.setDept_id_error("Duplicate combination of department id and employee id");
+				deub.setEmp_id_error("Duplicate combination of department id and employee id");
 				return;
 			} else if (psqle.getMessage().contains("violates foreign key constraint")) {
+				// add
 				deub.setOverall_error("No related records. Please change the input as annotated below");
 				if (psqle.getMessage().contains("\"department\"")) {
 					deub.setDept_id_error("Department ID not exist in department table");

@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import model.entity.Employee;
 
 public class ControllerManagement {
-	
 
 	public static <T> T unwrapCause(Class<T> clazz, Throwable e) {
 		while (!clazz.isInstance(e) && e.getCause() != null && e != e.getCause()) {
@@ -24,27 +23,24 @@ public class ControllerManagement {
 		return clazz.isInstance(e) ? clazz.cast(e) : null;
 	}
 
-
-	// this method is used to notify a user that a record has been updated and to
-	// redirect to another page
-	public static void navigateJS(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	// this method is used to notify a user that a record has been updated and
+	// redirect to success page. The success page will hold 5 seconds(can skip) and
+	// redirect to previous view page.
+	public static void navigateJS(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("success.jsp");
 		dispatcher.forward(request, response);
 	}
 
-	public static void test(HttpServletResponse response) {
-		PrintWriter out;
-		try {
-			out = response.getWriter();
-			out.println("<SCRIPT type=\"text/javascript\">");
-			out.println("alert(\"Your  is successful.\")");
-			out.println("</SCRIPT>");
-			response.sendRedirect("https://www.google.com/search?q=");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
+	// This method can be used to test
+	/*
+	 * public static void test(HttpServletResponse response) { PrintWriter out; try
+	 * { out = response.getWriter();
+	 * out.println("<SCRIPT type=\"text/javascript\">");
+	 * out.println("alert(\"Your  is successful.\")"); out.println("</SCRIPT>");
+	 * response.sendRedirect("https://www.google.com/search?q="); } catch
+	 * (IOException e) { // TODO Auto-generated catch block e.printStackTrace(); }
+	 * 
+	 * }
+	 */
 }

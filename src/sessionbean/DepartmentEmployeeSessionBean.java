@@ -28,11 +28,7 @@ import javax.ejb.Local;
  */
 @Stateless
 public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionBeanLocal {
-	@EJB
-	private DepartmentSessionBeanLocal a;
-	@EJB
-	private EmployeeSessionBeanLocal b;
-	// Write some codes here…
+
 	@PersistenceContext(unitName = "TanJingJie1804560")
 	EntityManager em;
 

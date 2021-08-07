@@ -38,15 +38,18 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
-		logger.setEntryPoints(request);
+
 
 		response.setContentType("text/html;charset=UTF-8");
 			
 		RequestDispatcher dispatcher = null;
 		
 		try {
-
+			/* Verify and process the parameter. 
+			 * Check with session, if parameter==null & not exist in session, do default
+			 * if parameter==null, exist in session, use existing(the session)
+			 * if parameter have value, reset the session parameter.
+			 * */
 			if(!PaginationValidate.multiplePageView(request, response))
 				throw new EJBException();
 		
@@ -75,13 +78,13 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 			//set checker for report
 			request.getSession().setAttribute("deverificationToken", String.valueOf(System.currentTimeMillis()));
 			
-			logger.setContentPoints(request, "Success view");
+			LoggingGeneral.setContentPoints(request, "Success view");
 		} catch (Exception ex) {
 			dispatcher = request.getRequestDispatcher("error.jsp");
-			logger.setContentPoints(request, "Unsuccess view" + ex.getMessage());
+			LoggingGeneral.setContentPoints(request, "Unsuccess view" + ex.getMessage());
 		} finally {
 			dispatcher.forward(request, response);
-			logger.setExitPoints(request);
+			LoggingGeneral.setExitPoints(request);
 		}
 
 	}

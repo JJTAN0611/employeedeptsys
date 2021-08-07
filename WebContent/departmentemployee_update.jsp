@@ -21,7 +21,8 @@
 	</h1>
 	<hr>
 	<center>Click the ID text box to see detail.</center>
-	<br> <br>
+	<div class="text-danger text-center"><jsp:getProperty name="deub"
+			property="overall_error" /> </div> <br>
 </div>
 <div class="container wow bounceInDown" data-wow-duration="1.5s"
 	data-wow-delay="0.2s">
@@ -40,19 +41,20 @@
 							type="button"
 							onclick="
 								$('#checkdept').attr('class', 'btn btn-info spinner-border');
-								 $.get('MainServlet?target=departmentemployee&action=getDepartment&id='+$('#dept_id').val(), function(data, status){
-									  var aid = $.parseJSON(data);
-									  if(aid.name==''){
-										  $('#deptcontent').hide();
-										  $('#deptname').html('null');
-										  alert('Department ID: ['+$('#dept_id').val()+'] not exist.');
-									  }else{
-										$('#dept_id').val(aid.id);
-									  	$('#dept_name').html('Department Name:&emsp;'+aid.name);
-									  	$('#deptcontent').show();
-									  }
-										$('#checkdept').attr('class', 'btn btn-info');
-									});
+							 $.get('MainServlet?target=departmentemployee&action=getDepartmentAjax&id='+$('#dept_id').val(), function(data, status){
+			
+								  if(data[0]==null){
+									  $('#deptcontent').hide();
+									  $('#deptname').html('null');
+									  alert('Department ID: ['+$('#dept_id').val()+'] not exist.');
+								  }else{
+									  console.log(data);
+									$('#dept_id').val(data[0].id);
+								  	$('#dept_name').html('Department Name:&emsp;'+data[0].deptName);
+								  	$('#deptcontent').show();
+								  }
+									$('#checkdept').attr('class', 'btn btn-info');
+								});
 						">Check</button>
 					</div>
 
@@ -83,27 +85,26 @@
 							type="button"
 							onclick="
 								$('#checkemp').attr('class', 'btn btn-info spinner-border');
-						  $.get('MainServlet?target=departmentemployee&action=getEmployee&id='+$('#emp_id').val(), function(data, status){
-							  var aid = $.parseJSON(data);
-							  if(aid.first_name=='null'){
-								  $('#empcontent').hide();
-								  alert('Employee ID: ['+$('#emp_id').val()+'] not exist.');
-								  $('#empfname').html('null');
-								  $('#emplname').html('null');
-								  $('#empgender').html('null');
-								  $('#empbdate').html('null');
-								  $('#emphdate').html('null');
-							  }else{
-								  $('#emp_id').val(aid.id);
-							  	  $('#empfname').html('First name:&emsp;'+aid.first_name);
-								  $('#emplname').html('Last name:&emsp;'+aid.last_name);
-								  $('#empgender').html('Gender:&emsp;'+(aid.gender=='M'?'Male':'Female'));
-								  $('#empbdate').html('Birth date:&emsp;'+aid.birth_date);
-								  $('#emphdate').html('Hire date:&emsp;'+aid.hire_date);
-							  	$('#empcontent').show();
-							  }
-							  $('#checkemp').attr('class', 'btn btn-info');
-							  });
+							  $.get('MainServlet?target=departmentemployee&action=getEmployeeAjax&id='+$('#emp_id').val(), function(data, status){
+								  if(data[0]==null){
+									  $('#empcontent').hide();
+									  alert('Employee ID: ['+$('#emp_id').val()+'] not exist.');
+									  $('#empfname').html('null');
+									  $('#emplname').html('null');
+									  $('#empgender').html('null');
+									  $('#empbdate').html('null');
+									  $('#emphdate').html('null');
+								  }else{
+									  $('#emp_id').val(data[0].id);
+								  	  $('#empfname').html('First name:&emsp;'+data[0].firstName);
+									  $('#emplname').html('Last name:&emsp;'+data[0].lastName);
+									  $('#empgender').html('Gender:&emsp;'+(data[0].gender=='M'?'Male':'Female'));
+									  $('#empbdate').html('Birth date:&emsp;'+data[0].birthDate);
+									  $('#emphdate').html('Hire date:&emsp;'+data[0].hireDate);
+								  	$('#empcontent').show();
+								  }
+								  $('#checkemp').attr('class', 'btn btn-info');
+								  });
 						">Check</button>
 					</div>
 

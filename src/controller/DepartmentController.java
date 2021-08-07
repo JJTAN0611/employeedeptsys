@@ -52,81 +52,168 @@ public class DepartmentController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
 
 		String action = (String) request.getAttribute("action");
 
 		try {
-
 			if (action.compareTo("getAutoId") == 0) {
-				JsonObject jo = Json.createObjectBuilder().add("autoId", getAutoId()).build();
+
+				// invoke auto id checker. If id is no longer enough. "allUsed" will be return.
+				String id = getAutoId();
+
+				// Response
+				JsonObject jo = Json.createObjectBuilder().add("autoId", id).build();
 				PrintWriter out = response.getWriter();
 				out.print(jo);
 				out.flush();
+
+				LoggingGeneral.setContentPoints(request, "Given ID: " + id + ". Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
 			} else if (action.compareTo("getDepartmentAjax") == 0) {
-				PrintWriter out = response.getWriter();
+
+				// Get department
 				Department dept = deptbean.findDepartment(request.getParameter("id"));
 				List<Department> h = new ArrayList<Department>();
 				h.add(dept);
 
+				// Set response type
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 
+				PrintWriter out = response.getWriter();
 				ObjectMapper mapper = new ObjectMapper();
 				mapper.writeValue(out, h);
+				if (dept != null)
+					LoggingGeneral.setContentPoints(request, "The department ID: " + dept.getId() + ". Completed.");
+				else
+					LoggingGeneral.setContentPoints(request, "ID not found. Failed.");
+				LoggingGeneral.setExitPoints(request);
 				return;
+
 			} else if (action.compareTo("add") == 0) {
-				request.setAttribute("dub", new DepartmentUseBean(getAutoId()));
+
+				// Prepare a empty use bean (except with id)
+				String id = getAutoId(); // invoke auto id checker. If id is no longer enough. "allUsed" will be return.
+				if(id.compareTo("allUsed")==0)
+					request.setAttribute("dub", new DepartmentUseBean());
+				else
+					request.setAttribute("dub", new DepartmentUseBean(id));
+
+				// Forward
 				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
 				req.forward(request, response);
+
+				LoggingGeneral.setContentPoints(request, "Prepared auto id " + id + ". Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
 			} else if (action.compareTo("update") == 0) {
+
+				// Find the department and prepare use bean with pre-input data
 				Department dept = deptbean.findDepartment(request.getParameter("id"));
+
+				// If not exist
+				if (dept == null) {
+					// Forward to error page
+					RequestDispatcher req = request.getRequestDispatcher("error.jsp");
+					req.forward(request, response);
+
+					LoggingGeneral.setContentPoints(request, "Failed prepare department update pre-input. Not exist.");
+					LoggingGeneral.setExitPoints(request);
+				}
+
+				// If exist
 				request.setAttribute("dub", new DepartmentUseBean(dept));
 				RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
 				req.forward(request, response);
+
+				LoggingGeneral.setContentPoints(request,
+						"Prepared department update pre-input" + dept.getId() + ". Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
 			} else if (action.compareTo("delete") == 0) {
+
+				// Find the department and prepare use bean with reference data
 				Department dept = deptbean.findDepartment(request.getParameter("id"));
+				if (dept == null) {
+					// Forward to error page
+					RequestDispatcher req = request.getRequestDispatcher("error.jsp");
+					req.forward(request, response);
+
+					LoggingGeneral.setContentPoints(request, "Failed prepare department delete reference. Not exist.");
+					LoggingGeneral.setExitPoints(request);
+				}
+
+				// If exist
 				request.setAttribute("dub", new DepartmentUseBean(dept));
 				RequestDispatcher req = request.getRequestDispatcher("department_delete.jsp");
 				req.forward(request, response);
+
+				LoggingGeneral.setContentPoints(request,
+						"Prepared department delete reference" + dept.getId() + ". Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
 			} else if (action.compareTo("report") == 0) {
-				// check the validity of session
-				// if found user do two things in once set error
-				// usually will pass cause the search view(pagination) will automatic refresh
-				// once it pressed report button
+				/*
+				 * check the validity of session if found user do two things in once, set error.
+				 * for report page usually will pass cause the search view(pagination) will
+				 * automatic refresh once it pressed report button
+				 */
+
 				String verificationToken = (String) request.getSession().getAttribute("dverificationToken");
-				System.out.println(verificationToken);
+				boolean dreportVerify;
 				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
-					request.getSession().setAttribute("dreportVerify", "false");
+					dreportVerify = false;
 				} else {
-					request.getSession().setAttribute("dreportVerify", "true");
+					dreportVerify = true;
 					if (deptbean.getNumberOfRows() > 0) {
 						request.getSession().setAttribute("departmentReportSize", deptbean.getNumberOfRows());
 					} else
 						request.getSession().setAttribute("departmentReportSize", 0);
 				}
+				request.getSession().setAttribute("dreportVerify", String.valueOf(dreportVerify));
+
+				// Forward
 				RequestDispatcher req = request.getRequestDispatcher("department_report.jsp");
 				req.forward(request, response);
+
+				LoggingGeneral.setContentPoints(request, "Verification result: " + dreportVerify + ". Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
 			} else if (action.compareTo("download") == 0) {
-				// check the validity of session
-				// if found user do two things in once set error
+				/*
+				 * check the validity of session. if found user do two things in once, make
+				 * report page show error. if found user do two things in once set error
+				 */
+
 				String verificationToken = (String) request.getSession().getAttribute("dverificationToken");
 				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
 					request.getSession().setAttribute("dreportVerify", "false");
+
 					RequestDispatcher req = request.getRequestDispatcher("department_report.jsp");
 					req.forward(request, response);
+
+					LoggingGeneral.setContentPoints(request,
+							"Verification result: false. Report not generated. Completed.");
+					LoggingGeneral.setExitPoints(request);
 					return;
 				}
+
 				PrintWriter out = response.getWriter();
 				response.setContentType("application/vnd.ms-excel");
 				response.setHeader("Content-Disposition", "attachment; filename=DepartmentReport.xls; charset=UTF-8");
 
-				List<Department> list = deptbean
-						.readDepartment((String) request.getSession().getAttribute("ddirection"));
+				List<Object[]> list = deptbean
+						.getDepartmentReport((String) request.getSession().getAttribute("ddirection"));
 				if (list != null && list.size() != 0) {
 					out.println("\tDepartment ID\tDepartment Name");
 					for (int i = 0; i < list.size(); i++)
-						out.println((i + 1) + "\t" + list.get(i).getId() + "\t" + list.get(i).getDeptName());
+						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString());
 					out.println("");
 					out.println("");
 					out.println("\tKeyword Filter:\t No filter");
@@ -134,13 +221,19 @@ public class DepartmentController extends HttpServlet {
 					out.println("\tTotal Records:\t" + request.getSession().getAttribute("departmentReportSize"));
 				} else
 					out.println("No record found");
-			}
-		} catch (
 
-		Exception ex) {
-			System.out.println(ex.getMessage());
+				LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
+			}
+		} catch (Exception ex) {
+			// send to error page
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
+
+			LoggingGeneral.setContentPoints(request, "Abnormal process occur: " + ex.getMessage());
+			LoggingGeneral.setExitPoints(request);
 		}
 
 	}
@@ -148,44 +241,101 @@ public class DepartmentController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		LoggingGeneral logger = (LoggingGeneral) request.getServletContext().getAttribute("log");
-		logger.setEntryPoints(request);
-
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
+
+			// Prepare new use bean
 			DepartmentUseBean dub = new DepartmentUseBean();
 			try {
+				// Fill in the use bean
 				dub.setId(request.getParameter("id"));
 				dub.setDept_name(request.getParameter("dept_name"));
+
+				// Call for validate
 				if (dub.validate()) {
+					// When it success, write into database
 					deptbean.addDepartment(dub);
 					ControllerManagement.navigateJS(request, response);
-					logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
+					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + dub.getId());
+					LoggingGeneral.setExitPoints(request);
 					return;
 				}
+
+				// Error in validate
 				dub.setOverall_error("Please fix the error below");
+
 			} catch (Exception e) {
+				// Normally is database SQL violation, after validate
 				errorRedirect(e, dub);
 			}
 
 			request.setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_add.jsp");
 			dispatcher.forward(request, response);
-		} else if (action.compareTo("delete") == 0) {
+
+			LoggingGeneral.setContentPoints(request, "Failed add.");
+
+		} else if (action.compareTo("update") == 0) {
+
+			// Prepare new use bean
 			DepartmentUseBean dub = new DepartmentUseBean();
 
 			try {
+				// Fill in the use bean
 				dub.setId(request.getParameter("id"));
+				dub.setDept_name(request.getParameter("dept_name"));
+
+				// Call for validate
+				if (dub.validate()) {
+					// try to update. sessionbean will return false when id not exist
+					if (deptbean.updateDepartment(dub)) {
+						ControllerManagement.navigateJS(request, response);
+						LoggingGeneral.setContentPoints(request, "Success update --> ID:" + dub.getId());
+						LoggingGeneral.setExitPoints(request);
+						return;
+					} else {
+						// Not exist
+						dub.setId_error("Department not exist");
+					}
+				}
+
+				// Any errors
+				dub.setOverall_error("Please fix the error below");
+			} catch (Exception e) {
+				// Normally is database SQL violation.
+				errorRedirect(e, dub);
+			}
+
+			request.setAttribute("dub", dub);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("department_update.jsp");
+			dispatcher.forward(request, response);
+
+			LoggingGeneral.setContentPoints(request, "Failed update.");
+
+		} else if (action.compareTo("delete") == 0) {
+
+			// Prepare new use bean
+			DepartmentUseBean dub = new DepartmentUseBean();
+
+			try {
+				// Fill in the use bean
+				dub.setId(request.getParameter("id"));
+
+				// Validate the id
 				if (dub.validateId()) {
+					// try to delete. sessionbean will return false when id not exist
 					if (deptbean.deleteDepartment(dub)) {
 						ControllerManagement.navigateJS(request, response);
-						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
+						LoggingGeneral.setContentPoints(request, "Success delete --> ID:" + dub.getId());
+						LoggingGeneral.setExitPoints(request);
 						return;
-					} else
+					} else {
+						// Not exist
 						dub.setId_error("Department not exist");
+					}
 				}
-				dub.setOverall_error("Please fix the error below");
+
 			} catch (Exception e) {
 				dub = new DepartmentUseBean(deptbean.findDepartment(dub.getId()));
 				errorRedirect(e, dub);
@@ -194,41 +344,23 @@ public class DepartmentController extends HttpServlet {
 			request.setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_delete.jsp");
 			dispatcher.forward(request, response);
-		} else if (action.compareTo("update") == 0) {
-			DepartmentUseBean dub = new DepartmentUseBean();
-			try {
-				dub.setId(request.getParameter("id"));
-				dub.setDept_name(request.getParameter("dept_name"));
-				if (dub.validate()) {
-					if (deptbean.updateDepartment(dub)) {
-						ControllerManagement.navigateJS(request, response);
-						logger.setContentPoints(request, "Success " + action + " --> ID:" + dub.getId());
-						return;
-					} else
-						dub.setId_error("Department not exist");
-				}
-				dub.setOverall_error("Please fix the error below");
-			} catch (Exception e) {
-				errorRedirect(e, dub);
-			}
-
-			request.setAttribute("dub", dub);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("department_update.jsp");
-			dispatcher.forward(request, response);
-
+			LoggingGeneral.setContentPoints(request, "Failed update.");
 		}
 
-		logger.setExitPoints(request);
+		LoggingGeneral.setExitPoints(request);
 	}
 
 	public void errorRedirect(Exception e, DepartmentUseBean dub) {
+
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
+				// delete
 				dub.setOverall_error("You may need to clear the related departmentemployee relation record");
 				dub.setId_error("This department is using in relation table and cannot be deleted");
 				dub.setExpress("departmentemployee");
 			} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
+				// add
 				dub.setOverall_error("Duplicate error. Please change the input as annotated below");
 				if (psqle.getMessage().contains("primary"))
 					dub.setId_error("Duplicate department id");
@@ -242,15 +374,25 @@ public class DepartmentController extends HttpServlet {
 	}
 
 	private String getAutoId() {
-		List<Department> ds = deptbean.getAllDepartment();
-		int t = 0;
-		for (Department d : ds)
-			if (Integer.valueOf(d.getId().substring(1, 4)) > t)
-				t = Integer.valueOf(d.getId().substring(1, 4));
-		if (t <= 999)
-			return "d" + String.format("%03d", t + 1);
-		else
+
+		//Get id list
+		List<Object> idNumber = deptbean.getSortedDepartmentStartWithD();
+
+		//Fully occupied
+		if (idNumber.size() >= 999)
 			return "allUsed";
+		
+		//Check still empty
+		for (int i = 1; i <= idNumber.size(); i++) {
+			int temp = Integer.valueOf(idNumber.get(i-1).toString());
+			if (i != temp)
+				return "d" + String.format("%03d", i);
+			
+		}
+
+		//Fully occupied in loop, but have remain (<999)
+		return "d" + String.format("%03d", idNumber.size() + 1);
+
 	}
 
 }

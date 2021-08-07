@@ -45,8 +45,7 @@
 			</h2>
 		</div>
 		<div class="text-center">
-			Keyword Filter: No filter<br>
-			Order Direction:
+			Keyword Filter: No filter<br> Order Direction:
 			<%=request.getSession().getAttribute("ddirection")%><br> Total
 			Records:
 			<%=request.getSession().getAttribute("departmentReportSize")%><br>
@@ -57,8 +56,8 @@
 	<br>
 	<hr>
 	<div class="text-center">
-		**URL encoding is used for compulsory session tracking.<br> The
-		session ID:
+		**URL encoding is used for compulsory session tracking , if cookie is
+		disabled. <br> The session ID:
 		<%=request.getSession().getId()%><br> The unique ID:
 		<%=((String) request.getParameter("verificationToken"))%>
 	</div>
@@ -68,8 +67,9 @@
 %>
 <div class="text-center">
 	<h2>
-		Please close this window and try again.<br> Remember! Do one
-		things at one time.
+		**URL encoding is used for compulsory session tracking , if cookie is
+		disabled. <br> Please close this window and try again.<br>
+		Remember! Do one things at one time.
 	</h2>
 	The unique ID:
 	<%=((String) request.getParameter("verificationToken"))%>

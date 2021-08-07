@@ -57,7 +57,7 @@
 	<br>
 	<hr>
 	<div class="text-center">
-		**URL encoding is used for compulsory session tracking.<br> The
+		**URL encoding is used for compulsory session tracking , if cookie is disabled.<br> The
 		session ID:
 		<%=request.getSession().getId()%><br> The unique ID:
 		<%=((String) request.getParameter("verificationToken"))%>
@@ -70,6 +70,7 @@
 %>
 <div class="text-center">
 	<h2>
+		**URL encoding is used for compulsory session tracking , if cookie is disabled.<br>
 		Please close this window and try again.<br> Remember! Do one
 		things at one time.
 	</h2>

@@ -25,7 +25,6 @@ import javax.ejb.Local;
 @Stateless
 public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
-	// Write some codes here…
 	@PersistenceContext(unitName = "TanJingJie1804560")
 	EntityManager em;
 
@@ -36,14 +35,19 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<Department> getAllDepartment() throws EJBException {
-		// Write some codes here…
-		try {
-			return em.createNamedQuery("Department.findAll").getResultList();
-		} catch (NoResultException e) {
-			return null;
-		}
-		
+	//
+	public List<Object[]> getDepartmentReport(String direction) throws EJBException {
+		Query q = null;
+		q = em.createNativeQuery("SELECT * FROM employees.department order by id " + direction);
+
+		return q.getResultList();
+	}
+	
+	@Override
+	public List<Object> getSortedDepartmentStartWithD() throws EJBException {
+		Query q = null;
+		q = em.createNativeQuery("SELECT SUBSTRING(d.id,2,3) FROM employees.department d WHERE d.id~'^d[0-9][0-9][0-9]' ORDER BY 1");
+		return q.getResultList();
 	}
 
 	public List<Department> readDepartment(String direction) throws EJBException {
@@ -85,7 +89,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	public boolean updateDepartment(DepartmentUseBean dup) throws EJBException {
 		// Write some codes here…
 		Department d = findDepartment(dup.getId());
-		if(d==null)
+		if (d == null)
 			return false;
 		d.setDeptName(dup.getDept_name());
 		em.merge(d);
@@ -95,7 +99,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	public boolean deleteDepartment(DepartmentUseBean dup) throws EJBException {
 		// Write some codes here…
 		Department d = findDepartment(dup.getId());
-		if(d==null)
+		if (d == null)
 			return false;
 		em.remove(d);
 		return true;
@@ -108,4 +112,6 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		d.setDeptName(dup.getDept_name());
 		em.persist(d);
 	}
+
+
 }

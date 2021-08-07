@@ -11,12 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 public class PaginationValidate {
 	/*
 	 * This class is to validate related pagination parameter (if have) to attribute
-	 * for preprocess parameter is direction, current page, recordperPage, nOfPages,
+	 * for pre-process parameter is direction, current page, recordperPage, nOfPages,
 	 * keyword If there have extra parameter is fine. If the program found it
 	 * already have in the session AND not exist in the request, then this program
-	 * will use the one in session.
-	 */
-
+	 * will use the one in session(existing value).
+	 * Summary-->
+	 * if parameter==null & not exist in session, do default
+	 * if parameter==null, exist in session, use existing(the session)
+	 * if parameter have value, reset the session parameter.
+	 * */
+	
 	public static String getAppend(HttpServletRequest request) {
 		switch ((String) request.getAttribute("target")) {
 		case "employee":

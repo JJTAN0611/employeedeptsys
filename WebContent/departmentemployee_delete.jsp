@@ -1,4 +1,4 @@
-<%@ page errorPage = "error.jsp" %>
+<%@ page errorPage="error.jsp"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -22,8 +22,9 @@
 	</h1>
 	<hr>
 	<center>Click the ID input textbox to see detail.</center>
-		<div class="text-danger text-center"><jsp:getProperty name="deub"
-			property="overall_error" /> </div>
+	<div class="text-danger text-center"><jsp:getProperty name="deub"
+			property="overall_error" />
+	</div>
 	<br>
 </div>
 
@@ -36,32 +37,35 @@
 			<div class="col-8">
 				<div class="input-group">
 					<input id="dept_id" type="text" class="form-control" name="dept_id"
-						value='<jsp:getProperty name="deub" property="dept_id"/>' readonly='readonly'>
+						value='<jsp:getProperty name="deub" property="dept_id"/>'
+						readonly='readonly'>
 					<div class="input-group-append">
 						<button id="checkdept" class="btn btn-info"
 							data-bs-toggle='collapse' data-bs-target='#deptcontent'
 							type="button"
 							onclick="
 								$('#checkdept').attr('class', 'btn btn-info spinner-border');
-								 $.get('MainServlet?target=departmentemployee&action=getDepartment&id='+$('#dept_id').val(), function(data, status){
-									  var aid = $.parseJSON(data);
-									  if(aid.name==''){
-										  $('#deptcontent').hide();
-										  $('#deptname').html('null');
-										  alert('Department ID: ['+$('#dept_id').val()+'] not exist.');
-									  }else{
-										$('#dept_id').val(aid.id);
-									  	$('#dept_name').html('Department Name:&emsp;'+aid.name);
-									  	$('#deptcontent').show();
-									  }
-										$('#checkdept').attr('class', 'btn btn-info');
-									});
+							 $.get('MainServlet?target=departmentemployee&action=getDepartmentAjax&id='+$('#dept_id').val(), function(data, status){
+			
+								  if(data[0]==null){
+									  $('#deptcontent').hide();
+									  $('#deptname').html('null');
+									  alert('Department ID: ['+$('#dept_id').val()+'] not exist.');
+								  }else{
+									$('#dept_id').val(data[0].id);
+								  	$('#dept_name').html('Department Name:&emsp;'+data[0].deptName);
+								  	$('#deptcontent').show();
+								  }
+									$('#checkdept').attr('class', 'btn btn-info');
+								});
 						">Check</button>
 					</div>
 
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-						property="dept_id_error" /> ${deub.getExpress()}</div>
+						property="dept_id_error" />
+					${deub.getExpress()}
+				</div>
 				<div id="deptcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
@@ -78,40 +82,42 @@
 			<div class="col-8">
 				<div class="input-group">
 					<input id="emp_id" type="number" class="form-control" name="emp_id"
-						value='<jsp:getProperty name="deub" property="emp_id"/>' readonly='readonly'>
+						value='<jsp:getProperty name="deub" property="emp_id"/>'
+						readonly='readonly'>
 					<div class="input-group-append">
 						<button id="checkemp" class="btn btn-info"
 							data-bs-toggle='collapse' data-bs-target='#empcontent'
 							type="button"
 							onclick="
 								$('#checkemp').attr('class', 'btn btn-info spinner-border');
-						  $.get('MainServlet?target=departmentemployee&action=getEmployee&id='+$('#emp_id').val(), function(data, status){
-							  var aid = $.parseJSON(data);
-							  if(aid.first_name=='null'){
-								  $('#empcontent').hide();
-								  alert('Employee ID: ['+$('#emp_id').val()+'] not exist.');
-								  $('#empfname').html('null');
-								  $('#emplname').html('null');
-								  $('#empgender').html('null');
-								  $('#empbdate').html('null');
-								  $('#emphdate').html('null');
-							  }else{
-								  $('#emp_id').val(aid.id);
-							  	  $('#empfname').html('First name:&emsp;'+aid.first_name);
-								  $('#emplname').html('Last name:&emsp;'+aid.last_name);
-								  $('#empgender').html('Gender:&emsp;'+(aid.gender=='M'?'Male':'Female'));
-								  $('#empbdate').html('Birth date:&emsp;'+aid.birth_date);
-								  $('#emphdate').html('Hire date:&emsp;'+aid.hire_date);
-							  	$('#empcontent').show();
-							  }
-							  $('#checkemp').attr('class', 'btn btn-info');
-							  });
+							  $.get('MainServlet?target=departmentemployee&action=getEmployeeAjax&id='+$('#emp_id').val(), function(data, status){
+								  if(data[0]==null){
+									  $('#empcontent').hide();
+									  alert('Employee ID: ['+$('#emp_id').val()+'] not exist.');
+									  $('#empfname').html('null');
+									  $('#emplname').html('null');
+									  $('#empgender').html('null');
+									  $('#empbdate').html('null');
+									  $('#emphdate').html('null');
+								  }else{
+									  $('#emp_id').val(data[0].id);
+								  	  $('#empfname').html('First name:&emsp;'+data[0].firstName);
+									  $('#emplname').html('Last name:&emsp;'+data[0].lastName);
+									  $('#empgender').html('Gender:&emsp;'+(data[0].gender=='M'?'Male':'Female'));
+									  $('#empbdate').html('Birth date:&emsp;'+data[0].birthDate);
+									  $('#emphdate').html('Hire date:&emsp;'+data[0].hireDate);
+								  	$('#empcontent').show();
+								  }
+								  $('#checkemp').attr('class', 'btn btn-info');
+								  });
 						">Check</button>
 					</div>
-					
+
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-							property="emp_id_error" /> ${deub.getExpress()}</div>
+						property="emp_id_error" />
+					${deub.getExpress()}
+				</div>
 				<div id="empcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
@@ -140,7 +146,7 @@
 			<label class="control-label col-3 text-end">From Date:</label>
 			<div class="col-8">
 				<input type="date" class="form-control" name="from_date"
-					value='<jsp:getProperty name="deub" property="from_date"/>'>
+					value='<jsp:getProperty name="deub" property="from_date"/>' readonly='readonly'>
 				<div class="text-danger"><jsp:getProperty name="deub"
 						property="from_date_error" /></div>
 			</div>
@@ -150,7 +156,7 @@
 			<label class="control-label col-3 text-end">To Date:</label>
 			<div class="col-8">
 				<input type="date" class="form-control" name="to_date"
-					value='<jsp:getProperty name="deub" property="to_date"/>'>
+					value='<jsp:getProperty name="deub" property="to_date"/>' readonly='readonly'>
 				<div class="text-danger"><jsp:getProperty name="deub"
 						property="to_date_error" /></div>
 			</div>

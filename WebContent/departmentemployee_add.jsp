@@ -95,7 +95,7 @@
 								  $('#empbdate').html('null');
 								  $('#emphdate').html('null');
 							  }else{
-								  $('#emp_id').val(data[0]);
+								  $('#emp_id').val(data[0].id);
 							  	  $('#empfname').html('First name:&emsp;'+data[0].firstName);
 								  $('#emplname').html('Last name:&emsp;'+data[0].lastName);
 								  $('#empgender').html('Gender:&emsp;'+(data[0].gender=='M'?'Male':'Female'));

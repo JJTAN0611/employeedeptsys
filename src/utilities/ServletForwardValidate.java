@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebFilter(filterName="MainFilter",urlPatterns="/MainServlet",dispatcherTypes= {DispatcherType.REQUEST})
 public class ServletForwardValidate implements Filter{
 	/*
-	 * This class is to verify those compulsory servlets forwarding The validate
-	 * parameter is target, action
+	 * This class is to verify those compulsory servlets forwarding. The validate
+	 * parameter is target, action. If not have related parameter, it will be filtered
 	 */
 
 	private boolean action(ServletRequest request, ServletResponse response) {
@@ -70,15 +70,17 @@ public class ServletForwardValidate implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-
+		LoggingGeneral.setEntryPoints((HttpServletRequest) request);
 		// TODO Auto-generated method stub
-		if(action(request, response) && target(request, response))
+		if(action(request, response) && target(request, response)) {
 			chain.doFilter(request, response);
-		else {
+			LoggingGeneral.setContentPoints((HttpServletRequest) request, "No obvious url error. Proceed.");
+		}else {
 			request.setAttribute("filtered", "is eliminated from main filter");
 			RequestDispatcher dispatcher= request.getRequestDispatcher("error.jsp");
 			dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
+			LoggingGeneral.setContentPoints((HttpServletRequest) request, "Obvious url rrror found");
 		}
 
 	}
