@@ -19,7 +19,7 @@ import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/log")
-public class log extends HttpServlet {
+public class Log extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,7 +63,7 @@ public class log extends HttpServlet {
 				bw.write("");
 				bw.flush();
 				bw.close();
-				ControllerManagement.navigateJS(request, response);
+				ControllerManagement.navigateSuccess(request, response);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 				LoggingGeneral.setContentPoints(request, "Unsuccess remove log. Failed");

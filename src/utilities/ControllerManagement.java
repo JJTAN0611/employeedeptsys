@@ -19,7 +19,7 @@ public class ControllerManagement {
 	// this method is used to notify a user that a record has been updated and
 	// redirect to success page. The success page will hold 5 seconds(can skip) and
 	// redirect to previous view page.
-	public static void navigateJS(HttpServletRequest request, HttpServletResponse response)
+	public static void navigateSuccess(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("success.jsp");
 		dispatcher.forward(request, response);

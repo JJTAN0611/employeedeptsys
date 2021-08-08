@@ -248,7 +248,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				if (deub.validateId()) {
 					// When it success, write into database
 					deptempbean.addDepartmentEmployee(deub);
-					ControllerManagement.navigateJS(request, response);
+					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request,
 							"Success add --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id() + ". Completed.");
 					LoggingGeneral.setExitPoints(request);
@@ -282,7 +282,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				if (deub.validateId()) {
 					// try to update. sessionbean will return false when id not exist
 					if (deptempbean.updateDepartmentEmployee(deub)) {
-						ControllerManagement.navigateJS(request, response);
+						ControllerManagement.navigateSuccess(request, response);
 						LoggingGeneral.setContentPoints(request, "Success update --> ID:" + deub.getDept_id() + " | "
 								+ deub.getEmp_id() + ". Completed.");
 						LoggingGeneral.setExitPoints(request);
@@ -321,7 +321,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				if (deub.validateId()) {
 					// try to delete. sessionbean will return false when id not exist
 					if (deptempbean.deleteDepartmentEmployee(deub)) {
-						ControllerManagement.navigateJS(request, response);
+						ControllerManagement.navigateSuccess(request, response);
 
 						LoggingGeneral.setContentPoints(request, "Success delete --> ID:" + deub.getDept_id() + " | "
 								+ deub.getEmp_id() + ". Completed.");

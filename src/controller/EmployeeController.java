@@ -253,7 +253,7 @@ public class EmployeeController extends HttpServlet {
 				// Call for validate
 				if (eub.validate()) {
 					empbean.addEmployee(eub);
-					ControllerManagement.navigateJS(request, response);
+					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + eub.getId() + ". Completed.");
 					LoggingGeneral.setExitPoints(request);
 					return;
@@ -288,7 +288,7 @@ public class EmployeeController extends HttpServlet {
 				if (eub.validate()) {
 					// try to update. sessionbean will return false when id not exist
 					if (empbean.updateEmployee(eub) == true) {
-						ControllerManagement.navigateJS(request, response);
+						ControllerManagement.navigateSuccess(request, response);
 						LoggingGeneral.setContentPoints(request,
 								"Success " + action + " --> ID:" + eub.getFirst_name() + ". Completed");
 						return;
@@ -323,7 +323,7 @@ public class EmployeeController extends HttpServlet {
 				if (eub.validateId()) {
 					// try to delete. sessionbean will return false when id not exist
 					if (empbean.deleteEmployee(eub)) {
-						ControllerManagement.navigateJS(request, response);
+						ControllerManagement.navigateSuccess(request, response);
 						LoggingGeneral.setContentPoints(request,
 								"Success delete --> ID:" + eub.getId() + ". Completed.");
 						LoggingGeneral.setExitPoints(request);

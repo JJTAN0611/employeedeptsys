@@ -257,7 +257,7 @@ public class DepartmentController extends HttpServlet {
 				if (dub.validate()) {
 					// When it success, write into database
 					deptbean.addDepartment(dub);
-					ControllerManagement.navigateJS(request, response);
+					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + dub.getId());
 					LoggingGeneral.setExitPoints(request);
 					return;
@@ -291,7 +291,7 @@ public class DepartmentController extends HttpServlet {
 				if (dub.validate()) {
 					// try to update. sessionbean will return false when id not exist
 					if (deptbean.updateDepartment(dub)) {
-						ControllerManagement.navigateJS(request, response);
+						ControllerManagement.navigateSuccess(request, response);
 						LoggingGeneral.setContentPoints(request, "Success update --> ID:" + dub.getId());
 						LoggingGeneral.setExitPoints(request);
 						return;
@@ -325,9 +325,9 @@ public class DepartmentController extends HttpServlet {
 
 				// Validate the id
 				if (dub.validateId()) {
-					// try to delete. sessionbean will return false when id not exist
+					// try to delete. session bean will return false when id not exist
 					if (deptbean.deleteDepartment(dub)) {
-						ControllerManagement.navigateJS(request, response);
+						ControllerManagement.navigateSuccess(request, response);
 						LoggingGeneral.setContentPoints(request, "Success delete --> ID:" + dub.getId());
 						LoggingGeneral.setExitPoints(request);
 						return;
