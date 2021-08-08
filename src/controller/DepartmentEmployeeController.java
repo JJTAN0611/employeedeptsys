@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
-
 import model.entity.DepartmentEmployee;
 import model.usebean.DepartmentEmployeeUseBean;
 import sessionbean.DepartmentEmployeeSessionBeanLocal;
@@ -43,8 +42,13 @@ public class DepartmentEmployeeController extends HttpServlet {
 			if (action.compareTo("getByIdAjax") == 0) {
 
 				// Get department
-				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
-						Long.valueOf(request.getParameter("emp_id")));
+				DepartmentEmployee deptemp;
+				try {
+					deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
+							Long.valueOf(request.getParameter("emp_id")));
+				} catch (Exception e) {
+					deptemp = null;
+				}
 				List<DepartmentEmployee> h = new ArrayList<DepartmentEmployee>();
 				h.add(deptemp);
 
@@ -61,7 +65,8 @@ public class DepartmentEmployeeController extends HttpServlet {
 							"The departmentEmployee ID: " + deptemp.getId().getDepartmentId() + " | "
 									+ deptemp.getId().getEmployeeId() + ". Completed.");
 				else
-					LoggingGeneral.setContentPoints(request, "ID not found. Failed.");
+					LoggingGeneral.setContentPoints(request, "ID not found."+request.getParameter("dept_id")+
+							request.getParameter("emp_id")+" Failed.");
 
 				LoggingGeneral.setExitPoints(request);
 				return;
@@ -108,7 +113,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				return;
 
 			} else if (action.compareTo("delete") == 0) {
-				
+
 				// Find the department
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 						Long.valueOf(request.getParameter("emp_id")));
@@ -129,7 +134,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				request.setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_delete.jsp");
 				req.forward(request, response);
-				
+
 				LoggingGeneral.setContentPoints(request, "Prepared department delete reference"
 						+ deptemp.getId().getDepartmentId() + " | " + deptemp.getId().getEmployeeId() + ". Completed.");
 				LoggingGeneral.setExitPoints(request);
@@ -137,9 +142,9 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 			} else if (action.compareTo("report") == 0) {
 				/*
-				 * check the validity of session. if found user do two things in once, set error.
-				 * for report page usually will pass cause the search view(pagination) will
-				 * automatic refresh once it pressed report button
+				 * check the validity of session. if found user do two things in once, set
+				 * error. for report page usually will pass cause the search view(pagination)
+				 * will automatic refresh once it pressed report button
 				 */
 
 				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
@@ -152,11 +157,12 @@ public class DepartmentEmployeeController extends HttpServlet {
 					request.getSession().setAttribute("departmentEmployeeReportSize", row);
 				}
 				request.getSession().setAttribute("dereportVerify", String.valueOf(dereportVerify));
-				
+
 				// Brief summary (The involved foreign key)
-				Integer[] summary=deptempbean.getDepartmentEmployeeSummary((String) request.getSession().getAttribute("dekeyword"));
+				Integer[] summary = deptempbean
+						.getDepartmentEmployeeSummary((String) request.getSession().getAttribute("dekeyword"));
 				request.getSession().setAttribute("dereportSummary", summary);
-				
+
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
 				req.forward(request, response);
 
@@ -190,8 +196,10 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 				String keyword = (String) request.getSession().getAttribute("dekeyword");
 				String direction = (String) request.getSession().getAttribute("dedirection");
-				Integer[] summary=(Integer[]) request.getSession().getAttribute("dereportSummary");// Brief summary (The involved foreign key)
-				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction); //Get the list
+				Integer[] summary = (Integer[]) request.getSession().getAttribute("dereportSummary");// Brief summary
+																										// (The involved
+																										// foreign key)
+				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction); // Get the list
 
 				if (list != null && list.size() != 0) {
 					out.println("\tDepartment ID\tEmployee ID\tFrom Date\tTo Date");
@@ -201,7 +209,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 				} else
 					out.println("No record found");
-				
+
 				out.println("");
 				out.println("");
 				out.println("\tInvolved Department:\t" + summary[0]);
@@ -210,8 +218,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				out.println("");
 				out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
 				out.println("\tOrder Direction:\t" + direction);
-				out.println(
-						"\tTotal Records:\t" + request.getSession().getAttribute("departmentEmployeeReportSize"));
+				out.println("\tTotal Records:\t" + request.getSession().getAttribute("departmentEmployeeReportSize"));
 
 				LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
 				LoggingGeneral.setExitPoints(request);
@@ -287,7 +294,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 								+ deub.getEmp_id() + ". Completed.");
 						LoggingGeneral.setExitPoints(request);
 						return;
-					}else {
+					} else {
 						// Not exist
 						deub.setDept_id_error("Department and employee combination not exist");
 						deub.setEmp_id_error("Department and employee combination not exist");
@@ -307,7 +314,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 			dispatcher.forward(request, response);
 
 			LoggingGeneral.setContentPoints(request, "Failed update.");
-			
+
 		} else if (action.compareTo("delete") == 0) {
 
 			// Prepare new use bean

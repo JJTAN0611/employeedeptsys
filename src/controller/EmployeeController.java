@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
-
 import model.entity.Employee;
 import model.usebean.EmployeeUseBean;
 import sessionbean.EmployeeSessionBeanLocal;
@@ -43,7 +42,12 @@ public class EmployeeController extends HttpServlet {
 			if (action.compareTo("getByIdAjax") == 0) {
 
 				// Get department
-				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
+				Employee emp;
+				try {
+					emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
+				} catch (Exception e) {
+					emp = null;
+				}
 				List<Employee> h = new ArrayList<Employee>();
 				h.add(emp);
 
@@ -70,7 +74,7 @@ public class EmployeeController extends HttpServlet {
 				Employee emp = empbean.getEmployeeByName(request.getParameter("name"));
 				List<Employee> h = new ArrayList<Employee>();
 				h.add(emp);
-	
+
 				// Set response type
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
@@ -168,7 +172,7 @@ public class EmployeeController extends HttpServlet {
 					request.getSession().setAttribute("employeeReportSize", row);
 				}
 				request.getSession().setAttribute("ereportVerify", String.valueOf(ereportVerify));
-				
+
 				RequestDispatcher req = request.getRequestDispatcher("employee_report.jsp");
 				req.forward(request, response);
 
@@ -211,7 +215,7 @@ public class EmployeeController extends HttpServlet {
 								+ list.get(i)[4].toString() + "\t" + list.get(i)[5].toString());
 				} else
 					out.println("No record found");
-				
+
 				out.println("");
 				out.println("");
 				out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
@@ -310,7 +314,7 @@ public class EmployeeController extends HttpServlet {
 			dispatcher.forward(request, response);
 
 			LoggingGeneral.setContentPoints(request, "Failed update.");
-			
+
 		} else if (action.compareTo("delete") == 0) {
 
 			// Prepare new use bean
@@ -352,12 +356,12 @@ public class EmployeeController extends HttpServlet {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
-				//delete
+				// delete
 				eub.setOverall_error("You may need to clear the related departmentemployee relation record");
 				eub.setId_error("This employee is using in relation table and cannot be deleted");
 				eub.setExpress("departmentemployee");
 			} else if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
-				//add
+				// add
 				eub.setOverall_error("Duplicate error. Please change the input as annotated below");
 				if (psqle.getMessage().contains("primary"))
 					eub.setId_error("dublicate employee id");

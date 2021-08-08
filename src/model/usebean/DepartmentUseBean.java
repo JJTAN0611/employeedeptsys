@@ -1,11 +1,7 @@
 package model.usebean;
 
-import java.util.Hashtable;
-
-import javax.servlet.http.HttpServletRequest;
 
 import model.entity.Department;
-import utilities.LoggingGeneral;
 
 public class DepartmentUseBean {
 	private String id = "";

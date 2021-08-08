@@ -1,14 +1,8 @@
 package model.usebean;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Hashtable;
-
-import javax.servlet.http.HttpServletRequest;
-
 import model.entity.Employee;
-import utilities.LoggingGeneral;
 
 public class EmployeeUseBean {
 	private Long id = null;

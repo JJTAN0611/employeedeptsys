@@ -19,7 +19,7 @@ import javax.ejb.EJBException;
 @Stateless
 public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
-	@PersistenceContext(unitName = "TanJingJie1804560")
+	@PersistenceContext(unitName = "TanJingJie18ACB04560")
 	EntityManager em;
 
 	/**

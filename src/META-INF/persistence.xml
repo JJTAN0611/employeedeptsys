@@ -2,7 +2,7 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-	<persistence-unit name="TanJingJie1804560">
+	<persistence-unit name="TanJingJie18ACB04560">
 		<jta-data-source>java:/employeedeptsys</jta-data-source>
 		<class>model.entity.Department</class>
 		<class>model.entity.DepartmentEmployee</class>

@@ -14,11 +14,12 @@
 							<h2>
 								Welcome To <em>O</em><span>ED</span><em>RS</em>
 							</h2>
-							<p>
+							<h5>
 								<strong><u>O</u></strong>nline <strong><u>E</u></strong>mployee<strong>
 									<u>D</u>
 								</strong>epartment<strong> <u>R</u></strong>egistration <strong><u>S</u></strong>ystem</em>
-							</p>
+							</h5>
+							<br>
 							<div class="main-red-button">
 								<a href="#functionality">Go explore</a>
 							</div>
@@ -60,12 +61,14 @@
 				data-wow-delay="0.25s">
 				<div class="search" style="background-color: #ffffee">
 					<h5>Search department by ID</h5>
-					<a href="MainServlet?target=department&action=view&keyword=">Click me to main department view</a>
+					<a href="MainServlet?target=department&action=view&keyword=">Click
+						me to main department view</a>
 					<hr>
 					<form id="diform">
 						<input type="hidden" name=target value="department" /> <input
-							type="hidden" name=action value="getByIdAjax" /> <input type="text"
-							id="id" name="id" placeholder="Department ID, eg. d009" value="" /> <input
+							type="hidden" name=action value="getByIdAjax" /> <input
+							type="text" id="id" name="id"
+							placeholder="Department ID, eg. d009" value="" /> <input
 							type="submit" id="disearch" value="Search" />
 					</form>
 					<div id='dioutput'></div>
@@ -73,12 +76,14 @@
 				<br>
 				<div class="search" style="background-color: #ffffee">
 					<h5>Search department by Name</h5>
-					<a href="MainServlet?target=department&action=view&keyword=" >Click me to main department view</a>
+					<a href="MainServlet?target=department&action=view&keyword=">Click
+						me to main department view</a>
 					<hr>
 					<form id="dnform">
 						<input type="hidden" name=target value="department" /> <input
-							type="hidden" name=action value="getByNameAjax" /> <input type="text"
-							id="text" name="name" placeholder="Department name, eg.Marketing" value="" /> <input
+							type="hidden" name=action value="getByNameAjax" /> <input
+							type="text" id="text" name="name"
+							placeholder="Department name, eg.Marketing" value="" /> <input
 							type="submit" id="dnsearch" value="Search" />
 					</form>
 					<div id='dnoutput'></div>
@@ -89,15 +94,18 @@
 				data-wow-delay="0.25s">
 				<div class="search" style="background-color: #d9edf3">
 					<h5>Search Department Employee by ID</h5>
-					<a href="MainServlet?target=departmentemployee&action=view&keyword=">Click me to main department-employee view</a>
+					<a
+						href="MainServlet?target=departmentemployee&action=view&keyword=">Click
+						me to main department-employee view</a>
 					<hr>
 					<form id="deiform">
 						<input type="hidden" name=target value="departmentemployee" /> <input
-							type="hidden" name=action value="getByIdAjax" /> <input type="text"
-							id="dept_id" name="dept_id" placeholder="Department ID, eg. d009" value="" />
-						<input type="number" id="emp_id" name="emp_id"
-							placeholder="Employee ID, eg. 100001" value="" /><input type="submit"
-							id="deisearch" value="Search" />
+							type="hidden" name=action value="getByIdAjax" /> <input
+							type="text" id="dept_id" name="dept_id"
+							placeholder="Department ID, eg. d009" value="" /> <input
+							type="number" id="emp_id" name="emp_id"
+							placeholder="Employee ID, eg. 100001" value="" /><input
+							type="submit" id="deisearch" value="Search" />
 					</form>
 					<div id='deioutput'></div>
 				</div>
@@ -107,12 +115,15 @@
 				data-wow-delay="0.25s">
 				<div class="search" style="background-color: #d6f8d6">
 					<h5>Search employee by ID</h5>
-					<a href="MainServlet?target=employee&action=view&keyword="  onclick='$("#employee").trigger("click");'>Click me to main employee view</a>
+					<a href="MainServlet?target=employee&action=view&keyword="
+						onclick='$("#employee").trigger("click");'>Click me to main
+						employee view</a>
 					<hr>
 					<form id="eiform">
 						<input type="hidden" name=target value="employee" /> <input
-							type="hidden" name=action value="getByIdAjax" /> <input type="number"
-							id="id" name="id" placeholder="Employee ID, eg. 100001" value="" /> <input
+							type="hidden" name=action value="getByIdAjax" /> <input
+							type="number" id="id" name="id"
+							placeholder="Employee ID, eg. 100001" value="" /> <input
 							type="submit" id="eisearch" value="Search" />
 					</form>
 					<div id='eioutput'></div>
@@ -120,12 +131,14 @@
 				<br>
 				<div class="search" style="background-color: #d6f8d6">
 					<h5>Search employee by Name</h5>
-					<a href="MainServlet?target=employee&action=view&keyword=">Click me to main employee view</a>
+					<a href="MainServlet?target=employee&action=view&keyword=">Click
+						me to main employee view</a>
 					<hr>
 					<form id="enform">
 						<input type="hidden" name=target value="employee" /> <input
-							type="hidden" name=action value="getByNameAjax" /> <input type="text"
-							id="id" name="name" placeholder="Employee Name, eg. Georgi Facello" value="" /> <input
+							type="hidden" name=action value="getByNameAjax" /> <input
+							type="text" id="id" name="name"
+							placeholder="Employee Name, eg. Georgi Facello" value="" /> <input
 							type="submit" id="ensearch" value="Search" />
 					</form>
 					<div id='enoutput'></div>
@@ -151,13 +164,13 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-4 col-sm-6">
-				<div class="item wow bounceInUp" data-wow-duration="1s"
+				<div class="item wow bounceInUp justify-content-center"  style="align-content: center" data-wow-duration="1s"
 					data-wow-delay="0.3s">
 					<a href="MainServlet?target=department&action=view&keyword=">
 
 						<div class="hidden-content">
 							<h4>Department Record</h4>
-							<p>Click to perform action on employee table</p>
+							<p>Click to perform action on employee table. You may create report for each search.</p>
 						</div>
 						<div class="showed-content">
 							<img src="assets/images/department.png" alt="">
@@ -168,11 +181,12 @@
 			<div class="col-lg-4 col-sm-6">
 				<div class="item wow bounceInUp" data-wow-duration="1s"
 					data-wow-delay="0.4s">
-					<a href="MainServlet?target=departmentemployee&action=view&keyword=">
+					<a
+						href="MainServlet?target=departmentemployee&action=view&keyword=">
 
 						<div class="hidden-content">
 							<h4>Department-Employee Record</h4>
-							<p>Click to perform action on department-employee table</p>
+							<p>Click to perform action on department-employee table. You may create report for each search.</p>
 						</div>
 						<div class="showed-content">
 							<img src="assets/images/departmentemployee.png" alt="">
@@ -187,7 +201,7 @@
 
 						<div class="hidden-content">
 							<h4>Employee Record</h4>
-							<p>Click to perform action to employee table.</p>
+							<p>Click to perform action to employee table. You may create report for each search.</p>
 						</div>
 						<div class="showed-content">
 							<img src="assets/images/employee.png" alt="">
@@ -207,7 +221,7 @@
 				data-wow-duration="0.5s" data-wow-delay="0.25s">
 				<div class="section-heading">
 					<h2>Feel Free To Send Me A Message When You Need</h2>
-					<p>
+					<p >
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This
 						web application proposes the development of an online employee
 						department registration system using Servlet, Java Server Page
@@ -231,117 +245,142 @@
 					<div class="phone-info">
 						<h4>
 							For any enquiry, Call:<span><i class="fa fa-phone"></i> <a
-								href="#">+6011-38100852</a></span>
+								href="tel:+601138100852">+6011-38100852</a></span>
 						</h4>
 					</div>
 				</div>
 			</div>
-
+	
+			<div class="col-lg-6 align-self-center wow fadeInLeft"
+				data-wow-duration="0.5s" data-wow-delay="0.25s">
+				<div class="section-heading">
+					<br>
+					<img class="shadow-lg" src="assets/images/demo.png"
+						style="border-radius: 30px;" alt="Demo picture">
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 <%@ include file="footer.jsp"%>
 <script>
-	$("#disearch").click(
-			function() {
-				$("#dioutput").empty();
-				$.ajax({
-					url : 'MainServlet',
-					type : 'GET',
-					dataType : 'json',
-					data : $("#diform").serialize(),
-					success : function(data) {
-						if (data[0]==null) {
-							alert("Invalid department id. Not exist!");
-							$("#dioutput").html("");
-						} else {
-							$("#dioutput").append("<hr>");
-							$("#dioutput").append(
-									"<br>The department id: " + data[0].id);
-							$("#dioutput").append(
-									"<br>The department name: "
-											+ data[0].deptName);
+	$("#disearch")
+			.click(
+					function() {
+						$("#dioutput").empty();
+						$
+								.ajax({
+									url : 'MainServlet',
+									type : 'GET',
+									dataType : 'json',
+									data : $("#diform").serialize(),
+									success : function(data) {
+										if (data[0] == null) {
+											alert("Invalid department id. Not exist!");
+											$("#dioutput").html("");
+										} else {
+											$("#dioutput").append("<hr>");
+											$("#dioutput").append(
+													"<br>The department id: "
+															+ data[0].id);
+											$("#dioutput").append(
+													"<br>The department name: "
+															+ data[0].deptName);
 
-						}
-					},
-					error : function() {
-						alert('Invalid department id. Not exist. Error occur!');
-						$("#dioutput").html("");
-					}
-				});
-				return false;
-			});
+										}
+									},
+									error : function() {
+										alert('Invalid department id. Not exist. Error occur!');
+										$("#dioutput").html("");
+									}
+								});
+						return false;
+					});
 
-	$("#dnsearch").click(
-			function() {
-				$("#dnoutput").empty();
-				$.ajax({
-					url : 'MainServlet',
-					type : 'GET',
-					dataType : 'json',
-					data : $("#dnform").serialize(),
-					success : function(data) {
-						if (data[0]==null) {
-							alert("Invalid department name. Not exist!");
-							$("#dnoutput").html("");
-						} else {
-							$("#dnoutput").append("<hr>Please noted that only one result (The closest) is shown, please check the department name.<br><br>");
-							$("#dnoutput").append(
-									"<br>The department id: " + data[0].id);
-							$("#dnoutput").append(
-									"<br>The department name: "
-											+ data[0].deptName);
+	$("#dnsearch")
+			.click(
+					function() {
+						$("#dnoutput").empty();
+						$
+								.ajax({
+									url : 'MainServlet',
+									type : 'GET',
+									dataType : 'json',
+									data : $("#dnform").serialize(),
+									success : function(data) {
+										if (data[0] == null) {
+											alert("Invalid department name. Not exist!");
+											$("#dnoutput").html("");
+										} else {
+											$("#dnoutput")
+													.append(
+															"<hr>Please noted that only one result (The closest) is shown, please check the department name.<br><br>");
+											$("#dnoutput").append(
+													"<br>The department id: "
+															+ data[0].id);
+											$("#dnoutput").append(
+													"<br>The department name: "
+															+ data[0].deptName);
 
-						}
-					},
-					error : function() {
-						alert('Invalid department name. Not exist. Error occur!');
-						$("#dnoutput").html("");
-					}
-				});
-				return false;
-			});
+										}
+									},
+									error : function() {
+										alert('Invalid department name. Not exist. Error occur!');
+										$("#dnoutput").html("");
+									}
+								});
+						return false;
+					});
 
-	$("#deisearch").click(
-			function() {
-				$("#deioutput").empty();
-				$.ajax({
-					url : 'MainServlet',
-					type : 'GET',
-					dataType : 'json',
-					data : $("#deiform").serialize(),
-					success : function(data) {
-						if (data[0] == null) {
-							alert("Invalid department id and employee id. Not exist!");
-							$("#deioutput").html("");
-						} else {
-							$("#deioutput").append("<hr>");
-							$("#deioutput").append(
-									"<br>The department: "
-											+ data[0].department.id + " | "
-											+ data[0].department.deptName);
-							$("#deioutput").append(
-									"<br>The employee: " + data[0].employee.id
-											+ " | "
-											+ data[0].employee.firstName + " "
-											+ data[0].employee.lastName + " | "
-											+ data[0].employee.gender);
-							$("#deioutput").append(
-									"<br>The position from date: "
-											+ data[0].fromDate);
-							$("#deioutput").append(
-									"<br>The position to date: "
-											+ data[0].toDate);
+	$("#deisearch")
+			.click(
+					function() {
+						$("#deioutput").empty();
+						$
+								.ajax({
+									url : 'MainServlet',
+									type : 'GET',
+									dataType : 'json',
+									data : $("#deiform").serialize(),
+									success : function(data) {
+										if (data[0] == null) {
+											alert("Invalid department id and employee id. Not exist!");
+											$("#deioutput").html("");
+										} else {
+											$("#deioutput").append("<hr>");
+											$("#deioutput")
+													.append(
+															"<br>The department: "
+																	+ data[0].department.id
+																	+ " | "
+																	+ data[0].department.deptName);
+											$("#deioutput")
+													.append(
+															"<br>The employee: "
+																	+ data[0].employee.id
+																	+ " | "
+																	+ data[0].employee.firstName
+																	+ " "
+																	+ data[0].employee.lastName
+																	+ " | "
+																	+ data[0].employee.gender);
+											$("#deioutput").append(
+													"<br>The position from date: "
+															+ data[0].fromDate);
+											$("#deioutput").append(
+													"<br>The position to date: "
+															+ data[0].toDate);
 
-						}
-					},
-					error : function() {
-						alert('Invalid department id and employee id. Not exist. Error occur!');
-						$("#deioutput").html("");
-					}
-				});
-				return false;
-			});
+										}
+									},
+									error : function() {
+										alert('Invalid department id and employee id. Not exist. Error occur!');
+										$("#deioutput").html("");
+									}
+								});
+						return false;
+					});
+
 	$("#eisearch").click(
 			function() {
 				$("#eioutput").empty();
@@ -381,44 +420,52 @@
 				});
 				return false;
 			});
-	$("#ensearch").click(
-			function() {
-				$("#enioutput").empty();
-				$.ajax({
-					url : 'MainServlet',
-					type : 'GET',
-					dataType : 'json',
-					data : $("#enform").serialize(),
-					success : function(data) {
-						console.log(data)
-						if (data[0] == null) {
-							alert("Invalid employee name. Not exist!");
-							$("#enoutput").html("");
-						} else {
-							$("#enoutput").append("<hr>Please noted that only one result (The closest) is shown, please check the employee name.<br><br>");
-							$("#enoutput").append(
-									"<br>The employee id: " + data[0].id);
-							$("#enoutput").append(
-									"<br>The employee name: "
-											+ data[0].firstName + " "
-											+ data[0].lastName);
 
-							$("#enoutput").append(
-									"<br>The employee gender: "
-											+ data[0].gender);
-							$("#enoutput").append(
-									"<br>The employee birth date: "
-											+ data[0].hireDate);
-							$("#enoutput").append(
-									"<br>The employee hired date: "
-											+ data[0].birthDate);
-						}
-					},
-					error : function() {
-						alert('Invalid employee name. Not exist. Error occur!');
-						$("#enoutput").html("");
-					}
-				});
-				return false;
-			});
+	$("#ensearch")
+			.click(
+					function() {
+						$("#enioutput").empty();
+						$
+								.ajax({
+									url : 'MainServlet',
+									type : 'GET',
+									dataType : 'json',
+									data : $("#enform").serialize(),
+									success : function(data) {
+										console.log(data)
+										if (data[0] == null) {
+											alert("Invalid employee name. Not exist!");
+											$("#enoutput").html("");
+										} else {
+											$("#enoutput")
+													.append(
+															"<hr>Please noted that only one result (The closest) is shown, please check the employee name.<br><br>");
+											$("#enoutput").append(
+													"<br>The employee id: "
+															+ data[0].id);
+											$("#enoutput").append(
+													"<br>The employee name: "
+															+ data[0].firstName
+															+ " "
+															+ data[0].lastName);
+
+											$("#enoutput").append(
+													"<br>The employee gender: "
+															+ data[0].gender);
+											$("#enoutput").append(
+													"<br>The employee birth date: "
+															+ data[0].hireDate);
+											$("#enoutput")
+													.append(
+															"<br>The employee hired date: "
+																	+ data[0].birthDate);
+										}
+									},
+									error : function() {
+										alert('Invalid employee name. Not exist. Error occur!');
+										$("#enoutput").html("");
+									}
+								});
+						return false;
+					});
 </script>
