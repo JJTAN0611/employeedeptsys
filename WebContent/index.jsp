@@ -60,6 +60,7 @@
 				data-wow-delay="0.25s">
 				<div class="search" style="background-color: #ffffee">
 					<h5>Search department by ID</h5>
+					<a href="MainServlet?target=department&action=view&keyword=">Click me to main department view</a>
 					<hr>
 					<form id="diform">
 						<input type="hidden" name=target value="department" /> <input
@@ -72,6 +73,7 @@
 				<br>
 				<div class="search" style="background-color: #ffffee">
 					<h5>Search department by Name</h5>
+					<a href="MainServlet?target=department&action=view&keyword=" >Click me to main department view</a>
 					<hr>
 					<form id="dnform">
 						<input type="hidden" name=target value="department" /> <input
@@ -87,6 +89,7 @@
 				data-wow-delay="0.25s">
 				<div class="search" style="background-color: #d9edf3">
 					<h5>Search Department Employee by ID</h5>
+					<a href="MainServlet?target=departmentemployee&action=view&keyword=">Click me to main department-employee view</a>
 					<hr>
 					<form id="deiform">
 						<input type="hidden" name=target value="departmentemployee" /> <input
@@ -104,6 +107,7 @@
 				data-wow-delay="0.25s">
 				<div class="search" style="background-color: #d6f8d6">
 					<h5>Search employee by ID</h5>
+					<a href="MainServlet?target=employee&action=view&keyword="  onclick='$("#employee").trigger("click");'>Click me to main employee view</a>
 					<hr>
 					<form id="eiform">
 						<input type="hidden" name=target value="employee" /> <input
@@ -116,6 +120,7 @@
 				<br>
 				<div class="search" style="background-color: #d6f8d6">
 					<h5>Search employee by Name</h5>
+					<a href="MainServlet?target=employee&action=view&keyword=">Click me to main employee view</a>
 					<hr>
 					<form id="enform">
 						<input type="hidden" name=target value="employee" /> <input
@@ -148,7 +153,7 @@
 			<div class="col-lg-4 col-sm-6">
 				<div class="item wow bounceInUp" data-wow-duration="1s"
 					data-wow-delay="0.3s">
-					<a href="#" onclick='$("#department").trigger("click");'>
+					<a href="MainServlet?target=department&action=view&keyword=">
 
 						<div class="hidden-content">
 							<h4>Department Record</h4>
@@ -163,7 +168,7 @@
 			<div class="col-lg-4 col-sm-6">
 				<div class="item wow bounceInUp" data-wow-duration="1s"
 					data-wow-delay="0.4s">
-					<a href="#" onclick='$("#department_employee").trigger("click");'>
+					<a href="MainServlet?target=departmentemployee&action=view&keyword=">
 
 						<div class="hidden-content">
 							<h4>Department-Employee Record</h4>
@@ -178,7 +183,7 @@
 			<div class="col-lg-4 col-sm-6">
 				<div class="item wow bounceInUp" data-wow-duration="1s"
 					data-wow-delay="0.5s">
-					<a href="#" onclick='$("#employee").trigger("click");'>
+					<a href="MainServlet?target=employee&action=view&keyword=">
 
 						<div class="hidden-content">
 							<h4>Employee Record</h4>
