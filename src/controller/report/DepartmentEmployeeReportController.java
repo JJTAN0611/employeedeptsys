@@ -100,10 +100,11 @@ public class DepartmentEmployeeReportController extends HttpServlet {
 				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction); // Get the list
 
 				if (list != null && list.size() != 0) {
-					out.println("\tDepartment ID\tEmployee ID\tFrom Date\tTo Date");
+					out.println("\tDepartment ID\tDepartment Name (Reference)\tEmployee ID\tEmployee Name (Reference)\tFrom Date\tTo Date");
 					for (int i = 0; i < list.size(); i++)
 						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString() + "\t"
-								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString());
+								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString()+" "+list.get(i)[4].toString()+"\t"
+								+ list.get(i)[5].toString()+ "\t" + list.get(i)[6].toString());
 
 				} else
 					out.println("No record found");
