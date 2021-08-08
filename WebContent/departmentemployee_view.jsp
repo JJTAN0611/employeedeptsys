@@ -31,8 +31,8 @@ button[aria-expanded=false] .fa-chevron-down {
 				Department Employee Record
 				<div class="badge bg-light text-info text-wrap">View</div>
 			</div>
-			<div class="text-end col-3">
-				<button class="btn btn-light btn-outline-success text-dark"
+			<div class="text-end col-3 wow bounceIn" data-wow-duration="2s" data-wow-delay="0.2s">
+				<button class="btn btn-success rounded-pill border border-light border-5"
 					style="font-size: 20px; font-weight: bold;"
 					onclick="document.getElementById('adddepartmentemployee').click()">+
 					Add Record</button>
@@ -140,7 +140,7 @@ button[aria-expanded=false] .fa-chevron-down {
 							</div>
 						</div>
 						<div class="col-2">
-							<button class="btn btn-primary btn-info float-end" type="submit">Go</button>
+							<button class="btn btn-primary btn-info btn-lg font-weight-bold float-end" type="submit">Go</button>
 						</div>
 					</div>
 
@@ -159,7 +159,7 @@ button[aria-expanded=false] .fa-chevron-down {
 				onclick='alert("Report generating. Please hold on."); javascript:window.open("<%=response.encodeURL("MainServlet?target=departmentemployee&action=report&verificationToken="
 					+ ((String) request.getSession().getAttribute("deverificationToken")))%>", "_blank", "scrollbars=1,resizable=1,height=700,width=600"); '
 				class="btn btn-info btn-circle float-end shadow-lg"
-				style="border-radius: 30px">Report <i class="fas fa-file"></i>
+				style="border-radius: 30px"><i class="fas fa-file"></i> Report for this current search. Click to download.
 			</a>
 		</div>
 		<br>
