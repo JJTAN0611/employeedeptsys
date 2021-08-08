@@ -4,6 +4,8 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import utilities.LoggingGeneral;
+
 @WebListener()
 public class UserTrackingListener implements HttpSessionListener {
 	private static int users = 0;
@@ -11,12 +13,14 @@ public class UserTrackingListener implements HttpSessionListener {
 
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
+		LoggingGeneral.setSessionInit(se.getSession().getId());
 		userId++;
 		users++;
 	}
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
+		LoggingGeneral.setSessionInit(se.getSession().getId());
 		users--;
 	}
 
