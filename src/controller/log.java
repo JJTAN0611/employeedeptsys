@@ -1,4 +1,4 @@
-package log;
+package controller;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
