@@ -11,7 +11,6 @@ public class UserTrackingListener implements HttpSessionListener {
 
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
-		se.getSession().setAttribute("browserNotified", false);
 		userId++;
 		users++;
 	}

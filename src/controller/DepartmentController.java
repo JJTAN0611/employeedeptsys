@@ -2,41 +2,23 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.ejb.EJBTransactionRolledbackException;
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonString;
-import javax.persistence.NoResultException;
-import javax.persistence.RollbackException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.Department;
-import model.entity.DepartmentEmployee;
-import model.entity.Employee;
 import model.usebean.DepartmentUseBean;
 import sessionbean.DepartmentSessionBeanLocal;
-import sessionbean.EmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
@@ -71,7 +53,7 @@ public class DepartmentController extends HttpServlet {
 				LoggingGeneral.setExitPoints(request);
 				return;
 
-			} else if (action.compareTo("getDepartmentAjax") == 0) {
+			} else if (action.compareTo("getByIdAjax") == 0) {
 
 				// Get department
 				Department dept = deptbean.findDepartment(request.getParameter("id"));
@@ -92,7 +74,28 @@ public class DepartmentController extends HttpServlet {
 				LoggingGeneral.setExitPoints(request);
 				return;
 
-			} else if (action.compareTo("add") == 0) {
+			} else if (action.compareTo("getByNameAjax") == 0) {
+
+				// Get department
+				Department dept = deptbean.getDepartmentByName(request.getParameter("name"));
+				List<Department> h = new ArrayList<Department>();
+				h.add(dept);
+
+				// Set response type
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+
+				PrintWriter out = response.getWriter();
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.writeValue(out, h);
+				if (dept != null)
+					LoggingGeneral.setContentPoints(request, "The department ID: " + dept.getId() + ". Completed.");
+				else
+					LoggingGeneral.setContentPoints(request, "Name not found. Failed.");
+				LoggingGeneral.setExitPoints(request);
+				return;
+
+			}else if (action.compareTo("add") == 0) {
 
 				// Prepare a empty use bean (except with id)
 				String id = getAutoId(); // invoke auto id checker. If id is no longer enough. "allUsed" will be return.
@@ -170,10 +173,7 @@ public class DepartmentController extends HttpServlet {
 					dreportVerify = false;
 				} else {
 					dreportVerify = true;
-					if (deptbean.getNumberOfRows() > 0) {
-						request.getSession().setAttribute("departmentReportSize", deptbean.getNumberOfRows());
-					} else
-						request.getSession().setAttribute("departmentReportSize", 0);
+					request.getSession().setAttribute("departmentReportSize", deptbean.getNumberOfRows());
 				}
 				request.getSession().setAttribute("dreportVerify", String.valueOf(dreportVerify));
 
@@ -214,14 +214,15 @@ public class DepartmentController extends HttpServlet {
 					out.println("\tDepartment ID\tDepartment Name");
 					for (int i = 0; i < list.size(); i++)
 						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString());
-					out.println("");
-					out.println("");
-					out.println("\tKeyword Filter:\t No filter");
-					out.println("\tOrder Direction:\t" + request.getSession().getAttribute("ddirection"));
-					out.println("\tTotal Records:\t" + request.getSession().getAttribute("departmentReportSize"));
+			
 				} else
 					out.println("No record found");
-
+				
+				out.println("");
+				out.println("");
+				out.println("\tKeyword Filter:\t No filter");
+				out.println("\tOrder Direction:\t" + request.getSession().getAttribute("ddirection"));
+				out.println("\tTotal Records:\t" + request.getSession().getAttribute("departmentReportSize"));
 				LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
 				LoggingGeneral.setExitPoints(request);
 				return;

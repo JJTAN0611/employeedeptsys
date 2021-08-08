@@ -255,7 +255,7 @@ button[aria-expanded=false] .fa-chevron-down {
 
 				</ul>
 			</nav>
-			<div class='pageref col-6 text-end'><%=currentPage%>
+			<div class='pageref col-6 text-end'><%=(nOfPages!=0?currentPage:0)%>
 				of
 				<%=nOfPages%></div>
 		</div>

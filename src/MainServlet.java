@@ -47,7 +47,8 @@ public class MainServlet extends HttpServlet {
 		if (target.compareTo("department") == 0)
 			switch (action) {
 			case "getAutoId":
-			case "getDepartmentAjax":
+			case "getByIdAjax":
+			case "getByNameAjax":
 			case "report":
 			case "download":
 				dispatcher = request.getRequestDispatcher("DepartmentController");
@@ -66,7 +67,8 @@ public class MainServlet extends HttpServlet {
 		else if (target.compareTo("employee") == 0) {
 			switch (action) {
 			case "getAutoId":
-			case "getEmployeeAjax":
+			case "getByIdAjax":
+			case "getByNameAjax":
 			case "report":
 			case "download":
 				dispatcher = request.getRequestDispatcher("EmployeeController");
@@ -85,7 +87,8 @@ public class MainServlet extends HttpServlet {
 		} else if (target.compareTo("departmentemployee") == 0) {
 			switch (action) {
 			case "getAutoId":
-			case "getDepartmentEmployeeAjax":
+			case "getByIdAjax":
+			case "getByNameAjax":
 			case "report":
 			case "download":
 				dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");

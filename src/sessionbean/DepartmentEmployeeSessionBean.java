@@ -5,23 +5,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.Tuple;
-
-import model.entity.Department;
 import model.entity.DepartmentEmployee;
 import model.entity.DepartmentEmployeePK;
-import model.entity.Employee;
 import model.usebean.DepartmentEmployeeUseBean;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.ejb.Local;
 
 /**
  * Session Bean implementation class EmployeeSessionBean
@@ -39,8 +30,9 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<Object[]> getDepartmentEmployeeReport(String keyword,String direction) throws EJBException {
-		// Write some codes here…
+	public List<Object[]> getDepartmentEmployeeReport(String keyword, String direction) throws EJBException {
+		// For report use. Using object instead of entity class is to minimize the
+		// heaviness of computing
 		Query q = null;
 		if (keyword.isEmpty()) {
 			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id " + direction);
@@ -52,13 +44,55 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 							+ "LIKE lower(?) order by de.department_id " + direction);
 			q.setParameter(1, "%" + keyword + "%");
 		}
+		try {
+			List<Object[]> results=q.getResultList();
+			return results;
+		} catch (Exception e) {
+			return null;
+		}
 		
-		return q.getResultList();
+	}
+
+	public Integer[] getDepartmentEmployeeSummary(String keyword) throws EJBException {
+		// For report use. Using object instead of entity class is to minimize the
+		// heaviness of computing
+		Integer[] result = new Integer[2];
+		Query q1 = null;
+		Query q2 = null;
+		if (keyword.isEmpty()) {
+			q1 = em.createNativeQuery("SELECT COUNT(DISTINCT de.department_id) FROM employees.department_employee de ");
+			q2 = em.createNativeQuery("SELECT COUNT(DISTINCT de.employee_id) FROM employees.department_employee de ");
+		} else {
+			q1 = em.createNativeQuery(
+					"SELECT COUNT(DISTINCT de.department_id) FROM employees.department_employee de, employees.department d, employees.employee e "
+							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
+							+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
+							+ "LIKE lower(?)");
+			q1.setParameter(1, "%" + keyword + "%");
+			q2 = em.createNativeQuery(
+					"SELECT COUNT(DISTINCT de.employee_id) FROM employees.department_employee de, employees.department d, employees.employee e "
+							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
+							+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
+							+ "LIKE lower(?)");
+			q2.setParameter(1, "%" + keyword + "%");
+		}
+		try {
+			result[0] = ((BigInteger) q1.getSingleResult()).intValue();
+		} catch (NoResultException n) {
+			result[0] = 0;
+		}
+		try {
+			result[1] = ((BigInteger) q2.getSingleResult()).intValue();
+		} catch (NoResultException n) {
+			result[1] = 0;
+		}
+		
+		return result;
 	}
 
 	public List<DepartmentEmployee> readDepartmentEmployee(int currentPage, int recordsPerPage, String keyword,
 			String direction) throws EJBException {
-		// Write some codes here…
+		// Get the list of departmentemployee for pagination
 		Query q = null;
 		int start = 0;
 		if (keyword.isEmpty()) {
@@ -77,12 +111,16 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 			start = currentPage * recordsPerPage - recordsPerPage;
 
 		}
-		List<DepartmentEmployee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
-		return results;
+		try {
+			List<DepartmentEmployee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
+			return results;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public int getNumberOfRows(String keyword) throws EJBException {
-		// Write some codes here…
+		// Get the number of row for a search key
 		Query q = null;
 		if (keyword.isEmpty()) {
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department_employee");
@@ -94,13 +132,18 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 							+ "LIKE lower(?)");
 			q.setParameter(1, "%" + keyword + "%");
 		}
-		BigInteger results = (BigInteger) q.getSingleResult();
-		int i = results.intValue();
-		return i;
+
+		try {
+			BigInteger results = (BigInteger) q.getSingleResult();
+			return results.intValue();
+		} catch (NoResultException n) {
+			return 0;
+		}
+
 	}
 
 	public DepartmentEmployee findDepartmentEmployee(String dept_id, Long emp_id) throws EJBException {
-		// Write some codes here…
+		// Find a record based on ids
 		Query q = em.createNamedQuery("DepartmentEmployee.findbyId");
 		try {
 			q.setParameter("id", new DepartmentEmployeePK(dept_id, emp_id));
@@ -112,7 +155,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 	}
 
 	public boolean updateDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
-		// Write some codes here…
+		// update record with given usebean
 		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
 		if (de == null)
 			return false;
@@ -123,7 +166,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 	}
 
 	public boolean deleteDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
-		// Write some codes here…
+		// delete record with given usebean (extract the id)
 		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
 		if (de == null)
 			return false;
@@ -132,7 +175,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 	}
 
 	public void addDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
-		// Write some codes here…
+		// add record with use bean
 
 		DepartmentEmployeePK depk = new DepartmentEmployeePK(deub.getDept_id(), deub.getEmp_id());
 		DepartmentEmployee de = new DepartmentEmployee();

@@ -1,9 +1,5 @@
 package utilities;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -13,7 +9,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @WebFilter(filterName="MainFilter",urlPatterns="/MainServlet",dispatcherTypes= {DispatcherType.REQUEST})
 public class ServletForwardValidate implements Filter{
@@ -31,9 +26,8 @@ public class ServletForwardValidate implements Filter{
 		//check
 		switch(action) {
 		case "getAutoId":
-		case "getDepartmentAjax":
-		case "getEmployeeAjax":
-		case "getDepartmentEmployeeAjax":
+		case "getByIdAjax":
+		case "getByNameAjax":
 		case "ajax":
 		case "view":
 		case "add":

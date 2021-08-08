@@ -9,26 +9,20 @@ import utilities.LoggingGeneral;
 
 @WebListener
 public class LoggingTrack implements ServletContextListener {
-	/**
-	 * Default constructor.
-	 */
+
 	public LoggingTrack() {
 // TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @see ServletContextListener#contextDestroyed(ServletContextEvent)
-	 */
+
 	public void contextDestroyed(ServletContextEvent sce) {
 // TODO Auto-generated method stub
-		sce.getServletContext().removeAttribute("log");
+		LoggingGeneral.setDestroy();
 	}
 
-	/**
-	 * @see ServletContextListener#contextInitialized(ServletContextEvent)
-	 */
+
 	public void contextInitialized(ServletContextEvent sce) {
 // TODO Auto-generated method stub
-		sce.getServletContext().setAttribute("log", new LoggingGeneral());
+		LoggingGeneral.setInit();
 	}
 }

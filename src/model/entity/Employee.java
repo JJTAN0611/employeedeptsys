@@ -15,8 +15,8 @@ import java.util.List;
  */
 
 @Entity
-@NamedQuery(name="Employee.findAll", query="SELECT e FROM Employee e")
 @NamedQuery(name = "Employee.findbyId", query = "SELECT e FROM Employee e WHERE e.id = :id")
+@NamedQuery(name="Employee.findbyName", query="SELECT e FROM Employee e WHERE LOWER(CONCAT(e.firstName,' ',e.lastName)) LIKE LOWER(:name)")
 @Table(name="employee", schema="employees")
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;

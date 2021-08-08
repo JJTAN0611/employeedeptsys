@@ -6,8 +6,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class LoggingGeneral {
+	
+	//The general logging class. Some static function use for easier log purposes
+	
 	private static Logger logger = LogManager.getRootLogger();
 
+	public static void setInit() {
+		logger.info("Initalised");
+	}
+	public static void setDestroy() {
+		logger.info("Destroyed");
+	}
+	
 	public static void setEntryPoints(HttpServletRequest request) {
 		logger.info("Entry Points. SessionID:" +request.getSession().getId());
 	}

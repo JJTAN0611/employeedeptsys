@@ -10,11 +10,14 @@ import model.usebean.EmployeeUseBean;
 
 @Local
 public interface EmployeeSessionBeanLocal {
-	public List<Object[]> getEmployeeReport(String keyword,String direction) throws EJBException;
+	public List<Object[]> getEmployeeReport(String keyword, String direction) throws EJBException;
 
 	public Employee findEmployee(Long id) throws EJBException;
 
-	public List<Employee> readEmployee(int currentPage, int recordsPerPage, String keyword,String direction) throws EJBException;
+	public Employee getEmployeeByName(String name) throws EJBException;
+
+	public List<Employee> readEmployee(int currentPage, int recordsPerPage, String keyword, String direction)
+			throws EJBException;
 
 	public int getNumberOfRows(String keyword) throws EJBException;
 

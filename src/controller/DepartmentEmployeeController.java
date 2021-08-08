@@ -6,33 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.ejb.EJBTransactionRolledbackException;
-import javax.inject.Inject;
-import javax.persistence.PersistenceException;
-import javax.persistence.RollbackException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
-import com.ibm.wsdl.util.StringUtils;
 
-import model.entity.Department;
 import model.entity.DepartmentEmployee;
-import model.entity.Employee;
 import model.usebean.DepartmentEmployeeUseBean;
-import model.usebean.DepartmentUseBean;
-import model.usebean.EmployeeUseBean;
-import model.entity.Employee;
 import sessionbean.DepartmentEmployeeSessionBeanLocal;
-import sessionbean.EmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
@@ -53,7 +40,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 		try {
 
-			if (action.compareTo("getDepartmentEmployeeAjax") == 0) {
+			if (action.compareTo("getByIdAjax") == 0) {
 
 				// Get department
 				DepartmentEmployee deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
@@ -162,12 +149,14 @@ public class DepartmentEmployeeController extends HttpServlet {
 				} else {
 					dereportVerify = true;
 					int row = deptempbean.getNumberOfRows((String) request.getSession().getAttribute("dekeyword"));
-					if (row > 0) {
-						request.getSession().setAttribute("departmentEmployeeReportSize", row);
-					} else
-						request.getSession().setAttribute("dempartmentEmployeeReportSize", 0);
+					request.getSession().setAttribute("departmentEmployeeReportSize", row);
 				}
-
+				request.getSession().setAttribute("dereportVerify", String.valueOf(dereportVerify));
+				
+				// Brief summary (The involved foreign key)
+				Integer[] summary=deptempbean.getDepartmentEmployeeSummary((String) request.getSession().getAttribute("dekeyword"));
+				request.getSession().setAttribute("dereportSummary", summary);
+				
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
 				req.forward(request, response);
 
@@ -201,21 +190,28 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 				String keyword = (String) request.getSession().getAttribute("dekeyword");
 				String direction = (String) request.getSession().getAttribute("dedirection");
-				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction);
+				Integer[] summary=(Integer[]) request.getSession().getAttribute("dereportSummary");// Brief summary (The involved foreign key)
+				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction); //Get the list
 
 				if (list != null && list.size() != 0) {
 					out.println("\tDepartment ID\tEmployee ID\tFrom Date\tTo Date");
 					for (int i = 0; i < list.size(); i++)
 						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString() + "\t"
 								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString());
-					out.println("");
-					out.println("");
-					out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
-					out.println("\tOrder Direction:\t" + direction);
-					out.println(
-							"\tTotal Records:\t" + request.getSession().getAttribute("departmentEmployeeReportSize"));
+
 				} else
 					out.println("No record found");
+				
+				out.println("");
+				out.println("");
+				out.println("\tInvolved Department:\t" + summary[0]);
+				out.println("\tInvolved Employee:\t" + summary[1]);
+				out.println("");
+				out.println("");
+				out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
+				out.println("\tOrder Direction:\t" + direction);
+				out.println(
+						"\tTotal Records:\t" + request.getSession().getAttribute("departmentEmployeeReportSize"));
 
 				LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
 				LoggingGeneral.setExitPoints(request);

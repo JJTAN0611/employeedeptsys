@@ -61,13 +61,25 @@
 				<div class="search" style="background-color: #ffffee">
 					<h5>Search department by ID</h5>
 					<hr>
-					<form id="dform">
+					<form id="diform">
 						<input type="hidden" name=target value="department" /> <input
-							type="hidden" name=action value="getDepartmentAjax" /> <input type="text"
+							type="hidden" name=action value="getByIdAjax" /> <input type="text"
 							id="id" name="id" placeholder="Department ID, eg. d009" value="" /> <input
-							type="submit" id="dsearch" value="Search" />
+							type="submit" id="disearch" value="Search" />
 					</form>
-					<div id='doutput'></div>
+					<div id='dioutput'></div>
+				</div>
+				<br>
+				<div class="search" style="background-color: #ffffee">
+					<h5>Search department by Name</h5>
+					<hr>
+					<form id="dnform">
+						<input type="hidden" name=target value="department" /> <input
+							type="hidden" name=action value="getByNameAjax" /> <input type="text"
+							id="text" name="name" placeholder="Department name, eg.Marketing" value="" /> <input
+							type="submit" id="dnsearch" value="Search" />
+					</form>
+					<div id='dnoutput'></div>
 				</div>
 				<br>
 			</div>
@@ -76,15 +88,15 @@
 				<div class="search" style="background-color: #d9edf3">
 					<h5>Search Department Employee by ID</h5>
 					<hr>
-					<form id="deform">
+					<form id="deiform">
 						<input type="hidden" name=target value="departmentemployee" /> <input
-							type="hidden" name=action value="getDepartmentEmployeeAjax" /> <input type="text"
+							type="hidden" name=action value="getByIdAjax" /> <input type="text"
 							id="dept_id" name="dept_id" placeholder="Department ID, eg. d009" value="" />
 						<input type="number" id="emp_id" name="emp_id"
 							placeholder="Employee ID, eg. 100001" value="" /><input type="submit"
-							id="desearch" value="Search" />
+							id="deisearch" value="Search" />
 					</form>
-					<div id='deoutput'></div>
+					<div id='deioutput'></div>
 				</div>
 				<br>
 			</div>
@@ -93,13 +105,25 @@
 				<div class="search" style="background-color: #d6f8d6">
 					<h5>Search employee by ID</h5>
 					<hr>
-					<form id="eform">
+					<form id="eiform">
 						<input type="hidden" name=target value="employee" /> <input
-							type="hidden" name=action value="getEmployeeAjax" /> <input type="number"
+							type="hidden" name=action value="getByIdAjax" /> <input type="number"
 							id="id" name="id" placeholder="Employee ID, eg. 100001" value="" /> <input
-							type="submit" id="esearch" value="Search" />
+							type="submit" id="eisearch" value="Search" />
 					</form>
-					<div id='eoutput'></div>
+					<div id='eioutput'></div>
+				</div>
+				<br>
+				<div class="search" style="background-color: #d6f8d6">
+					<h5>Search employee by Name</h5>
+					<hr>
+					<form id="enform">
+						<input type="hidden" name=target value="employee" /> <input
+							type="hidden" name=action value="getByNameAjax" /> <input type="text"
+							id="id" name="name" placeholder="Employee Name, eg. Georgi Facello" value="" /> <input
+							type="submit" id="ensearch" value="Search" />
+					</form>
+					<div id='enoutput'></div>
 				</div>
 				<br>
 			</div>
@@ -213,22 +237,23 @@
 </div>
 <%@ include file="footer.jsp"%>
 <script>
-	$("#dsearch").click(
+	$("#disearch").click(
 			function() {
-				$("#doutput").empty();
+				$("#dioutput").empty();
 				$.ajax({
 					url : 'MainServlet',
 					type : 'GET',
 					dataType : 'json',
-					data : $("#dform").serialize(),
+					data : $("#diform").serialize(),
 					success : function(data) {
 						if (data[0]==null) {
 							alert("Invalid department id. Not exist!");
+							$("#dioutput").html("");
 						} else {
-							$("#doutput").append("<hr>");
-							$("#doutput").append(
+							$("#dioutput").append("<hr>");
+							$("#dioutput").append(
 									"<br>The department id: " + data[0].id);
-							$("#doutput").append(
+							$("#dioutput").append(
 									"<br>The department name: "
 											+ data[0].deptName);
 
@@ -236,38 +261,70 @@
 					},
 					error : function() {
 						alert('Invalid department id. Not exist. Error occur!');
+						$("#dioutput").html("");
 					}
 				});
 				return false;
 			});
 
-	$("#desearch").click(
+	$("#dnsearch").click(
 			function() {
-				$("#deoutput").empty();
+				$("#dnoutput").empty();
 				$.ajax({
 					url : 'MainServlet',
 					type : 'GET',
 					dataType : 'json',
-					data : $("#deform").serialize(),
+					data : $("#dnform").serialize(),
+					success : function(data) {
+						if (data[0]==null) {
+							alert("Invalid department name. Not exist!");
+							$("#dnoutput").html("");
+						} else {
+							$("#dnoutput").append("<hr>Please noted that only one result (The closest) is shown, please check the department name.<br><br>");
+							$("#dnoutput").append(
+									"<br>The department id: " + data[0].id);
+							$("#dnoutput").append(
+									"<br>The department name: "
+											+ data[0].deptName);
+
+						}
+					},
+					error : function() {
+						alert('Invalid department name. Not exist. Error occur!');
+						$("#dnoutput").html("");
+					}
+				});
+				return false;
+			});
+
+	$("#deisearch").click(
+			function() {
+				$("#deioutput").empty();
+				$.ajax({
+					url : 'MainServlet',
+					type : 'GET',
+					dataType : 'json',
+					data : $("#deiform").serialize(),
 					success : function(data) {
 						if (data[0] == null) {
 							alert("Invalid department id and employee id. Not exist!");
+							$("#deioutput").html("");
 						} else {
-							$("#deoutput").append("<hr>");
-							$("#deoutput").append(
+							$("#deioutput").append("<hr>");
+							$("#deioutput").append(
 									"<br>The department: "
 											+ data[0].department.id + " | "
 											+ data[0].department.deptName);
-							$("#deoutput").append(
+							$("#deioutput").append(
 									"<br>The employee: " + data[0].employee.id
 											+ " | "
 											+ data[0].employee.firstName + " "
 											+ data[0].employee.lastName + " | "
 											+ data[0].employee.gender);
-							$("#deoutput").append(
+							$("#deioutput").append(
 									"<br>The position from date: "
 											+ data[0].fromDate);
-							$("#deoutput").append(
+							$("#deioutput").append(
 									"<br>The position to date: "
 											+ data[0].toDate);
 
@@ -275,43 +332,86 @@
 					},
 					error : function() {
 						alert('Invalid department id and employee id. Not exist. Error occur!');
+						$("#deioutput").html("");
 					}
 				});
 				return false;
 			});
-	$("#esearch").click(
+	$("#eisearch").click(
 			function() {
-				$("#eoutput").empty();
+				$("#eioutput").empty();
 				$.ajax({
 					url : 'MainServlet',
 					type : 'GET',
 					dataType : 'json',
-					data : $("#eform").serialize(),
+					data : $("#eiform").serialize(),
 					success : function(data) {
 						if (data[0] == null) {
 							alert("Invalid employee id. Not exist!");
+							$("#eioutput").html("");
 						} else {
-							$("#eoutput").append("<hr>");
-							$("#eoutput").append(
+							$("#eioutput").append("<hr>");
+							$("#eioutput").append(
 									"<br>The employee id: " + data[0].id);
-							$("#eoutput").append(
+							$("#eioutput").append(
 									"<br>The employee name: "
 											+ data[0].firstName + " "
 											+ data[0].lastName);
 
-							$("#eoutput").append(
+							$("#eioutput").append(
 									"<br>The employee gender: "
 											+ data[0].gender);
-							$("#eoutput").append(
+							$("#eioutput").append(
 									"<br>The employee birth date: "
 											+ data[0].hireDate);
-							$("#eoutput").append(
+							$("#eioutput").append(
 									"<br>The employee hired date: "
 											+ data[0].birthDate);
 						}
 					},
 					error : function() {
 						alert('Invalid employee id. Not exist. Error occur!');
+						$("#eioutput").html("");
+					}
+				});
+				return false;
+			});
+	$("#ensearch").click(
+			function() {
+				$("#enioutput").empty();
+				$.ajax({
+					url : 'MainServlet',
+					type : 'GET',
+					dataType : 'json',
+					data : $("#enform").serialize(),
+					success : function(data) {
+						console.log(data)
+						if (data[0] == null) {
+							alert("Invalid employee name. Not exist!");
+							$("#enoutput").html("");
+						} else {
+							$("#enoutput").append("<hr>Please noted that only one result (The closest) is shown, please check the employee name.<br><br>");
+							$("#enoutput").append(
+									"<br>The employee id: " + data[0].id);
+							$("#enoutput").append(
+									"<br>The employee name: "
+											+ data[0].firstName + " "
+											+ data[0].lastName);
+
+							$("#enoutput").append(
+									"<br>The employee gender: "
+											+ data[0].gender);
+							$("#enoutput").append(
+									"<br>The employee birth date: "
+											+ data[0].hireDate);
+							$("#enoutput").append(
+									"<br>The employee hired date: "
+											+ data[0].birthDate);
+						}
+					},
+					error : function() {
+						alert('Invalid employee name. Not exist. Error occur!');
+						$("#enoutput").html("");
 					}
 				});
 				return false;

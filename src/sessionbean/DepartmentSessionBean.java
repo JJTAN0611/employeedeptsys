@@ -7,17 +7,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import model.entity.Department;
-import model.entity.Employee;
+import model.entity.DepartmentEmployee;
 import model.usebean.DepartmentUseBean;
-import utilities.ControllerManagement;
-
 import java.math.BigInteger;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJBException;
-import javax.ejb.Local;
 
 /**
  * Session Bean implementation class EmployeeSessionBean
@@ -37,38 +31,63 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	//
 	public List<Object[]> getDepartmentReport(String direction) throws EJBException {
+		// For report use. Using object instead of entity class is to minimize the
+		// heaviness of computing
 		Query q = null;
 		q = em.createNativeQuery("SELECT * FROM employees.department order by id " + direction);
-
-		return q.getResultList();
+		try {
+			List<Object[]> results = q.getResultList();
+			return results;
+		} catch (Exception e) {
+			return null;
+		}
 	}
-	
+
 	@Override
 	public List<Object> getSortedDepartmentStartWithD() throws EJBException {
+		// Get the list of number which is the id start from dxxx, where xxx is number
+		// (The xxx will be return as object in list)
 		Query q = null;
-		q = em.createNativeQuery("SELECT SUBSTRING(d.id,2,3) FROM employees.department d WHERE d.id~'^d[0-9][0-9][0-9]' ORDER BY 1");
-		return q.getResultList();
+		q = em.createNativeQuery(
+				"SELECT SUBSTRING(d.id,2,3) FROM employees.department d WHERE d.id~'^d[0-9][0-9][0-9]' ORDER BY 1");
+		
+		try {
+			List<Object> results = q.getResultList();
+			return results;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public List<Department> readDepartment(String direction) throws EJBException {
-		// Write some codes here…
+		// Get the list of department for pagination
 		Query q = null;
 		q = em.createNativeQuery("SELECT * FROM employees.department order by id " + direction, Department.class);
-		List<Department> results = q.getResultList();
-		return results;
+		
+		try {
+			List<Department> results = q.getResultList();
+			return results;
+		} catch (Exception e) {
+			return null;
+		}
+	
 	}
 
 	public int getNumberOfRows() throws EJBException {
-		// Write some codes here…
+		// Get the number of row for a search key
 		Query q = null;
 		q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department");
-		BigInteger results = (BigInteger) q.getSingleResult();
-		int i = results.intValue();
-		return i;
+
+		try {
+			BigInteger results = (BigInteger) q.getSingleResult();
+			return results.intValue();
+		}catch (NoResultException n) {
+			return 0;
+		}
 	}
 
 	public Department findDepartment(String id) throws EJBException {
-		// Write some codes here…
+		// Find a record based on id
 		Query q = em.createNamedQuery("Department.findbyId");
 
 		try {
@@ -79,15 +98,19 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		}
 	}
 
-	public List<Department> getDepartmentByName(String name) throws EJBException {
-		// Write some codes here…
+	public Department getDepartmentByName(String name) throws EJBException {
+		// get department by name, for quick search use
 		Query q = em.createNamedQuery("Department.findbyName");
-		q.setParameter("dept_name", name);
-		return q.getResultList();
+		try {
+			q.setParameter("name", "%" + name + "%");
+			return (Department) q.setFirstResult(0).setMaxResults(1).getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	public boolean updateDepartment(DepartmentUseBean dup) throws EJBException {
-		// Write some codes here…
+		// update record with given usebean
 		Department d = findDepartment(dup.getId());
 		if (d == null)
 			return false;
@@ -97,7 +120,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	}
 
 	public boolean deleteDepartment(DepartmentUseBean dup) throws EJBException {
-		// Write some codes here…
+		// delete record with given usebean (extract the id)
 		Department d = findDepartment(dup.getId());
 		if (d == null)
 			return false;
@@ -106,12 +129,11 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	}
 
 	public void addDepartment(DepartmentUseBean dup) throws EJBException {
-		// Write some codes here…
+		// add record with use bean
 		Department d = new Department();
 		d.setId(dup.getId());
 		d.setDeptName(dup.getDept_name());
 		em.persist(d);
 	}
-
 
 }

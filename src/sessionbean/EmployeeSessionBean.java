@@ -6,18 +6,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import model.entity.Department;
+import model.entity.DepartmentEmployee;
 import model.entity.Employee;
 import model.usebean.EmployeeUseBean;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.EJBException;
-import javax.ejb.Local;
 
 /**
  * Session Bean implementation class EmployeeSessionBean
@@ -35,40 +30,56 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<Object[]> getEmployeeReport(String keyword,String direction) throws EJBException {
+	public List<Object[]> getEmployeeReport(String keyword, String direction) throws EJBException {
 		Query q = null;
-		// Write some codes here…
+		// For report use. Using object instead of entity class is to minimize the
+		// heaviness of computing
 		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.employee order by id "+direction);
+			q = em.createNativeQuery("SELECT * FROM employees.employee order by id " + direction);
 		} else {
 			q = em.createNativeQuery(
-					"SELECT * from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?) order by id "+direction);
+					"SELECT * from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?) order by id "
+							+ direction);
 			q.setParameter(1, "%" + keyword + "%");
 		}
-		
-		return q.getResultList();
+
+		try {
+			List<Object[]> results = q.getResultList();
+			return results;
+		} catch (Exception n) {
+			return null;
+		}
 	}
 
-	public List<Employee> readEmployee(int currentPage, int recordsPerPage, String keyword,String direction) throws EJBException {
-		// Write some codes here…
+	public List<Employee> readEmployee(int currentPage, int recordsPerPage, String keyword, String direction)
+			throws EJBException {
+		// Get the list of employee for pagination
 		Query q = null;
 		int start = 0;
 		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.employee order by id "+direction, Employee.class);
+			q = em.createNativeQuery("SELECT * FROM employees.employee order by id " + direction, Employee.class);
 			start = currentPage * recordsPerPage - recordsPerPage;
 		} else {
 			q = em.createNativeQuery(
-					"SELECT * from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?) order by id "+direction,
+					"SELECT * from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?) order by id "
+							+ direction,
 					Employee.class);
 			start = currentPage * recordsPerPage - recordsPerPage;
 			q.setParameter(1, "%" + keyword + "%");
 		}
-		List<Employee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
-		return results;
+		
+		try {
+			List<Employee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
+			return results;
+		} catch (Exception n) {
+			return null;
+		}
+		
+		
 	}
 
 	public int getNumberOfRows(String keyword) throws EJBException {
-		// Write some codes here…
+		// Get the number of row for a search key
 		Query q = null;
 		if (keyword.isEmpty()) {
 			q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.employee");
@@ -77,27 +88,43 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 					"SELECT COUNT(id) AS totalrow  from employees.employee WHERE lower(concat(id,' ',first_name,' ',last_name,' ',gender,' ',hire_date,' ',birth_date)) LIKE lower(?)");
 			q.setParameter(1, "%" + keyword + "%");
 		}
-		BigInteger results = (BigInteger) q.getSingleResult();
-		int i = results.intValue();
-		return i;
+
+		try {
+			BigInteger results = (BigInteger) q.getSingleResult();
+			return results.intValue();
+		}catch (NoResultException n) {
+			return 0;
+		}
 	}
 
 	public Employee findEmployee(Long id) throws EJBException {
-		// Write some codes here…
+		// Find a record based on ids
 		Query q = em.createNamedQuery("Employee.findbyId");
 
 		try {
 			q.setParameter("id", id);
 			return (Employee) q.getSingleResult();
-		}catch (NoResultException | NumberFormatException e ) {
+		} catch (NoResultException | NumberFormatException e) {
+			return null;
+		}
+	}
+
+	public Employee getEmployeeByName(String name) throws EJBException {
+		// Find a record based on name for quick search use
+		Query q = em.createNamedQuery("Employee.findbyName");
+
+		try {
+			q.setParameter("name", "%" + name + "%");
+			return (Employee) q.setFirstResult(0).setMaxResults(1).getSingleResult();
+		} catch (NoResultException n) {
 			return null;
 		}
 	}
 
 	public boolean updateEmployee(EmployeeUseBean eub) throws EJBException {
-		// Write some codes here…
+		// update record with given usebean
 		Employee e = findEmployee(eub.getId());
-		if(e==null)
+		if (e == null)
 			return false;
 		e.setFirstName(eub.getFirst_name());
 		e.setLastName(eub.getLast_name());
@@ -109,16 +136,16 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 	}
 
 	public boolean deleteEmployee(EmployeeUseBean eub) throws EJBException {
-		// Write some codes here…
+		// delete record with given usebean (extract the id)
 		Employee e = findEmployee(eub.getId());
-		if(e==null)
+		if (e == null)
 			return false;
 		em.remove(e);
 		return true;
 	}
 
 	public void addEmployee(EmployeeUseBean eub) throws EJBException {
-		// Write some codes here…
+		// add record with use bean
 		Employee e = new Employee();
 		e.setFirstName(eub.getFirst_name());
 		e.setLastName(eub.getLast_name());

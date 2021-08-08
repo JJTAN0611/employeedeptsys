@@ -2,20 +2,10 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.ejb.EJBTransactionRolledbackException;
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,11 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
-import model.entity.Department;
+
 import model.entity.Employee;
-import model.usebean.DepartmentUseBean;
 import model.usebean.EmployeeUseBean;
-import model.entity.Employee;
 import sessionbean.EmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
@@ -52,7 +40,7 @@ public class EmployeeController extends HttpServlet {
 
 		try {
 
-			if (action.compareTo("getEmployeeAjax") == 0) {
+			if (action.compareTo("getByIdAjax") == 0) {
 
 				// Get department
 				Employee emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
@@ -71,6 +59,30 @@ public class EmployeeController extends HttpServlet {
 					LoggingGeneral.setContentPoints(request, "The employee ID: " + emp.getId() + ". Completed.");
 				else
 					LoggingGeneral.setContentPoints(request, "ID not found. Failed.");
+
+				LoggingGeneral.setExitPoints(request);
+				return;
+
+			} else if (action.compareTo("getByNameAjax") == 0) {
+
+				// Get department
+
+				Employee emp = empbean.getEmployeeByName(request.getParameter("name"));
+				List<Employee> h = new ArrayList<Employee>();
+				h.add(emp);
+	
+				// Set response type
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+
+				PrintWriter out = response.getWriter();
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.writeValue(out, h);
+
+				if (emp != null)
+					LoggingGeneral.setContentPoints(request, "The employee ID: " + emp.getId() + ". Completed.");
+				else
+					LoggingGeneral.setContentPoints(request, "Name not found. Failed.");
 
 				LoggingGeneral.setExitPoints(request);
 				return;
@@ -153,12 +165,10 @@ public class EmployeeController extends HttpServlet {
 				} else {
 					ereportVerify = true;
 					int row = empbean.getNumberOfRows((String) request.getSession().getAttribute("ekeyword"));
-					if (row > 0) {
-						request.getSession().setAttribute("employeeReportSize", row);
-					} else
-						request.getSession().setAttribute("employeeReportSize", 0);
+					request.getSession().setAttribute("employeeReportSize", row);
 				}
-
+				request.getSession().setAttribute("ereportVerify", String.valueOf(ereportVerify));
+				
 				RequestDispatcher req = request.getRequestDispatcher("employee_report.jsp");
 				req.forward(request, response);
 
@@ -193,19 +203,20 @@ public class EmployeeController extends HttpServlet {
 				String direction = (String) request.getSession().getAttribute("edirection");
 				List<Object[]> list = empbean.getEmployeeReport(keyword, direction);
 				if (list != null && list.size() != 0) {
-					System.out.println("heree");
+
 					out.println("\tEmployee ID\tFirst Name\tLast Name\tGender\tBirth Date\tHire Date");
 					for (int i = 0; i < list.size(); i++)
 						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString() + "\t"
 								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString() + "\t"
 								+ list.get(i)[4].toString() + "\t" + list.get(i)[5].toString());
-					out.println("");
-					out.println("");
-					out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
-					out.println("\tOrder Direction:\t" + direction);
-					out.println("\tTotal Records:\t" + request.getSession().getAttribute("employeeReportSize"));
 				} else
 					out.println("No record found");
+				
+				out.println("");
+				out.println("");
+				out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
+				out.println("\tOrder Direction:\t" + direction);
+				out.println("\tTotal Records:\t" + request.getSession().getAttribute("employeeReportSize"));
 			}
 
 			LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");

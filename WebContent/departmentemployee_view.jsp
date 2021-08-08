@@ -202,7 +202,7 @@ button[aria-expanded=false] .fa-chevron-down {
 						<hr>
 						<ul class='list-group'>
 							<li class='list-group-item list-group-item-action'>Gender:
-								&emsp;" <%=(de.getEmployee().getGender() == "M" ? "Male" : "Female")%></li>
+								&emsp; <%=(de.getEmployee().getGender() == "M" ? "Male" : "Female")%></li>
 							<li class='list-group-item list-group-item-action'>Birth
 								date: &emsp;<%=de.getEmployee().getBirthDate()%></li>
 
@@ -279,7 +279,7 @@ button[aria-expanded=false] .fa-chevron-down {
 
 				</ul>
 			</nav>
-			<div class='pageref col-6 text-end'><%=currentPage%>
+			<div class='pageref col-6 text-end'><%=(nOfPages!=0?currentPage:0)%>
 				of
 				<%=nOfPages%></div>
 

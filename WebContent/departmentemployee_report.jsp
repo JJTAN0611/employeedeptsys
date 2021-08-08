@@ -51,7 +51,9 @@
 			Order Direction:
 			<%=request.getSession().getAttribute("dedirection")%><br> Total
 			Records:
-			<%=request.getSession().getAttribute("departmentEmployeeReportSize")%><br>
+			<%=String.valueOf(request.getSession().getAttribute("departmentEmployeeReportSize"))%><br>
+			Involved Department: <%=((Integer[])request.getSession().getAttribute("dereportSummary"))[0] %><br>
+			Involved Employee: <%=((Integer[])request.getSession().getAttribute("dereportSummary"))[1] %><br>
 		</div>
 	</div>
 	<br>

@@ -85,7 +85,7 @@
 							type="button"
 							onclick="
 								$('#checkemp').attr('class', 'btn btn-info spinner-border');
-						  $.get('MainServlet?target=departmentemployee&action=getEmployeeAjax&id='+$('#emp_id').val(), function(data, status){
+						  $.get('MainServlet?target=departmentemployee&action=getByIdAjax&id='+$('#emp_id').val(), function(data, status){
 							  if(data[0]==null){
 								  $('#empcontent').hide();
 								  alert('Employee ID: ['+$('#emp_id').val()+'] not exist.');
