@@ -1,4 +1,4 @@
-package main;
+package controller.main;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,18 +50,20 @@ public class MainServlet extends HttpServlet {
 			case "getAutoId":
 			case "getByIdAjax":
 			case "getByNameAjax":
+				dispatcher = request.getRequestDispatcher("DepartmentQueryServlet");
+				break;
 			case "report":
 			case "download":
-				dispatcher = request.getRequestDispatcher("DepartmentController");
+				dispatcher = request.getRequestDispatcher("DepartmentReportController");
 				break;
 			case "view": // check display's parameter
 				dispatcher = request.getRequestDispatcher("DepartmentPaginationServlet");
 				break;
-			// main cud function
+			// main cud operation function
 			case "add":
 			case "update": // check edit's parameter
 			case "delete": // check remove's parameter
-				dispatcher = request.getRequestDispatcher("DepartmentController");
+				dispatcher = request.getRequestDispatcher("DepartmentOperationController");
 				break;
 			}
 		// employee
@@ -70,18 +72,20 @@ public class MainServlet extends HttpServlet {
 			case "getAutoId":
 			case "getByIdAjax":
 			case "getByNameAjax":
+				dispatcher = request.getRequestDispatcher("EmployeeQueryServlet");
+				break;
 			case "report":
 			case "download":
-				dispatcher = request.getRequestDispatcher("EmployeeController");
+				dispatcher = request.getRequestDispatcher("EmployeeReportController");
 				break;
 			case "view": // check display's parameter
 				dispatcher = request.getRequestDispatcher("EmployeePaginationServlet");
 				break;
-			// main cud function
+			// main cud operation function
 			case "add":
 			case "update": // check edit's parameter
 			case "delete": // check remove's parameter
-				dispatcher = request.getRequestDispatcher("EmployeeController");
+				dispatcher = request.getRequestDispatcher("EmployeeOperationController");
 				break;
 			}
 			// departmentemployee
@@ -90,9 +94,7 @@ public class MainServlet extends HttpServlet {
 			case "getAutoId":
 			case "getByIdAjax":
 			case "getByNameAjax":
-			case "report":
-			case "download":
-				dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
+				dispatcher = request.getRequestDispatcher("DepartmentEmployeeQueryServlet");
 				break;
 			case "getDepartmentAjax":
 				dispatcher = request.getRequestDispatcher("DepartmentController");
@@ -100,22 +102,26 @@ public class MainServlet extends HttpServlet {
 			case "getEmployeeAjax":
 				dispatcher = request.getRequestDispatcher("EmployeeController");
 				break;
+			case "report":
+			case "download":
+				dispatcher = request.getRequestDispatcher("DepartmentEmployeeReportController");
+				break;
 			case "view": // check display's parameter
 				dispatcher = request.getRequestDispatcher("DepartmentEmployeePaginationServlet");
 				break;
-			// main cud function
+			// main cud operation function
 			case "add":
 			case "update": // check edit's parameter
 			case "delete": // check remove's parameter
-				dispatcher = request.getRequestDispatcher("DepartmentEmployeeController");
+				dispatcher = request.getRequestDispatcher("DepartmentEmployeeOperationController");
 				break;
 			}
 		} else if (target.compareTo("log") == 0) {
 			switch (action) {
 			case "view":
-			case "download":
+			case "download": //this no need report
 			case "delete":
-				dispatcher = request.getRequestDispatcher("log");
+				dispatcher = request.getRequestDispatcher("LogOperationController");
 				break;
 			}
 		}

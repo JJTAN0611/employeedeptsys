@@ -1,4 +1,4 @@
-package controller;
+package controller.operation;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,13 +22,13 @@ import sessionbean.EmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
-@WebServlet("/EmployeeController")
-public class EmployeeController extends HttpServlet {
+@WebServlet("/EmployeeOperationController")
+public class EmployeeOperationController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private EmployeeSessionBeanLocal empbean;
 
-	public EmployeeController() {
+	public EmployeeOperationController() {
 		super();
 	}
 
@@ -38,60 +38,7 @@ public class EmployeeController extends HttpServlet {
 		String action = (String) request.getAttribute("action");
 
 		try {
-
-			if (action.compareTo("getByIdAjax") == 0) {
-
-				// Get department
-				Employee emp;
-				try {
-					emp = empbean.findEmployee(Long.valueOf(request.getParameter("id")));
-				} catch (Exception e) {
-					emp = null;
-				}
-				List<Employee> h = new ArrayList<Employee>();
-				h.add(emp);
-
-				// Set response type
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-
-				PrintWriter out = response.getWriter();
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.writeValue(out, h);
-
-				if (emp != null)
-					LoggingGeneral.setContentPoints(request, "The employee ID: " + emp.getId() + ". Completed.");
-				else
-					LoggingGeneral.setContentPoints(request, "ID not found. Failed.");
-
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			} else if (action.compareTo("getByNameAjax") == 0) {
-
-				// Get department
-
-				Employee emp = empbean.getEmployeeByName(request.getParameter("name"));
-				List<Employee> h = new ArrayList<Employee>();
-				h.add(emp);
-
-				// Set response type
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-
-				PrintWriter out = response.getWriter();
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.writeValue(out, h);
-
-				if (emp != null)
-					LoggingGeneral.setContentPoints(request, "The employee ID: " + emp.getId() + ". Completed.");
-				else
-					LoggingGeneral.setContentPoints(request, "Name not found. Failed.");
-
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			} else if (action.compareTo("add") == 0) {
+			if (action.compareTo("add") == 0) {
 
 				// Prepare a empty use bean (except with id)
 				request.setAttribute("eub", new EmployeeUseBean());
@@ -180,52 +127,7 @@ public class EmployeeController extends HttpServlet {
 				LoggingGeneral.setExitPoints(request);
 				return;
 
-			} else if (action.compareTo("download") == 0) {
-				/*
-				 * check the validity of session. if found user do two things in once, make
-				 * report page show error. if found user do two things in once set error
-				 */
-
-				String verificationToken = (String) request.getSession().getAttribute("everificationToken");
-				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
-					request.getSession().setAttribute("ereportVerify", "false");
-
-					RequestDispatcher req = request.getRequestDispatcher("employee_report.jsp");
-					req.forward(request, response);
-
-					LoggingGeneral.setContentPoints(request,
-							"Verification result: false. Report not generated. Completed.");
-					LoggingGeneral.setExitPoints(request);
-					return;
-				}
-
-				PrintWriter out = response.getWriter();
-				response.setContentType("application/vnd.ms-excel");
-				response.setHeader("Content-Disposition", "attachment; filename=EmployeeReport.xls; charset=UTF-8");
-
-				String keyword = (String) request.getSession().getAttribute("ekeyword");
-				String direction = (String) request.getSession().getAttribute("edirection");
-				List<Object[]> list = empbean.getEmployeeReport(keyword, direction);
-				if (list != null && list.size() != 0) {
-
-					out.println("\tEmployee ID\tFirst Name\tLast Name\tGender\tBirth Date\tHire Date");
-					for (int i = 0; i < list.size(); i++)
-						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString() + "\t"
-								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString() + "\t"
-								+ list.get(i)[4].toString() + "\t" + list.get(i)[5].toString());
-				} else
-					out.println("No record found");
-
-				out.println("");
-				out.println("");
-				out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
-				out.println("\tOrder Direction:\t" + direction);
-				out.println("\tTotal Records:\t" + request.getSession().getAttribute("employeeReportSize"));
-			}
-
-			LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
-			LoggingGeneral.setExitPoints(request);
-			return;
+			} 
 
 		} catch (Exception ex) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");

@@ -1,4 +1,4 @@
-package controller;
+package controller.operation;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
-@WebServlet("/log")
-public class Log extends HttpServlet {
+@WebServlet("/LogOperationController")
+public class LogOperationController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

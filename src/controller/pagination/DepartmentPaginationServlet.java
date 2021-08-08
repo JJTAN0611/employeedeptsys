@@ -1,4 +1,4 @@
-package pagination;
+package controller.pagination;
 
 import java.io.IOException;
 import java.util.List;

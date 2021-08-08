@@ -1,4 +1,4 @@
-package controller;
+package controller.operation;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,13 +22,13 @@ import sessionbean.DepartmentSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
-@WebServlet("/DepartmentController")
-public class DepartmentController extends HttpServlet {
+@WebServlet("/DepartmentOperationController")
+public class DepartmentOperationController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private DepartmentSessionBeanLocal deptbean;
 
-	public DepartmentController() {
+	public DepartmentOperationController() {
 		super();
 	}
 
@@ -38,68 +38,11 @@ public class DepartmentController extends HttpServlet {
 		String action = (String) request.getAttribute("action");
 
 		try {
-			if (action.compareTo("getAutoId") == 0) {
-
-				// invoke auto id checker. If id is no longer enough. "allUsed" will be return.
-				String id = getAutoId();
-
-				// Response
-				JsonObject jo = Json.createObjectBuilder().add("autoId", id).build();
-				PrintWriter out = response.getWriter();
-				out.print(jo);
-				out.flush();
-
-				LoggingGeneral.setContentPoints(request, "Given ID: " + id + ". Completed.");
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			} else if (action.compareTo("getByIdAjax") == 0) {
-
-				// Get department
-				Department dept = deptbean.findDepartment(request.getParameter("id"));
-				List<Department> h = new ArrayList<Department>();
-				h.add(dept);
-
-				// Set response type
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-
-				PrintWriter out = response.getWriter();
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.writeValue(out, h);
-				if (dept != null)
-					LoggingGeneral.setContentPoints(request, "The department ID: " + dept.getId() + ". Completed.");
-				else
-					LoggingGeneral.setContentPoints(request, "ID not found. Failed.");
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			} else if (action.compareTo("getByNameAjax") == 0) {
-
-				// Get department
-				Department dept = deptbean.getDepartmentByName(request.getParameter("name"));
-				List<Department> h = new ArrayList<Department>();
-				h.add(dept);
-
-				// Set response type
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-
-				PrintWriter out = response.getWriter();
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.writeValue(out, h);
-				if (dept != null)
-					LoggingGeneral.setContentPoints(request, "The department ID: " + dept.getId() + ". Completed.");
-				else
-					LoggingGeneral.setContentPoints(request, "Name not found. Failed.");
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			}else if (action.compareTo("add") == 0) {
+			if (action.compareTo("add") == 0) {
 
 				// Prepare a empty use bean (except with id)
 				String id = getAutoId(); // invoke auto id checker. If id is no longer enough. "allUsed" will be return.
-				if(id.compareTo("allUsed")==0)
+				if (id.compareTo("allUsed") == 0)
 					request.setAttribute("dub", new DepartmentUseBean());
 				else
 					request.setAttribute("dub", new DepartmentUseBean(id));
@@ -157,73 +100,6 @@ public class DepartmentController extends HttpServlet {
 
 				LoggingGeneral.setContentPoints(request,
 						"Prepared department delete reference" + dept.getId() + ". Completed.");
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			} else if (action.compareTo("report") == 0) {
-				/*
-				 * check the validity of session if found user do two things in once, set error.
-				 * for report page usually will pass cause the search view(pagination) will
-				 * automatic refresh once it pressed report button
-				 */
-
-				String verificationToken = (String) request.getSession().getAttribute("dverificationToken");
-				boolean dreportVerify;
-				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
-					dreportVerify = false;
-				} else {
-					dreportVerify = true;
-					request.getSession().setAttribute("departmentReportSize", deptbean.getNumberOfRows());
-				}
-				request.getSession().setAttribute("dreportVerify", String.valueOf(dreportVerify));
-
-				// Forward
-				RequestDispatcher req = request.getRequestDispatcher("department_report.jsp");
-				req.forward(request, response);
-
-				LoggingGeneral.setContentPoints(request, "Verification result: " + dreportVerify + ". Completed.");
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			} else if (action.compareTo("download") == 0) {
-				/*
-				 * check the validity of session. if found user do two things in once, make
-				 * report page show error. if found user do two things in once set error
-				 */
-
-				String verificationToken = (String) request.getSession().getAttribute("dverificationToken");
-				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
-					request.getSession().setAttribute("dreportVerify", "false");
-
-					RequestDispatcher req = request.getRequestDispatcher("department_report.jsp");
-					req.forward(request, response);
-
-					LoggingGeneral.setContentPoints(request,
-							"Verification result: false. Report not generated. Completed.");
-					LoggingGeneral.setExitPoints(request);
-					return;
-				}
-
-				PrintWriter out = response.getWriter();
-				response.setContentType("application/vnd.ms-excel");
-				response.setHeader("Content-Disposition", "attachment; filename=DepartmentReport.xls; charset=UTF-8");
-
-				List<Object[]> list = deptbean
-						.getDepartmentReport((String) request.getSession().getAttribute("ddirection"));
-				if (list != null && list.size() != 0) {
-					out.println("\tDepartment ID\tDepartment Name");
-					for (int i = 0; i < list.size(); i++)
-						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString());
-			
-				} else
-					out.println("No record found");
-				
-				out.println("");
-				out.println("");
-				out.println("\tKeyword Filter:\t No filter");
-				out.println("\tOrder Direction:\t" + request.getSession().getAttribute("ddirection"));
-				out.println("\tTotal Records:\t" + request.getSession().getAttribute("departmentReportSize"));
-				LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
 				LoggingGeneral.setExitPoints(request);
 				return;
 
@@ -376,22 +252,22 @@ public class DepartmentController extends HttpServlet {
 
 	private String getAutoId() {
 
-		//Get id list
+		// Get id list
 		List<Object> idNumber = deptbean.getSortedDepartmentStartWithD();
 
-		//Fully occupied
+		// Fully occupied
 		if (idNumber.size() >= 999)
 			return "allUsed";
-		
-		//Check still empty
+
+		// Check still empty
 		for (int i = 1; i <= idNumber.size(); i++) {
-			int temp = Integer.valueOf(idNumber.get(i-1).toString());
+			int temp = Integer.valueOf(idNumber.get(i - 1).toString());
 			if (i != temp)
 				return "d" + String.format("%03d", i);
-			
+
 		}
 
-		//Fully occupied in loop, but have remain (<999)
+		// Fully occupied in loop, but have remain (<999)
 		return "d" + String.format("%03d", idNumber.size() + 1);
 
 	}

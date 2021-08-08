@@ -1,4 +1,4 @@
-package controller;
+package controller.operation;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,13 +22,13 @@ import sessionbean.DepartmentEmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
-@WebServlet("/DepartmentEmployeeController")
-public class DepartmentEmployeeController extends HttpServlet {
+@WebServlet("/DepartmentEmployeeOperationController")
+public class DepartmentEmployeeOperationController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private DepartmentEmployeeSessionBeanLocal deptempbean;
 
-	public DepartmentEmployeeController() {
+	public DepartmentEmployeeOperationController() {
 		super();
 	}
 
@@ -39,39 +39,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 
 		try {
 
-			if (action.compareTo("getByIdAjax") == 0) {
-
-				// Get department
-				DepartmentEmployee deptemp;
-				try {
-					deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
-							Long.valueOf(request.getParameter("emp_id")));
-				} catch (Exception e) {
-					deptemp = null;
-				}
-				List<DepartmentEmployee> h = new ArrayList<DepartmentEmployee>();
-				h.add(deptemp);
-
-				// Set response type
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-
-				PrintWriter out = response.getWriter();
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.writeValue(out, h);
-
-				if (deptemp != null)
-					LoggingGeneral.setContentPoints(request,
-							"The departmentEmployee ID: " + deptemp.getId().getDepartmentId() + " | "
-									+ deptemp.getId().getEmployeeId() + ". Completed.");
-				else
-					LoggingGeneral.setContentPoints(request, "ID not found."+request.getParameter("dept_id")+
-							request.getParameter("emp_id")+" Failed.");
-
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			} else if (action.compareTo("add") == 0) {
+			if (action.compareTo("add") == 0) {
 
 				// Prepare a empty use bean (except with id)
 				request.setAttribute("deub", new DepartmentEmployeeUseBean());
@@ -140,90 +108,6 @@ public class DepartmentEmployeeController extends HttpServlet {
 				LoggingGeneral.setExitPoints(request);
 				return;
 
-			} else if (action.compareTo("report") == 0) {
-				/*
-				 * check the validity of session. if found user do two things in once, set
-				 * error. for report page usually will pass cause the search view(pagination)
-				 * will automatic refresh once it pressed report button
-				 */
-
-				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
-				boolean dereportVerify;
-				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
-					dereportVerify = false;
-				} else {
-					dereportVerify = true;
-					int row = deptempbean.getNumberOfRows((String) request.getSession().getAttribute("dekeyword"));
-					request.getSession().setAttribute("departmentEmployeeReportSize", row);
-				}
-				request.getSession().setAttribute("dereportVerify", String.valueOf(dereportVerify));
-
-				// Brief summary (The involved foreign key)
-				Integer[] summary = deptempbean
-						.getDepartmentEmployeeSummary((String) request.getSession().getAttribute("dekeyword"));
-				request.getSession().setAttribute("dereportSummary", summary);
-
-				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
-				req.forward(request, response);
-
-				LoggingGeneral.setContentPoints(request, "Verification result: " + dereportVerify + ". Completed.");
-				LoggingGeneral.setExitPoints(request);
-				return;
-
-			} else if (action.compareTo("download") == 0) {
-				/*
-				 * check the validity of session. if found user do two things in once, make
-				 * report page show error. if found user do two things in once set error
-				 */
-
-				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
-				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
-					request.getSession().setAttribute("dereportVerify", "false");
-
-					RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
-					req.forward(request, response);
-
-					LoggingGeneral.setContentPoints(request,
-							"Verification result: false. Report not generated. Completed.");
-					LoggingGeneral.setExitPoints(request);
-					return;
-				}
-
-				PrintWriter out = response.getWriter();
-				response.setContentType("application/vnd.ms-excel");
-				response.setHeader("Content-Disposition",
-						"attachment; filename=DepartmentEmployeeRelationReport.xls; charset=UTF-8");
-
-				String keyword = (String) request.getSession().getAttribute("dekeyword");
-				String direction = (String) request.getSession().getAttribute("dedirection");
-				Integer[] summary = (Integer[]) request.getSession().getAttribute("dereportSummary");// Brief summary
-																										// (The involved
-																										// foreign key)
-				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction); // Get the list
-
-				if (list != null && list.size() != 0) {
-					out.println("\tDepartment ID\tEmployee ID\tFrom Date\tTo Date");
-					for (int i = 0; i < list.size(); i++)
-						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString() + "\t"
-								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString());
-
-				} else
-					out.println("No record found");
-
-				out.println("");
-				out.println("");
-				out.println("\tInvolved Department:\t" + summary[0]);
-				out.println("\tInvolved Employee:\t" + summary[1]);
-				out.println("");
-				out.println("");
-				out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
-				out.println("\tOrder Direction:\t" + direction);
-				out.println("\tTotal Records:\t" + request.getSession().getAttribute("departmentEmployeeReportSize"));
-
-				LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
-				LoggingGeneral.setExitPoints(request);
-				return;
-
 			}
 		} catch (Exception ex) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
@@ -286,7 +170,7 @@ public class DepartmentEmployeeController extends HttpServlet {
 				deub.setTo_date(request.getParameter("to_date"));
 
 				// Call for validate
-				if (deub.validateId()) {
+				if (deub.validate()) {
 					// try to update. sessionbean will return false when id not exist
 					if (deptempbean.updateDepartmentEmployee(deub)) {
 						ControllerManagement.navigateSuccess(request, response);
