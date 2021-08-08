@@ -39,14 +39,14 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 					"SELECT de.department_id, d.dept_name, de.employee_id, e.first_name, e.last_name, de.from_date, de.to_date "
 							+ "FROM employees.department_employee de, employees.department d, employees.employee e "
 							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
-							+ "ORDER BY department_id " + direction);
+							+ "ORDER BY department_id " + direction + ", de.employee_id "+ direction);
 		} else {
 			q = em.createNativeQuery(
 					"SELECT de.department_id, d.dept_name, de.employee_id, e.first_name, e.last_name, de.from_date, de.to_date "
 							+ "FROM employees.department_employee de, employees.department d, employees.employee e "
 							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
 							+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
-							+ "LIKE lower(?) ORDER BY de.department_id " + direction);
+							+ "LIKE lower(?) ORDER BY de.department_id " + direction + ", de.employee_id "+ direction);
 
 			q.setParameter(1, "%" + keyword + "%");
 		}
@@ -103,7 +103,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		Query q = null;
 		int start = 0;
 		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id " + direction,
+			q = em.createNativeQuery("SELECT * FROM employees.department_employee order by department_id " + direction + " , de.employee_id "+ direction,
 					DepartmentEmployee.class);
 
 			start = currentPage * recordsPerPage - recordsPerPage;
@@ -112,7 +112,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 					"SELECT * from employees.department_employee de, employees.department d, employees.employee e "
 							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
 							+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
-							+ "LIKE lower(?) order by de.department_id " + direction,
+							+ "LIKE lower(?) order by de.department_id " + direction + " , de.employee_id " + direction,
 					DepartmentEmployee.class);
 			q.setParameter(1, "%" + keyword + "%");
 			start = currentPage * recordsPerPage - recordsPerPage;

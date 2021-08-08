@@ -35,6 +35,8 @@ public class DepartmentOperationController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		response.setContentType("text/html;charset=UTF-8");
+		
 		String action = (String) request.getAttribute("action");
 
 		try {
@@ -42,11 +44,16 @@ public class DepartmentOperationController extends HttpServlet {
 
 				// Prepare a empty use bean (except with id)
 				String id = getAutoId(); // invoke auto id checker. If id is no longer enough. "allUsed" will be return.
-				if (id.compareTo("allUsed") == 0)
-					request.setAttribute("dub", new DepartmentUseBean());
-				else
-					request.setAttribute("dub", new DepartmentUseBean(id));
-
+				DepartmentUseBean dub = new DepartmentUseBean();
+				if (id.compareTo("allUsed") == 0) {
+					dub.setId_error("The id starting from 'd' (dxxx) is used all. Please start with other character.");
+					
+				} else {
+					dub.setId(id);
+					dub.setId_error("Please try to use the automate id (start with d) provided.");
+				}
+				request.setAttribute("dub", dub);
+				
 				// Forward
 				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
 				req.forward(request, response);

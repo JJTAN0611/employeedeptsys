@@ -40,7 +40,7 @@ public class DepartmentEmployeeUseBean {
 		} else if (dept_id.length() < 1 || dept_id.length() > 4) {
 			allTrue = false;
 			dept_id_error = "Please enter department ID with 1-4 character.";
-		}
+		} 
 
 		if (emp_id == null) {
 			allTrue = false;

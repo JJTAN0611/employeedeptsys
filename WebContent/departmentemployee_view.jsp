@@ -167,7 +167,6 @@ button[aria-expanded=false] .fa-chevron-down {
 			class="table-responsive table table-bordered table-striped table-hover table-light shadow-lg"
 			style="background: white">
 			<tr class="table-dark">
-				<th scope="col">PK ID</th>
 				<th scope="col">Department ID</th>
 				<th scope="col">Employee ID</th>
 				<th scope="col">From Date</th>
@@ -184,7 +183,6 @@ button[aria-expanded=false] .fa-chevron-down {
 			%>
 
 			<tr>
-				<td><%=de.getId().toString().substring(34)%></td>
 				<td><%=de.getDepartment().getId()%> | <%=de.getDepartment().getDeptName()%></td>
 
 				<td><%=de.getEmployee().getId()%> | <%=de.getEmployee().getFirstName()%>

@@ -35,7 +35,7 @@
 			<label class="control-label col-3 text-end">Employee ID:</label>
 			<div class="col-8">
 				<input type="number" class="form-control" placeholder="Enter id"
-					name="id"  value='<jsp:getProperty name="eub" property="id"/>' readonly="readonly">
+					name="id"  value='<jsp:getProperty name="eub" property="id"/>' readonly="readonly"  required>
 				<div class="text-danger"><jsp:getProperty name="eub"
 						property="id_error" /></div>
 			</div>
@@ -46,14 +46,14 @@
 			<div class="col-4">
 				<input type="text" class="form-control" placeholder="First name"
 					name="first_name"
-					value='<jsp:getProperty name="eub" property="first_name"/>'>
+					value='<jsp:getProperty name="eub" property="first_name"/>' required/>
 				<div class="text-danger"><jsp:getProperty name="eub"
 						property="first_name_error" /></div>
 			</div>
 			<div class="col-4">
 				<input type="text" class="form-control" placeholder="Last name"
 					name="last_name"
-					value='<jsp:getProperty name="eub" property="last_name"/>'>
+					value='<jsp:getProperty name="eub" property="last_name"/>' required/>
 				<div class="text-danger"><jsp:getProperty name="eub"
 						property="last_name_error" /></div>
 			</div>
@@ -64,12 +64,12 @@
 			<div class="col-8">
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio" name="gender"
-						id="rmale" value="M" ${eub.getChecked("M")}> <label
+						id="rmale" value="M" ${eub.getChecked("M")} required> <label
 						class="form-check-label" for="rmale">Male</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio" name="gender"
-						id="rfemale" value="F" ${eub.getChecked("F")}> <label
+						id="rfemale" value="F" ${eub.getChecked("F")} required> <label
 						class="form-check-label" for="rfemale">Female</label>
 				</div>
 				<div class="text-danger"><jsp:getProperty name="eub"
@@ -81,7 +81,7 @@
 			<label class="control-label col-3 text-end">Birth Date:</label>
 			<div class="col-8">
 				<input type="date" class="form-control" name="birth_date"
-					value='<jsp:getProperty name="eub" property="birth_date"/>'>
+					value='<jsp:getProperty name="eub" property="birth_date"/>' required/>
 				<div class="text-danger"><jsp:getProperty name="eub"
 						property="birth_date_error" /></div>
 			</div>
@@ -91,7 +91,7 @@
 			<label class="control-label col-3 text-end">Hire Date:</label>
 			<div class="col-8">
 				<input type="date" class="form-control" name="hire_date"
-					value='<jsp:getProperty name="eub" property="hire_date"/>'>
+					value='<jsp:getProperty name="eub" property="hire_date"/>' required/>
 				<div class="text-danger"><jsp:getProperty name="eub"
 						property="hire_date_error" /></div>
 			</div>

@@ -424,7 +424,7 @@
 	$("#ensearch")
 			.click(
 					function() {
-						$("#enioutput").empty();
+						$("#enoutput").empty();
 						$
 								.ajax({
 									url : 'MainServlet',
