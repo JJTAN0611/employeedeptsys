@@ -15,7 +15,13 @@
 		is successful.
 	</h2>
 	<br>
-	<hr>
+	<h5 class="text-center">
+		<%if(((String)request.getAttribute("action")).compareTo("add")==0){ %>
+			Navigating to newly added record on view page.
+		<%}else{ %>
+			Navigating to previous view page.
+		<%} %>
+	</h5>
 	<br>
 	<h3 class="text-center">
 		Redirecting to
