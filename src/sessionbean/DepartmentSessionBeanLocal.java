@@ -12,7 +12,7 @@ import model.usebean.DepartmentUseBean;
 public interface DepartmentSessionBeanLocal {
 	public List<Object[]> getDepartmentReport(String direction) throws EJBException;
 
-	public List<Object> getSortedDepartmentStartWithD() throws EJBException;
+	public String getAutoId() throws EJBException;
 
 	public Department findDepartment(String id) throws EJBException;
 

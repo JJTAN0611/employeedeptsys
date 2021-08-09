@@ -10,6 +10,7 @@ import model.entity.Department;
 import model.entity.DepartmentEmployee;
 import model.usebean.DepartmentUseBean;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJBException;
 
@@ -44,33 +45,50 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	}
 
 	@Override
-	public List<Object> getSortedDepartmentStartWithD() throws EJBException {
+	public String getAutoId() throws EJBException {
 		// Get the list of number which is the id start from dxxx, where xxx is number
 		// (The xxx will be return as object in list)
 		Query q = null;
 		q = em.createNativeQuery(
 				"SELECT SUBSTRING(d.id,2,3) FROM employees.department d WHERE d.id~'^d[0-9][0-9][0-9]' ORDER BY 1");
-		
+
 		try {
-			List<Object> results = q.getResultList();
-			return results;
+			List<Object> idNumber = q.getResultList();
+
+			if (idNumber.size() >= 999)
+				return "allUsed";
+
+			int largest = Integer.valueOf(idNumber.get(idNumber.size() - 1).toString());
+			if (largest == 999) {
+				// No have space after the largest, loop and check the remain space
+				for (int i = 1; i <= idNumber.size(); i++) {
+					int temp = Integer.valueOf(idNumber.get(i - 1).toString());
+					if (i != temp)
+						return "d" + String.format("%03d", i);
+				}
+			} else {
+				// Still have space after the largest
+				return "d" + String.format("%03d", largest + 1);
+			}
+
 		} catch (Exception e) {
-			return null;
+			return "allUsed";
 		}
+		return "allUsed";
 	}
 
 	public List<Department> readDepartment(String direction) throws EJBException {
 		// Get the list of department for pagination
 		Query q = null;
 		q = em.createNativeQuery("SELECT * FROM employees.department order by id " + direction, Department.class);
-		
+
 		try {
 			List<Department> results = q.getResultList();
 			return results;
 		} catch (Exception e) {
 			return null;
 		}
-	
+
 	}
 
 	public int getNumberOfRows() throws EJBException {
@@ -81,7 +99,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		try {
 			BigInteger results = (BigInteger) q.getSingleResult();
 			return results.intValue();
-		}catch (NoResultException n) {
+		} catch (NoResultException n) {
 			return 0;
 		}
 	}

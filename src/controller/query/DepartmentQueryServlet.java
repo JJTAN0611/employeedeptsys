@@ -40,8 +40,8 @@ public class DepartmentQueryServlet extends HttpServlet {
 		try {
 			if (action.compareTo("getAutoId") == 0) {
 
-				// invoke auto id checker. If id is no longer enough. "allUsed" will be return.
-				String id = getAutoId(deptbean);
+				// invoke auto id checker. If "d" started id is no longer enough. "allUsed" will be return.
+				String id = deptbean.getAutoId();
 
 				// Response
 				JsonObject jo = Json.createObjectBuilder().add("autoId", id).build();
@@ -110,28 +110,6 @@ public class DepartmentQueryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);
-	}
-
-	private static String getAutoId(DepartmentSessionBeanLocal deptbean) {
-
-		//Get id list
-		List<Object> idNumber = deptbean.getSortedDepartmentStartWithD();
-
-		//Fully occupied
-		if (idNumber.size() >= 999)
-			return "allUsed";
-		
-		//Check still empty
-		for (int i = 1; i <= idNumber.size(); i++) {
-			int temp = Integer.valueOf(idNumber.get(i-1).toString());
-			if (i != temp)
-				return "d" + String.format("%03d", i);
-			
-		}
-
-		//Fully occupied in loop, but have remain (<999)
-		return "d" + String.format("%03d", idNumber.size() + 1);
-
 	}
 
 }

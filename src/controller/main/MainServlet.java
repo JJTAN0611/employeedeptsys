@@ -96,12 +96,6 @@ public class MainServlet extends HttpServlet {
 			case "getByNameAjax":
 				dispatcher = request.getRequestDispatcher("DepartmentEmployeeQueryServlet");
 				break;
-			case "getDepartmentAjax":
-				dispatcher = request.getRequestDispatcher("DepartmentController");
-				break;
-			case "getEmployeeAjax":
-				dispatcher = request.getRequestDispatcher("EmployeeController");
-				break;
 			case "report":
 			case "download":
 				dispatcher = request.getRequestDispatcher("DepartmentEmployeeReportController");

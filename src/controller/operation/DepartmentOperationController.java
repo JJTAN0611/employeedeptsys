@@ -43,7 +43,7 @@ public class DepartmentOperationController extends HttpServlet {
 			if (action.compareTo("add") == 0) {
 
 				// Prepare a empty use bean (except with id)
-				String id = getAutoId(); // invoke auto id checker. If id is no longer enough. "allUsed" will be return.
+				String id = deptbean.getAutoId(); // invoke auto id checker. If "d" started id is no longer enough. "allUsed" will be return.
 				DepartmentUseBean dub = new DepartmentUseBean();
 				if (id.compareTo("allUsed") == 0) {
 					dub.setId_error("The id starting from 'd' (dxxx) is used all. Please start with other character.");
@@ -255,28 +255,6 @@ public class DepartmentOperationController extends HttpServlet {
 			}
 		} else
 			dub.setOverall_error(e.getMessage());
-	}
-
-	private String getAutoId() {
-
-		// Get id list
-		List<Object> idNumber = deptbean.getSortedDepartmentStartWithD();
-
-		// Fully occupied
-		if (idNumber.size() >= 999)
-			return "allUsed";
-
-		// Check still empty
-		for (int i = 1; i <= idNumber.size(); i++) {
-			int temp = Integer.valueOf(idNumber.get(i - 1).toString());
-			if (i != temp)
-				return "d" + String.format("%03d", i);
-
-		}
-
-		// Fully occupied in loop, but have remain (<999)
-		return "d" + String.format("%03d", idNumber.size() + 1);
-
 	}
 
 }
