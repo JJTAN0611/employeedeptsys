@@ -3,7 +3,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<jsp:useBean id="dub" type="model.javabean.DepartmentUseBean"
+<jsp:useBean id="dub" type="model.javabean.DepartmentJavaBean"
 	scope="request" />
 
 <%@ include file="header.jsp"%>

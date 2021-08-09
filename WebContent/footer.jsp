@@ -19,17 +19,22 @@
 <script src="assets/js/templatemo-custom.js"></script>
 
 <script>
-	window.onload = function() {
-		var x = readCookie('oedrsUserId');
-		document.getElementById("userId").innerHTML = x;
-		console.log("ID" + x);
+	$(document)
+			.ready(
+					function() {
+						var x = readCookie('oedrsUserId');
+						document.getElementById("userId").innerHTML = x;
+						console.log("ID" + x);
 <%String z = request.getHeader("user-agent");
-			if (!(z.contains("Chrome"))&&!((boolean)request.getSession().getAttribute("browserNotified"))) {
-				request.getSession().setAttribute("browserNotified",true);
-			%>
+			String j = (String) request.getSession().getAttribute("browserNotified");
+			if (j == null)
+				j = "false";
+			if (z == null || (!z.contains("Chrome")) && !(j.equals("true"))) {
+				request.getSession().setAttribute("browserNotified", "true");%>
 	alert("Optimised view is in Chrome browser!");
 <%}%>
-	}
+	});
+
 	function readCookie(name) {
 		var nameEQ = name + "=";
 		var ca = document.cookie.split(';');

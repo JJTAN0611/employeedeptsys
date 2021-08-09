@@ -17,7 +17,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.Department;
-import model.javabean.DepartmentUseBean;
+import model.javabean.DepartmentJavaBean;
 import sessionbean.DepartmentSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
@@ -44,7 +44,7 @@ public class DepartmentOperationController extends HttpServlet {
 
 				// Prepare a empty use bean (except with id)
 				String id = deptbean.getAutoId(); // invoke auto id checker. If "d" started id is no longer enough. "allUsed" will be return.
-				DepartmentUseBean dub = new DepartmentUseBean();
+				DepartmentJavaBean dub = new DepartmentJavaBean();
 				if (id.compareTo("allUsed") == 0) {
 					dub.setId_error("The id starting from 'd' (dxxx) is used all. Please start with other character.");
 					
@@ -78,7 +78,7 @@ public class DepartmentOperationController extends HttpServlet {
 				}
 
 				// If exist
-				request.setAttribute("dub", new DepartmentUseBean(dept));
+				request.setAttribute("dub", new DepartmentJavaBean(dept));
 				RequestDispatcher req = request.getRequestDispatcher("department_update.jsp");
 				req.forward(request, response);
 
@@ -101,7 +101,7 @@ public class DepartmentOperationController extends HttpServlet {
 				}
 
 				// If exist
-				request.setAttribute("dub", new DepartmentUseBean(dept));
+				request.setAttribute("dub", new DepartmentJavaBean(dept));
 				RequestDispatcher req = request.getRequestDispatcher("department_delete.jsp");
 				req.forward(request, response);
 
@@ -130,7 +130,7 @@ public class DepartmentOperationController extends HttpServlet {
 		if (action.compareTo("add") == 0) {
 
 			// Prepare new use bean
-			DepartmentUseBean dub = new DepartmentUseBean();
+			DepartmentJavaBean dub = new DepartmentJavaBean();
 			try {
 				// Fill in the use bean
 				dub.setId(request.getParameter("id"));
@@ -138,7 +138,7 @@ public class DepartmentOperationController extends HttpServlet {
 
 				// Call for validate
 				if (dub.validate()) {
-					// When it success, write into database
+					// When it success validate, write into database
 					deptbean.addDepartment(dub);
 					
 					ControllerManagement.navigateSuccess(request, response);
@@ -146,9 +146,6 @@ public class DepartmentOperationController extends HttpServlet {
 					LoggingGeneral.setExitPoints(request);
 					return;
 				}
-
-				// Error in validate
-				dub.setOverall_error("Please fix the error below");
 
 			} catch (Exception e) {
 				// Normally is database SQL violation, after validate
@@ -164,7 +161,7 @@ public class DepartmentOperationController extends HttpServlet {
 		} else if (action.compareTo("update") == 0) {
 
 			// Prepare new use bean
-			DepartmentUseBean dub = new DepartmentUseBean();
+			DepartmentJavaBean dub = new DepartmentJavaBean();
 
 			try {
 				// Fill in the use bean
@@ -181,12 +178,11 @@ public class DepartmentOperationController extends HttpServlet {
 						return;
 					} else {
 						// Not exist
-						dub.setId_error("Department not exist");
+						dub.setId_error("Department not exist.");
+						dub.setOverall_error("It might be sitmoutaneous use performed the same action. Please try again from department view.");
+						dub.setExpress("department");
 					}
 				}
-
-				// Any errors
-				dub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				// Normally is database SQL violation.
 				errorRedirect(e, dub);
@@ -201,7 +197,7 @@ public class DepartmentOperationController extends HttpServlet {
 		} else if (action.compareTo("delete") == 0) {
 
 			// Prepare new use bean
-			DepartmentUseBean dub = new DepartmentUseBean();
+			DepartmentJavaBean dub = new DepartmentJavaBean();
 
 			try {
 				// Fill in the use bean
@@ -217,12 +213,14 @@ public class DepartmentOperationController extends HttpServlet {
 						return;
 					} else {
 						// Not exist
-						dub.setId_error("Department not exist");
+						dub.setId_error("Department not exist.");
+						dub.setOverall_error("It might be sitmoutaneous user performed the same action. Try again on department view.");
+						dub.setExpress("department");
 					}
 				}
 
 			} catch (Exception e) {
-				dub = new DepartmentUseBean(deptbean.findDepartment(dub.getId()));
+				dub = new DepartmentJavaBean(deptbean.findDepartment(dub.getId()));
 				errorRedirect(e, dub);
 			}
 
@@ -235,27 +233,30 @@ public class DepartmentOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(Exception e, DepartmentUseBean dub) {
+	public void errorRedirect(Exception e, DepartmentJavaBean dub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
 				// delete
-				dub.setOverall_error("You may need to clear the related departmentemployee relation record");
-				dub.setId_error("This department is using in relation table and cannot be deleted");
+				dub.setOverall_error("You may need to clear the related departmentemployee relation record.");
+				dub.setId_error("This department is using in relation table and cannot be deleted.");
 				dub.setExpress("departmentemployee");
 			} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
 				// add
-				dub.setOverall_error("Duplicate error. Please change the input as annotated below");
+				dub.setOverall_error("Duplicate error. Please change the input as annotated below.");
 				if (psqle.getMessage().contains("primary"))
-					dub.setId_error("Duplicate department id");
+					dub.setId_error("Duplicate department id.");
 				else if (psqle.getMessage().contains("dept_name"))
-					dub.setDept_name_error("Duplicate department name");
+					dub.setDept_name_error("Duplicate department name.");
 				else
-					dub.setOverall_error(psqle.getMessage());
+					dub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
-		} else
-			dub.setOverall_error(e.getMessage());
+		} else { //mostly is concurrency issue
+			dub.setOverall_error("Try again on department view. Error occur: " + e.getMessage());
+			dub.setId_error("Try again.");
+			dub.setExpress("department");
+		}
 	}
 
 }

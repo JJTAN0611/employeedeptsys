@@ -72,7 +72,6 @@ public class ServletForwardValidate implements Filter{
 		}else {
 			request.setAttribute("filtered", "is eliminated from main filter");
 			RequestDispatcher dispatcher= request.getRequestDispatcher("error.jsp");
-			dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
 			LoggingGeneral.setContentPoints((HttpServletRequest) request, "Obvious url rrror found");
 		}

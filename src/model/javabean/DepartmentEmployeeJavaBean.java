@@ -5,7 +5,7 @@ import java.util.Date;
 
 import model.entity.DepartmentEmployee;
 
-public class DepartmentEmployeeUseBean {
+public class DepartmentEmployeeJavaBean {
 
 	private String dept_id = "";
 	private Long emp_id = null;
@@ -19,11 +19,11 @@ public class DepartmentEmployeeUseBean {
 	private String overall_error = "";
 	private String express = "";
 
-	public DepartmentEmployeeUseBean() {
+	public DepartmentEmployeeJavaBean() {
 		this.dept_id = "";
 	}
 
-	public DepartmentEmployeeUseBean(DepartmentEmployee deptemp) {
+	public DepartmentEmployeeJavaBean(DepartmentEmployee deptemp) {
 		this.dept_id = deptemp.getId().getDepartmentId();
 		this.emp_id = deptemp.getId().getEmployeeId();
 		this.from_date = deptemp.getFromDate();
@@ -33,19 +33,7 @@ public class DepartmentEmployeeUseBean {
 	public boolean validate() {
 		boolean allTrue = true;
 
-		if (dept_id == null || dept_id.equals("")) {
-			dept_id = "";
-			allTrue = false;
-			dept_id_error = "Please enter a department ID. Department ID cannot be null";
-		} else if (dept_id.length() < 1 || dept_id.length() > 4) {
-			allTrue = false;
-			dept_id_error = "Please enter department ID with 1-4 character.";
-		} 
-
-		if (emp_id == null) {
-			allTrue = false;
-			emp_id_error = "Please enter a employee ID. Employee ID cannot be null";
-		}
+		allTrue = validateId();
 
 		if (from_date == null) {
 			allTrue = false;
@@ -60,8 +48,8 @@ public class DepartmentEmployeeUseBean {
 		if (from_date != null && to_date != null) {
 			if (from_date.compareTo(to_date) > 0) {
 				allTrue = false;
-				from_date_error = "To date must large than or same with from date";
-				to_date_error = "To date must large than or same with from date";
+				from_date_error = "To date must large than or same with from date.";
+				to_date_error = "To date must large than or same with from date.";
 			}
 		}
 		return allTrue;
@@ -73,7 +61,10 @@ public class DepartmentEmployeeUseBean {
 		if (dept_id == null || dept_id.equals("")) {
 			dept_id = "";
 			allTrue = false;
-			dept_id_error = "Please enter a department ID. Department ID cannot be null";
+			dept_id_error = "Please enter a department ID. Department ID cannot be null.";
+		} else if (dept_id.contains(" ")) {
+			allTrue = false;
+			dept_id_error = "Department ID cannot contain space!";
 		} else if (dept_id.length() < 1 || dept_id.length() > 4) {
 			allTrue = false;
 			dept_id_error = "Please enter a valid department ID with 1-4 character.";
@@ -83,6 +74,10 @@ public class DepartmentEmployeeUseBean {
 			allTrue = false;
 			emp_id_error = "Please enter a valid employee ID (digit).";
 		}
+
+		if (!allTrue)
+			overall_error = "Please fix the error below.";
+
 		return allTrue;
 	}
 
@@ -172,10 +167,14 @@ public class DepartmentEmployeeUseBean {
 	}
 
 	public String getExpress() {
-		if (!express.equals(""))
-			return "<a href='MainServlet?target=" + express + "&action=add' target='_blank'> Click me to add "
-					+ express + "</a>";
-		else
+		if (!express.equals("")) {
+			if (express.equals("departmentemployee")) {
+				return "<a href='MainServlet?target=departmentemployee&action=view' target='_blank'> Click me to go department-employee view</a>";
+			} else {
+				return "<a href='MainServlet?target=" + express + "&action=add' target='_blank'> Click me to add "
+						+ express + "</a>";
+			}
+		} else
 			return "";
 	}
 

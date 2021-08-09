@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:useBean id="deub" type="model.javabean.DepartmentEmployeeUseBean"
+<jsp:useBean id="deub" type="model.javabean.DepartmentEmployeeJavaBean"
 	scope="request" />
 <%@ include file="header.jsp"%>
 
@@ -22,7 +22,7 @@
 	<hr>
 	<center>Click the ID text box to see detail.</center>
 	<div class="text-danger text-center"><jsp:getProperty name="deub"
-			property="overall_error" /> </div> <br>
+			property="overall_error" /></div> <br>
 </div>
 <div class="container wow bounceInDown" data-wow-duration="1.5s"
 	data-wow-delay="0.2s">
@@ -60,7 +60,7 @@
 
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-						property="dept_id_error" /></div>
+						property="dept_id_error" /> ${deub.getExpress()} </div>
 				<div id="deptcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
@@ -110,7 +110,7 @@
 
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-						property="emp_id_error" /></div>
+						property="emp_id_error" />${deub.getExpress()} </div>
 				<div id="empcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>

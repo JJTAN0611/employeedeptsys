@@ -6,7 +6,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Local;
 
 import model.entity.Employee;
-import model.javabean.EmployeeUseBean;
+import model.javabean.EmployeeJavaBean;
 
 @Local
 public interface EmployeeSessionBeanLocal {
@@ -21,9 +21,9 @@ public interface EmployeeSessionBeanLocal {
 
 	public int getNumberOfRows(String keyword) throws EJBException;
 
-	public boolean updateEmployee(EmployeeUseBean eub) throws EJBException;
+	public boolean updateEmployee(EmployeeJavaBean eub) throws EJBException;
 
-	public boolean deleteEmployee(EmployeeUseBean eub) throws EJBException;
+	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException;
 
-	public Long addEmployee(EmployeeUseBean eub) throws EJBException;
+	public Long addEmployee(EmployeeJavaBean eub) throws EJBException;
 }

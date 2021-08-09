@@ -17,7 +17,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.DepartmentEmployee;
-import model.javabean.DepartmentEmployeeUseBean;
+import model.javabean.DepartmentEmployeeJavaBean;
 import sessionbean.DepartmentEmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
@@ -42,7 +42,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 			if (action.compareTo("add") == 0) {
 
 				// Prepare a empty use bean (except with id)
-				request.setAttribute("deub", new DepartmentEmployeeUseBean());
+				request.setAttribute("deub", new DepartmentEmployeeJavaBean());
 
 				// Forward
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_add.jsp");
@@ -71,7 +71,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				}
 
 				// If exist, prepare use bean with pre-input data
-				request.setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
+				request.setAttribute("deub", new DepartmentEmployeeJavaBean(deptemp));
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_update.jsp");
 				req.forward(request, response);
 
@@ -99,7 +99,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				}
 
 				// If exist, prepare use bean with reference data
-				request.setAttribute("deub", new DepartmentEmployeeUseBean(deptemp));
+				request.setAttribute("deub", new DepartmentEmployeeJavaBean(deptemp));
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_delete.jsp");
 				req.forward(request, response);
 
@@ -127,7 +127,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		if (action.compareTo("add") == 0) {
 
 			// Prepare new use bean
-			DepartmentEmployeeUseBean deub = new DepartmentEmployeeUseBean();
+			DepartmentEmployeeJavaBean deub = new DepartmentEmployeeJavaBean();
 			try {
 				// Fill in the use bean
 				deub.setDept_id(request.getParameter("dept_id"));
@@ -150,8 +150,6 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 					return;
 				}
 
-				// Error in validate
-				deub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				// Normally is database SQL violation, after validate
 				errorRedirect(e, deub);
@@ -165,7 +163,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		} else if (action.compareTo("update") == 0) {
 
 			// Prepare new use bean
-			DepartmentEmployeeUseBean deub = new DepartmentEmployeeUseBean();
+			DepartmentEmployeeJavaBean deub = new DepartmentEmployeeJavaBean();
 			try {
 				// Fill in the use bean
 				deub.setDept_id(request.getParameter("dept_id"));
@@ -186,12 +184,11 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 						// Not exist
 						deub.setDept_id_error("Department and employee combination not exist");
 						deub.setEmp_id_error("Department and employee combination not exist");
-						deub.setOverall_error("This combination not exist");
+						deub.setOverall_error("It might be sitmoutaneous use performed the same action. Please try again from department-employee view.");
+						deub.setExpress("departmentemployee");
 					}
 				}
 
-				// Any errors
-				deub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				// Normally is database SQL violation.
 				errorRedirect(e, deub);
@@ -206,7 +203,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		} else if (action.compareTo("delete") == 0) {
 
 			// Prepare new use bean
-			DepartmentEmployeeUseBean deub = new DepartmentEmployeeUseBean();
+			DepartmentEmployeeJavaBean deub = new DepartmentEmployeeJavaBean();
 			try {
 				// Fill in the use bean
 				deub.setDept_id(request.getParameter("dept_id"));
@@ -226,12 +223,13 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 						// Not exist
 						deub.setDept_id_error("Department and employee combination not exist");
 						deub.setEmp_id_error("Department and employee combination not exist");
-						deub.setOverall_error("This combination not exist");
+						deub.setOverall_error("It might be sitmoutaneous user performed the same action. Try again on department-employee view.");
+						deub.setExpress("departmentemployee");
 					}
 				}
 
 			} catch (Exception e) {
-				deub = new DepartmentEmployeeUseBean(
+				deub = new DepartmentEmployeeJavaBean(
 						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
 				errorRedirect(e, deub);
 			}
@@ -245,29 +243,33 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(Exception e, DepartmentEmployeeUseBean deub) {
+	public void errorRedirect(Exception e, DepartmentEmployeeJavaBean deub) {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
 				// add
-				deub.setOverall_error("Duplicate error. Please change the input as annotated below");
-				deub.setDept_id_error("Duplicate combination of department id and employee id");
-				deub.setEmp_id_error("Duplicate combination of department id and employee id");
+				deub.setOverall_error("Duplicate error. Please change the input as annotated below.");
+				deub.setDept_id_error("Duplicate combination of department id and employee id.");
+				deub.setEmp_id_error("Duplicate combination of department id and employee id.");
 				return;
 			} else if (psqle.getMessage().contains("violates foreign key constraint")) {
 				// add
-				deub.setOverall_error("No related records. Please change the input as annotated below");
+				deub.setOverall_error("No related records. Please change the input as annotated below.");
 				if (psqle.getMessage().contains("\"department\"")) {
-					deub.setDept_id_error("Department ID not exist in department table");
+					deub.setDept_id_error("Department ID not exist in department table.");
 					deub.setExpress("department");
 				} else if (psqle.getMessage().contains("\"employee\"")) {
-					deub.setEmp_id_error("Employee ID not exist in employee table");
+					deub.setEmp_id_error("Employee ID not exist in employee table.");
 					deub.setExpress("employee");
 				} else
-					deub.setOverall_error(psqle.getMessage());
+					deub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
-		} else
-			deub.setOverall_error(e.toString());
+		} else { //mostly is concurrency issue
+			deub.setOverall_error("Try again on department-employee view. Error occur: " + e.toString());
+			deub.setDept_id_error("Try again.");
+			deub.setEmp_id_error("Try again.");
+			deub.setExpress("departmentemployee");
+		}
 	}
 
 }

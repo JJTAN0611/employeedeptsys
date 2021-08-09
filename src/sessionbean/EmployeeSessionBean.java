@@ -8,7 +8,7 @@ import javax.persistence.Query;
 
 import model.entity.DepartmentEmployee;
 import model.entity.Employee;
-import model.javabean.EmployeeUseBean;
+import model.javabean.EmployeeJavaBean;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -121,7 +121,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		}
 	}
 
-	public boolean updateEmployee(EmployeeUseBean eub) throws EJBException {
+	public boolean updateEmployee(EmployeeJavaBean eub) throws EJBException {
 		// update record with given usebean
 		Employee e = findEmployee(eub.getId());
 		if (e == null)
@@ -135,7 +135,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		return true;
 	}
 
-	public boolean deleteEmployee(EmployeeUseBean eub) throws EJBException {
+	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException {
 		// delete record with given usebean (extract the id)
 		Employee e = findEmployee(eub.getId());
 		if (e == null)
@@ -144,7 +144,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		return true;
 	}
 
-	public Long addEmployee(EmployeeUseBean eub) throws EJBException {
+	public Long addEmployee(EmployeeJavaBean eub) throws EJBException {
 		// add record with use bean
 		Employee e = new Employee();
 		e.setFirstName(eub.getFirst_name());

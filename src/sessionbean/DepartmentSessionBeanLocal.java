@@ -6,7 +6,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Local;
 
 import model.entity.Department;
-import model.javabean.DepartmentUseBean;
+import model.javabean.DepartmentJavaBean;
 
 @Local
 public interface DepartmentSessionBeanLocal {
@@ -22,9 +22,9 @@ public interface DepartmentSessionBeanLocal {
 
 	public int getNumberOfRows() throws EJBException;
 
-	public boolean updateDepartment(DepartmentUseBean dup) throws EJBException;
+	public boolean updateDepartment(DepartmentJavaBean dup) throws EJBException;
 
-	public boolean deleteDepartment(DepartmentUseBean dup) throws EJBException;
+	public boolean deleteDepartment(DepartmentJavaBean dup) throws EJBException;
 
-	public void addDepartment(DepartmentUseBean dup) throws EJBException;
+	public void addDepartment(DepartmentJavaBean dup) throws EJBException;
 }

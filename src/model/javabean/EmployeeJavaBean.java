@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import model.entity.Employee;
 
-public class EmployeeUseBean {
+public class EmployeeJavaBean {
 	private Long id = null;
 
 	private String first_name = "";
@@ -22,10 +22,10 @@ public class EmployeeUseBean {
 	private String overall_error = "";
 	private String express="";
 
-	public EmployeeUseBean() {
+	public EmployeeJavaBean() {
 	}
 
-	public EmployeeUseBean(Employee e) {
+	public EmployeeJavaBean(Employee e) {
 		this.id = e.getId();
 		this.first_name = e.getFirstName();
 		this.last_name = e.getLastName();
@@ -38,28 +38,36 @@ public class EmployeeUseBean {
 	public boolean validate() {
 		boolean allTrue = true;
 
+		allTrue=validateId();
+		
 		if (first_name == null || first_name.equals("")) {
 			first_name = "";
 			allTrue = false;
-			first_name_error = "Please enter a first name. First name cannot be null";
+			first_name_error = "Please enter a first name. First name cannot be null.";
+		}  else if (first_name.trim().length() == 0) {
+			allTrue = false;
+			first_name_error = "First name cannot contain only space.";
 		} else if (first_name.length() < 1 || first_name.length() > 14) {
 			allTrue = false;
-			first_name_error = "Please enter a first name within 14 character";
+			first_name_error = "Please enter a first name within 14 character.";
 		}
 
 		if (last_name == null || last_name.equals("")) {
 			last_name = "";
 			allTrue = false;
-			last_name_error = "Please enter a last name. Last name cannot be null";
-		} else if (last_name.length() < 1 || last_name.length() > 14) {
+			last_name_error = "Please enter a last name. Last name cannot be null.";
+		} else if (last_name.trim().length() == 0) {
 			allTrue = false;
-			last_name_error = "Please enter last name within 16 character";
+			last_name_error = "First name cannot contain only space.";
+		}  else if (last_name.length() < 1 || last_name.length() > 14) {
+			allTrue = false;
+			last_name_error = "Please enter last name within 16 character.";
 		}
 
 		if (gender == null || gender.equals("")) {
 			gender = "";
 			allTrue = false;
-			gender_error = "Please select a gender. Gender cannot be null";
+			gender_error = "Please select a gender. Gender cannot be null.";
 		} else if (!(gender.compareTo("M") == 0 || gender.compareTo("F") == 0)) {
 			allTrue = false;
 			gender_error = "Please select only 'M' or 'F'. Dont change the source html!";
@@ -78,13 +86,13 @@ public class EmployeeUseBean {
 		if (hire_date != null && birth_date != null) {
 			if (hire_date.compareTo(birth_date) <= 0) {
 				allTrue = false;
-				hire_date_error = "Hire date must large than birth date";
-				birth_date_error = "Hire date must large than birth date";
+				hire_date_error = "Hire date must large than birth date.";
+				birth_date_error = "Hire date must large than birth date.";
 			}
 		}
 
 		if (!allTrue)
-			overall_error = "Please fix the error below";
+			overall_error = "Please fix the error below.";
 
 		return allTrue;
 	}
@@ -96,6 +104,8 @@ public class EmployeeUseBean {
 			allTrue = false;
 			id_error = "Please enter a ID.";
 		}
+		if (!allTrue)
+			overall_error = "Please fix the error below.";
 		return allTrue;
 	}
 
@@ -229,7 +239,7 @@ public class EmployeeUseBean {
 
 	public String getExpress() {
 		if (!express.equals(""))
-			return "<a href='MainServlet?target="+express+"&action=view' target='_blank'> Click me to the table.</a>";
+			return "<a href='MainServlet?target="+express+"&action=view' target='_blank'> Click me to go.</a>";
 		else
 			return "";
 	}

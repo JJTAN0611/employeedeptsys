@@ -8,7 +8,7 @@ import javax.persistence.Query;
 
 import model.entity.Department;
 import model.entity.DepartmentEmployee;
-import model.javabean.DepartmentUseBean;
+import model.javabean.DepartmentJavaBean;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -128,7 +128,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		}
 	}
 
-	public boolean updateDepartment(DepartmentUseBean dup) throws EJBException {
+	public boolean updateDepartment(DepartmentJavaBean dup) throws EJBException {
 		// update record with given usebean
 		Department d = findDepartment(dup.getId());
 		if (d == null)
@@ -138,7 +138,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		return true;
 	}
 
-	public boolean deleteDepartment(DepartmentUseBean dup) throws EJBException {
+	public boolean deleteDepartment(DepartmentJavaBean dup) throws EJBException {
 		// delete record with given usebean (extract the id)
 		Department d = findDepartment(dup.getId());
 		if (d == null)
@@ -147,7 +147,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		return true;
 	}
 
-	public void addDepartment(DepartmentUseBean dup) throws EJBException {
+	public void addDepartment(DepartmentJavaBean dup) throws EJBException {
 		// add record with use bean
 		Department d = new Department();
 		d.setId(dup.getId());

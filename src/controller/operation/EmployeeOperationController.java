@@ -17,7 +17,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.Employee;
-import model.javabean.EmployeeUseBean;
+import model.javabean.EmployeeJavaBean;
 import sessionbean.EmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
@@ -41,7 +41,7 @@ public class EmployeeOperationController extends HttpServlet {
 			if (action.compareTo("add") == 0) {
 
 				// Prepare a empty use bean (except with id)
-				request.setAttribute("eub", new EmployeeUseBean());
+				request.setAttribute("eub", new EmployeeJavaBean());
 
 				// Forward
 				RequestDispatcher req = request.getRequestDispatcher("employee_add.jsp");
@@ -68,7 +68,7 @@ public class EmployeeOperationController extends HttpServlet {
 				}
 
 				// If exist, prepare use bean with pre-input data
-				request.setAttribute("eub", new EmployeeUseBean(emp));
+				request.setAttribute("eub", new EmployeeJavaBean(emp));
 
 				RequestDispatcher req = request.getRequestDispatcher("employee_update.jsp");
 				req.forward(request, response);
@@ -95,7 +95,7 @@ public class EmployeeOperationController extends HttpServlet {
 				}
 
 				// If exist, prepare use bean with reference data
-				request.setAttribute("eub", new EmployeeUseBean(emp));
+				request.setAttribute("eub", new EmployeeJavaBean(emp));
 				RequestDispatcher req = request.getRequestDispatcher("employee_delete.jsp");
 				req.forward(request, response);
 
@@ -127,7 +127,7 @@ public class EmployeeOperationController extends HttpServlet {
 				LoggingGeneral.setExitPoints(request);
 				return;
 
-			} 
+			}
 
 		} catch (Exception ex) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
@@ -147,7 +147,7 @@ public class EmployeeOperationController extends HttpServlet {
 		if (action.compareTo("add") == 0) {
 
 			// Prepare new use bean
-			EmployeeUseBean eub = new EmployeeUseBean();
+			EmployeeJavaBean eub = new EmployeeJavaBean();
 			try {
 				// Fill in the use bean
 				eub.setFirst_name(request.getParameter("first_name"));
@@ -159,10 +159,11 @@ public class EmployeeOperationController extends HttpServlet {
 				// Call for validate
 				if (eub.validate()) {
 					Long addedEmployeeId = empbean.addEmployee(eub);
-					
+
 					// pagination set to new employee record
-					request.getSession().setAttribute("ekeyword",String.valueOf(addedEmployeeId)+" "+eub.getFirst_name()+" "+eub.getLast_name());
-					
+					request.getSession().setAttribute("ekeyword",
+							String.valueOf(addedEmployeeId) + " " + eub.getFirst_name() + " " + eub.getLast_name());
+
 					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + eub.getId() + ". Completed.");
 					LoggingGeneral.setExitPoints(request);
@@ -184,7 +185,7 @@ public class EmployeeOperationController extends HttpServlet {
 		} else if (action.compareTo("update") == 0) {
 
 			// Prepare new use bean
-			EmployeeUseBean eub = new EmployeeUseBean();
+			EmployeeJavaBean eub = new EmployeeJavaBean();
 			try {
 				// Fill in the use bean
 				eub.setId(request.getParameter("id"));
@@ -205,12 +206,12 @@ public class EmployeeOperationController extends HttpServlet {
 					} else {
 						// Not exist
 						eub.setId_error("Employee not exist");
-						eub.setOverall_error("Please fix the error below");
+						eub.setOverall_error(
+								"It might be sitmoutaneous use performed the same action. Please try again in employee view.");
+						eub.setExpress("employee");
 					}
 				}
 
-				// Any errors
-				eub.setOverall_error("Please fix the error below");
 			} catch (Exception e) {
 				// Normally is database SQL violation.
 				errorRedirect(e, eub);
@@ -224,7 +225,7 @@ public class EmployeeOperationController extends HttpServlet {
 		} else if (action.compareTo("delete") == 0) {
 
 			// Prepare new use bean
-			EmployeeUseBean eub = new EmployeeUseBean();
+			EmployeeJavaBean eub = new EmployeeJavaBean();
 			try {
 				// Fill in the use bean
 				eub.setId(request.getParameter("id"));
@@ -240,12 +241,14 @@ public class EmployeeOperationController extends HttpServlet {
 						return;
 					} else {
 						// Not exist
-						eub.setId_error("Employee not exist");
-						eub.setOverall_error("Please fix the error below");
+						eub.setId_error("Employee not exist.");
+						eub.setOverall_error(
+								"It might be sitmoutaneous user performed the same action. Try again on employee view.");
+						eub.setExpress("employee");
 					}
 				}
 			} catch (Exception e) {
-				eub = new EmployeeUseBean(empbean.findEmployee(eub.getId()));
+				eub = new EmployeeJavaBean(empbean.findEmployee(eub.getId()));
 				errorRedirect(e, eub);
 			}
 			request.setAttribute("eub", eub);
@@ -257,25 +260,28 @@ public class EmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(Exception e, EmployeeUseBean eub) {
+	public void errorRedirect(Exception e, EmployeeJavaBean eub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
 				// delete
-				eub.setOverall_error("You may need to clear the related departmentemployee relation record");
-				eub.setId_error("This employee is using in relation table and cannot be deleted");
+				eub.setOverall_error("You may need to clear the related departmentemployee relation record.");
+				eub.setId_error("This employee is using in relation table and cannot be deleted.");
 				eub.setExpress("departmentemployee");
 			} else if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
 				// add
-				eub.setOverall_error("Duplicate error. Please change the input as annotated below");
+				eub.setOverall_error("Duplicate error. Please change the input as annotated below.");
 				if (psqle.getMessage().contains("primary"))
-					eub.setId_error("dublicate employee id");
+					eub.setId_error("Duplicate employee id.");
 				else
-					eub.setOverall_error(psqle.getMessage());
+					eub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
-		} else
-			eub.setOverall_error(e.toString());
+		} else { // mostly is concurrency issue
+			eub.setOverall_error("Try again on employee view. Error occur: " + e.getMessage());
+			eub.setId_error("Try again. ");
+			eub.setExpress("employee");
+		}
 	}
 
 }

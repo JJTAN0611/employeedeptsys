@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import model.entity.DepartmentEmployee;
 import model.entity.DepartmentEmployeePK;
-import model.javabean.DepartmentEmployeeUseBean;
+import model.javabean.DepartmentEmployeeJavaBean;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -161,7 +161,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	}
 
-	public boolean updateDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
+	public boolean updateDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
 		// update record with given usebean
 		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
 		if (de == null)
@@ -172,7 +172,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		return true;
 	}
 
-	public boolean deleteDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
+	public boolean deleteDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
 		// delete record with given usebean (extract the id)
 		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
 		if (de == null)
@@ -181,7 +181,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		return true;
 	}
 
-	public void addDepartmentEmployee(DepartmentEmployeeUseBean deub) throws EJBException {
+	public void addDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
 		// add record with use bean
 
 		DepartmentEmployeePK depk = new DepartmentEmployeePK(deub.getDept_id(), deub.getEmp_id());
