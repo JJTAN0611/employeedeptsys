@@ -25,5 +25,5 @@ public interface EmployeeSessionBeanLocal {
 
 	public boolean deleteEmployee(EmployeeUseBean eub) throws EJBException;
 
-	public void addEmployee(EmployeeUseBean eub) throws EJBException;
+	public Long addEmployee(EmployeeUseBean eub) throws EJBException;
 }

@@ -140,6 +140,7 @@ public class DepartmentOperationController extends HttpServlet {
 				if (dub.validate()) {
 					// When it success, write into database
 					deptbean.addDepartment(dub);
+					
 					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + dub.getId());
 					LoggingGeneral.setExitPoints(request);

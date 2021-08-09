@@ -139,6 +139,10 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				if (deub.validateId()) {
 					// When it success, write into database
 					deptempbean.addDepartmentEmployee(deub);
+					
+					// pagination set to new department employee record
+					request.getSession().setAttribute("dekeyword",deub.getDept_id()+"%"+deub.getEmp_id()+"%"+deub.getFrom_date()+" "+deub.getTo_date());
+					
 					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request,
 							"Success add --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id() + ". Completed.");

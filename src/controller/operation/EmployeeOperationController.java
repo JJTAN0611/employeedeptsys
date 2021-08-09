@@ -158,7 +158,11 @@ public class EmployeeOperationController extends HttpServlet {
 
 				// Call for validate
 				if (eub.validate()) {
-					empbean.addEmployee(eub);
+					Long addedEmployeeId = empbean.addEmployee(eub);
+					
+					// pagination set to new employee record
+					request.getSession().setAttribute("ekeyword",String.valueOf(addedEmployeeId)+" "+eub.getFirst_name()+" "+eub.getLast_name());
+					
 					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + eub.getId() + ". Completed.");
 					LoggingGeneral.setExitPoints(request);

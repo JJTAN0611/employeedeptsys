@@ -144,7 +144,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		return true;
 	}
 
-	public void addEmployee(EmployeeUseBean eub) throws EJBException {
+	public Long addEmployee(EmployeeUseBean eub) throws EJBException {
 		// add record with use bean
 		Employee e = new Employee();
 		e.setFirstName(eub.getFirst_name());
@@ -153,6 +153,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		e.setBirthDate(eub.getBirth_date());
 		e.setHireDate(eub.getHire_date());
 		em.persist(e);
+		return e.getId();
 	}
 
 }
