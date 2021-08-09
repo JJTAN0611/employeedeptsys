@@ -163,6 +163,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	public boolean updateDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
 		// update record with given usebean
+		// do find first, avoid directly use the id, sometimes may not exist and will become "add" automatically, if detect return false
 		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
 		if (de == null)
 			return false;

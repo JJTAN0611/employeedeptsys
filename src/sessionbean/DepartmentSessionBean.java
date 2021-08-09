@@ -130,7 +130,8 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	public boolean updateDepartment(DepartmentJavaBean dup) throws EJBException {
 		// update record with given usebean
-		Department d = findDepartment(dup.getId());
+		// do find first, avoid directly use the id, sometimes may not exist and will become "add" automatically, if detect return false
+		Department d = findDepartment(dup.getId()); 
 		if (d == null)
 			return false;
 		d.setDeptName(dup.getDept_name());

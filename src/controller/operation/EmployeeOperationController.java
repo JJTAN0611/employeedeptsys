@@ -141,7 +141,11 @@ public class EmployeeOperationController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try and catch here
+		// Input validate done by javabean
+		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
+		// Ensure "delete" is done in session bean, will return false if related record not exist.
+		
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
@@ -241,13 +245,14 @@ public class EmployeeOperationController extends HttpServlet {
 						return;
 					} else {
 						// Not exist
-						eub.setId_error("Employee not exist.");
+						eub.setId_error("Employee not exist. Try again on employee view.");
 						eub.setOverall_error(
 								"It might be sitmoutaneous user performed the same action. Try again on employee view.");
 						eub.setExpress("employee");
 					}
 				}
 			} catch (Exception e) {
+				// Dont use user record for continuing displaying. It have risk to show not updated data
 				eub = new EmployeeJavaBean(empbean.findEmployee(eub.getId()));
 				errorRedirect(e, eub);
 			}

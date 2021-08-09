@@ -124,7 +124,11 @@ public class DepartmentOperationController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try and catch here
+		// Input validate done by javabean
+		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
+		// Ensure "delete" is done in session bean, will return false if related record not exist.
+		
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
@@ -148,7 +152,7 @@ public class DepartmentOperationController extends HttpServlet {
 				}
 
 			} catch (Exception e) {
-				// Normally is database SQL violation, after validate
+				// Normally is database PSQL violation, after validate
 				errorRedirect(e, dub);
 			}
 
@@ -184,7 +188,7 @@ public class DepartmentOperationController extends HttpServlet {
 					}
 				}
 			} catch (Exception e) {
-				// Normally is database SQL violation.
+				// Normally is database PSQL violation.
 				errorRedirect(e, dub);
 			}
 
@@ -213,13 +217,15 @@ public class DepartmentOperationController extends HttpServlet {
 						return;
 					} else {
 						// Not exist
-						dub.setId_error("Department not exist.");
+						dub.setId_error("Department not exist. Try again on department view.");
 						dub.setOverall_error("It might be sitmoutaneous user performed the same action. Try again on department view.");
 						dub.setExpress("department");
 					}
 				}
 
 			} catch (Exception e) {
+				// Normally is database PSQL violation.
+				// Dont use user record for continuing displaying. It have risk to show not updated data
 				dub = new DepartmentJavaBean(deptbean.findDepartment(dub.getId()));
 				errorRedirect(e, dub);
 			}

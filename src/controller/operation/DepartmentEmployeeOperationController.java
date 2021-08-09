@@ -121,7 +121,11 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try and catch here
+		// Input validate done by javabean
+		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
+		// Ensure "delete" is done in session bean, will return false if related record not exist.
+		
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
@@ -221,14 +225,15 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 						return;
 					} else {
 						// Not exist
-						deub.setDept_id_error("Department and employee combination not exist");
-						deub.setEmp_id_error("Department and employee combination not exist");
+						deub.setDept_id_error("Department and employee combination not exist. Try again on department-employee view.");
+						deub.setEmp_id_error("Department and employee combination not exist. Try again on department-employee view.");
 						deub.setOverall_error("It might be sitmoutaneous user performed the same action. Try again on department-employee view.");
 						deub.setExpress("departmentemployee");
 					}
 				}
 
 			} catch (Exception e) {
+				// Dont use user record for continuing displaying. It have risk to show not updated data
 				deub = new DepartmentEmployeeJavaBean(
 						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
 				errorRedirect(e, deub);
@@ -247,13 +252,13 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
-				// add
+				// normally occur for operation: add
 				deub.setOverall_error("Duplicate error. Please change the input as annotated below.");
 				deub.setDept_id_error("Duplicate combination of department id and employee id.");
 				deub.setEmp_id_error("Duplicate combination of department id and employee id.");
 				return;
 			} else if (psqle.getMessage().contains("violates foreign key constraint")) {
-				// add
+				// normally occur for operation: add
 				deub.setOverall_error("No related records. Please change the input as annotated below.");
 				if (psqle.getMessage().contains("\"department\"")) {
 					deub.setDept_id_error("Department ID not exist in department table.");

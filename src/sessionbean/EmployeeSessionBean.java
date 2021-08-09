@@ -123,6 +123,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 	public boolean updateEmployee(EmployeeJavaBean eub) throws EJBException {
 		// update record with given usebean
+		// do find first, avoid directly use the id, sometimes may not exist and will become "add" automatically, if detect return false
 		Employee e = findEmployee(eub.getId());
 		if (e == null)
 			return false;
@@ -137,6 +138,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException {
 		// delete record with given usebean (extract the id)
+		
 		Employee e = findEmployee(eub.getId());
 		if (e == null)
 			return false;
