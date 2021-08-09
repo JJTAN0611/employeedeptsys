@@ -53,8 +53,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		try {
 			List<Object[]> results = q.getResultList();
 			return results;
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		} catch (NoResultException e) {
 			return null;
 		}
 

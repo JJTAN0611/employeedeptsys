@@ -46,7 +46,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		try {
 			List<Object[]> results = q.getResultList();
 			return results;
-		} catch (Exception n) {
+		} catch (NoResultException n) {
 			return null;
 		}
 	}
@@ -71,7 +71,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		try {
 			List<Employee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
 			return results;
-		} catch (Exception n) {
+		} catch (NoResultException n) {
 			return null;
 		}
 		
