@@ -12,7 +12,7 @@ import model.javabean.DepartmentEmployeeJavaBean;
 public interface DepartmentEmployeeSessionBeanLocal {
 	public List<Object[]> getDepartmentEmployeeReport(String keyword, String direction) throws EJBException;
 
-	public Integer[] getDepartmentEmployeeSummary(String keyword) throws EJBException;
+	public Integer[] getDepartmentEmployeeInvolvedSummary(String keyword) throws EJBException;
 
 	public DepartmentEmployee findDepartmentEmployee(String dept_id, Long emp_id) throws EJBException;
 

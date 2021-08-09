@@ -275,7 +275,7 @@ public class EmployeeOperationController extends HttpServlet {
 				eub.setOverall_error("You may need to clear the related departmentemployee relation record.");
 				eub.setId_error("This employee is using in relation table and cannot be deleted.");
 				eub.setExpress("departmentemployee");
-			} else if (psqle.getMessage().contains("dublicate key value violates unique constraint")) {
+			} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
 				// add
 				eub.setOverall_error("Duplicate error. Please change the input as annotated below.");
 				if (psqle.getMessage().contains("primary"))

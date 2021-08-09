@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
@@ -126,7 +128,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		// Input validate done by javabean
 		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
 		// Ensure "delete" is done in session bean, will return false if related record not exist.
-		
+
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
@@ -153,11 +155,12 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 							"Success add --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id() + ". Completed.");
 					LoggingGeneral.setExitPoints(request);
 					return;
+				
 				}
 
 			} catch (EJBException e) {
 				// Normally is database SQL violation, after validate
-				errorSetting(e, deub);
+				errorRedirect(e, deub);
 			}
 			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_add.jsp");
@@ -196,7 +199,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 
 			} catch (EJBException e) {
 				// Normally is database SQL violation.
-				errorSetting(e, deub);
+				errorRedirect(e, deub);
 			}
 
 			request.setAttribute("deub", deub);
@@ -234,7 +237,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				}
 
 			} catch (EJBException e) {
-				errorSetting(e, deub);
+				errorRedirect(e, deub);
 			}
 			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
@@ -246,7 +249,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorSetting(EJBException e, DepartmentEmployeeJavaBean deub) {
+	public void errorRedirect(EJBException e, DepartmentEmployeeJavaBean deub) {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
@@ -256,7 +259,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				deub.setEmp_id_error("Duplicate combination of department id and employee id.");
 				return;
 			} else if (psqle.getMessage().contains("violates foreign key constraint")) {
-				// normally occur for operation: add
+				// normally occur for operation: delete
 				deub.setOverall_error("No related records. Please change the input as annotated below.");
 				if (psqle.getMessage().contains("\"department\"")) {
 					deub.setDept_id_error("Department ID not exist in department table.");

@@ -2,24 +2,17 @@ package controller.report;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.json.Json;
-import javax.json.JsonObject;
+import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.postgresql.util.PSQLException;
 
-import model.entity.Department;
-import model.javabean.DepartmentJavaBean;
 import sessionbean.DepartmentSessionBeanLocal;
-import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/DepartmentReportController")
@@ -106,7 +99,7 @@ public class DepartmentReportController extends HttpServlet {
 				return;
 
 			}
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 			// send to error page
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);

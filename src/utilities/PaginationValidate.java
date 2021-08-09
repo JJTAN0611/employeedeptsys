@@ -16,7 +16,8 @@ public class PaginationValidate {
 	 * if parameter have value, reset the session parameter.
 	 * */
 	
-	public static String getAppend(HttpServletRequest request) {
+	//This function is append of initial letter of table for easier building session attribute
+	public static String getTableBeginAppend(HttpServletRequest request) {
 		switch ((String) request.getAttribute("target")) {
 		case "employee":
 			return "e";
@@ -32,11 +33,11 @@ public class PaginationValidate {
 		String direction = request.getParameter("direction");
 
 		if (direction == null) {
-			if (request.getSession().getAttribute(getAppend(request) + "direction") == null)
-				request.getSession().setAttribute(getAppend(request) + "direction", "ASC"); // do default
+			if (request.getSession().getAttribute(getTableBeginAppend(request) + "direction") == null)
+				request.getSession().setAttribute(getTableBeginAppend(request) + "direction", "ASC"); // do default
 			// else no need do anything. Because already exist
 		} else if (direction.equals("ASC") || direction.equals("DESC"))
-			request.getSession().setAttribute(getAppend(request) + "direction", direction);
+			request.getSession().setAttribute(getTableBeginAppend(request) + "direction", direction);
 		else
 			return false; // abnormal value
 
@@ -50,36 +51,36 @@ public class PaginationValidate {
 		String keyword = request.getParameter("keyword");
 
 		if (direction == null) {
-			if (request.getSession().getAttribute(getAppend(request) + "direction") == null)
-				request.getSession().setAttribute(getAppend(request) + "direction", "ASC"); // do default
+			if (request.getSession().getAttribute(getTableBeginAppend(request) + "direction") == null)
+				request.getSession().setAttribute(getTableBeginAppend(request) + "direction", "ASC"); // do default
 			// else no need do anything. Because already exist
 		} else if (direction.equals("ASC") || direction.equals("DESC")) // from user
-			request.getSession().setAttribute(getAppend(request) + "direction", direction);
+			request.getSession().setAttribute(getTableBeginAppend(request) + "direction", direction);
 		else
 			return false; // abnormal value
 
 		if (currentPage == null) {
-			if (request.getSession().getAttribute(getAppend(request) + "currentPage") == null)
-				request.getSession().setAttribute(getAppend(request) + "currentPage", 1); // do default
+			if (request.getSession().getAttribute(getTableBeginAppend(request) + "currentPage") == null)
+				request.getSession().setAttribute(getTableBeginAppend(request) + "currentPage", 1); // do default
 			// else no need do anything. Because already exist
 		} else {
 			try {
 				int cp = Integer.parseInt(currentPage);
-				request.getSession().setAttribute(getAppend(request) + "currentPage", cp); // from user
+				request.getSession().setAttribute(getTableBeginAppend(request) + "currentPage", cp); // from user
 			} catch (NumberFormatException e) {
 				return false;
 			}
 		}
 
 		if (recordsPerPage == null) {
-			if (request.getSession().getAttribute(getAppend(request) + "recordsPerPage") == null)
-				request.getSession().setAttribute(getAppend(request) + "recordsPerPage", 50); // do default
+			if (request.getSession().getAttribute(getTableBeginAppend(request) + "recordsPerPage") == null)
+				request.getSession().setAttribute(getTableBeginAppend(request) + "recordsPerPage", 50); // do default
 			// else no need do anything. Because already exist
 		} else {
 			try {
 				int rpp = Integer.parseInt(recordsPerPage);
 				if (rpp <= 100 && rpp >= 1)
-					request.getSession().setAttribute(getAppend(request) + "recordsPerPage", rpp); // from user
+					request.getSession().setAttribute(getTableBeginAppend(request) + "recordsPerPage", rpp); // from user
 				else
 					return false;
 			} catch (NumberFormatException e) {
@@ -89,11 +90,11 @@ public class PaginationValidate {
 		}
 
 		if (keyword == null) {
-			if (request.getSession().getAttribute(getAppend(request) + "keyword") == null)
-				request.getSession().setAttribute(getAppend(request) + "keyword", ""); // do default
+			if (request.getSession().getAttribute(getTableBeginAppend(request) + "keyword") == null)
+				request.getSession().setAttribute(getTableBeginAppend(request) + "keyword", ""); // do default
 			// else no need do anything. Because already exist
 		} else {
-			request.getSession().setAttribute(getAppend(request) + "keyword", keyword); // from user
+			request.getSession().setAttribute(getTableBeginAppend(request) + "keyword", keyword); // from user
 			// accept any input as it is search
 		}
 		return true;

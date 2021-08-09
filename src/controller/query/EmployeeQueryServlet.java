@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -92,7 +93,7 @@ public class EmployeeQueryServlet extends HttpServlet {
 				return;
 
 			} 
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 
 			LoggingGeneral.setContentPoints(request, "Abnormal process occur: " + ex.getMessage());
 			LoggingGeneral.setExitPoints(request);

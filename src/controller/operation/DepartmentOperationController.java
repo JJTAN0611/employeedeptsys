@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.json.Json;
@@ -14,6 +16,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
@@ -37,7 +42,7 @@ public class DepartmentOperationController extends HttpServlet {
 			throws ServletException, IOException {
 
 		response.setContentType("text/html;charset=UTF-8");
-		
+
 		String action = (String) request.getAttribute("action");
 
 		try {
@@ -112,7 +117,7 @@ public class DepartmentOperationController extends HttpServlet {
 				return;
 
 			}
-		} catch (EJBException ex) {
+		} catch (EJBException  ex) {
 			// send to error page
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
@@ -129,6 +134,7 @@ public class DepartmentOperationController extends HttpServlet {
 		// Input validate done by javabean
 		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
 		// Ensure "delete" is done in session bean, will return false if related record not exist.
+
 		
 		String action = (String) request.getAttribute("action");
 

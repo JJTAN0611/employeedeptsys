@@ -59,7 +59,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	}
 
-	public Integer[] getDepartmentEmployeeSummary(String keyword) throws EJBException {
+	public Integer[] getDepartmentEmployeeInvolvedSummary(String keyword) throws EJBException {
 		// For report use. Using object instead of entity class is to minimize the
 		// heaviness of computing
 		Integer[] result = new Integer[2];

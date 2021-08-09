@@ -1,5 +1,7 @@
 package utilities;
 import java.io.IOException;
+import java.util.logging.Level;
+
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,7 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 @WebFilter(filterName="MainFilter",urlPatterns="/MainServlet",dispatcherTypes= {DispatcherType.REQUEST})
-public class ServletForwardValidate implements Filter{
+public class ServletValidateFilter implements Filter{
 	/*
 	 * This class is to verify those compulsory servlets forwarding. The validate
 	 * parameter is target, action. If not have related parameter, it will be filtered
@@ -65,6 +67,11 @@ public class ServletForwardValidate implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		LoggingGeneral.setEntryPoints((HttpServletRequest) request);
+		//Off those handled exception
+		//java.util.logging.Logger.getLogger("org.jboss.as.ejb3.invocation").setLevel(Level.OFF);
+		//java.util.logging.Logger.getLogger("com.arjuna.ats.arjuna").setLevel(Level.OFF);
+		//java.util.logging.Logger.getLogger("org.hibernate.engine.jdbc.spi.SqlExceptionHelper").setLevel(Level.OFF);
+		
 		// TODO Auto-generated method stub
 		if(action(request, response) && target(request, response)) {
 			chain.doFilter(request, response);

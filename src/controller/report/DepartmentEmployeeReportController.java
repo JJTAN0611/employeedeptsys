@@ -59,7 +59,7 @@ public class DepartmentEmployeeReportController extends HttpServlet {
 
 				// Brief summary (The involved foreign key)
 				Integer[] summary = deptempbean
-						.getDepartmentEmployeeSummary((String) request.getSession().getAttribute("dekeyword"));
+						.getDepartmentEmployeeInvolvedSummary((String) request.getSession().getAttribute("dekeyword"));
 				request.getSession().setAttribute("dereportSummary", summary);
 
 				RequestDispatcher req = request.getRequestDispatcher("departmentemployee_report.jsp");
