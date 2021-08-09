@@ -131,7 +131,7 @@ button[aria-expanded=false] .fa-chevron-down {
 					</div>
 					<br>
 					<div class="row">
-						<div class="col-10">
+						<div class="col-9">
 							<div class="text-light">
 								**You may use <b>department name</b> or <b>employee name</b>
 								instead of use <b>id</b> to search. <br> **You may use <b>%</b>
@@ -139,8 +139,9 @@ button[aria-expanded=false] .fa-chevron-down {
 								**Please enable cookie for record your session preference.
 							</div>
 						</div>
-						<div class="col-2">
-							<button class="btn btn-primary btn-info btn-lg font-weight-bold float-end" type="submit">Go</button>
+						<div class="col-3">
+							<a href="MainServlet?target=employee&action=view&keyword=" class="btn btn-outline-info fw-bold float-start border-5">Reset keyword</a>
+							<button class="btn btn-info btn-lg fw-bold float-end" type="submit">Go !</button>
 						</div>
 					</div>
 				</form>
