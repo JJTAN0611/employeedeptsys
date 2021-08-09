@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import model.entity.DepartmentEmployee;
 import model.entity.DepartmentEmployeePK;
-import model.usebean.DepartmentEmployeeUseBean;
+import model.javabean.DepartmentEmployeeUseBean;
 
 import java.math.BigInteger;
 import java.util.List;

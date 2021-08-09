@@ -6,7 +6,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Local;
 
 import model.entity.Department;
-import model.usebean.DepartmentUseBean;
+import model.javabean.DepartmentUseBean;
 
 @Local
 public interface DepartmentSessionBeanLocal {

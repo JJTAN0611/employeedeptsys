@@ -17,7 +17,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.Department;
-import model.usebean.DepartmentUseBean;
+import model.javabean.DepartmentUseBean;
 import sessionbean.DepartmentSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;

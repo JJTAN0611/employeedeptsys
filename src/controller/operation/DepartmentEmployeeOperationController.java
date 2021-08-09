@@ -17,7 +17,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.postgresql.util.PSQLException;
 
 import model.entity.DepartmentEmployee;
-import model.usebean.DepartmentEmployeeUseBean;
+import model.javabean.DepartmentEmployeeUseBean;
 import sessionbean.DepartmentEmployeeSessionBeanLocal;
 import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
@@ -136,7 +136,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				deub.setTo_date(request.getParameter("to_date"));
 
 				// Call for validate
-				if (deub.validateId()) {
+				if (deub.validate()) {
 					// When it success, write into database
 					deptempbean.addDepartmentEmployee(deub);
 					

@@ -1,4 +1,4 @@
-package model.usebean;
+package model.javabean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

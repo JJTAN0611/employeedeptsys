@@ -1,4 +1,4 @@
-package model.usebean;
+package model.javabean;
 
 
 import model.entity.Department;

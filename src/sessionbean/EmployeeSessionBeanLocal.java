@@ -6,7 +6,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Local;
 
 import model.entity.Employee;
-import model.usebean.EmployeeUseBean;
+import model.javabean.EmployeeUseBean;
 
 @Local
 public interface EmployeeSessionBeanLocal {

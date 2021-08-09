@@ -8,7 +8,7 @@ import javax.persistence.Query;
 
 import model.entity.DepartmentEmployee;
 import model.entity.Employee;
-import model.usebean.EmployeeUseBean;
+import model.javabean.EmployeeUseBean;
 
 import java.math.BigInteger;
 import java.util.List;
