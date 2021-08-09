@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.servlet.RequestDispatcher;
@@ -96,10 +97,7 @@ public class DepartmentQueryServlet extends HttpServlet {
 				return;
 
 			}
-		} catch (Exception ex) {
-			// send to error page
-			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
-			dispatcher.forward(request, response);
+		} catch (EJBException ex) {
 
 			LoggingGeneral.setContentPoints(request, "Abnormal process occur: " + ex.getMessage());
 			LoggingGeneral.setExitPoints(request);

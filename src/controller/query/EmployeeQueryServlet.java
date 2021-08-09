@@ -93,8 +93,6 @@ public class EmployeeQueryServlet extends HttpServlet {
 
 			} 
 		} catch (Exception ex) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
-			dispatcher.forward(request, response);
 
 			LoggingGeneral.setContentPoints(request, "Abnormal process occur: " + ex.getMessage());
 			LoggingGeneral.setExitPoints(request);

@@ -3,6 +3,7 @@ package controller.pagination;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,7 +44,7 @@ public class EmployeePaginationServlet extends HttpServlet {
 		try {
 
 			if (!PaginationValidate.multiplePageView(request, response))
-				throw new Exception();
+				throw new EJBException();
 
 			int nOfPages = 0;
 			int currentPage = (int) request.getSession().getAttribute("ecurrentPage");
@@ -71,7 +72,7 @@ public class EmployeePaginationServlet extends HttpServlet {
 			request.getSession().setAttribute("everificationToken", String.valueOf(System.currentTimeMillis()));
 
 			LoggingGeneral.setContentPoints(request, "Success view");
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 			dispatcher = request.getRequestDispatcher("error.jsp");
 			LoggingGeneral.setContentPoints(request, "Unsuccess view" + ex.getMessage());
 		} finally {

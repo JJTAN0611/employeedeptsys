@@ -1,5 +1,6 @@
 package model.javabean;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -96,7 +97,7 @@ public class DepartmentEmployeeJavaBean {
 	public void setEmp_id(String emp_id) {
 		try {
 			this.emp_id = Long.valueOf(emp_id);
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 		}
 	}
 
@@ -109,8 +110,11 @@ public class DepartmentEmployeeJavaBean {
 		try {
 			fd = new SimpleDateFormat("yyyy-MM-dd").parse(from_date);
 			this.from_date = new java.sql.Date(fd.getTime());
-		} catch (Exception e) {
+		} catch (ParseException e) {
+		} catch (IllegalArgumentException i) {
+		} catch (NullPointerException n) {
 		}
+
 	}
 
 	public Date getTo_date() {
@@ -122,8 +126,11 @@ public class DepartmentEmployeeJavaBean {
 		try {
 			td = new SimpleDateFormat("yyyy-MM-dd").parse(to_date);
 			this.to_date = new java.sql.Date(td.getTime());
-		} catch (Exception e) {
+		} catch (ParseException e) {
+		} catch (IllegalArgumentException i) {
+		} catch (NullPointerException n) {
 		}
+
 	}
 
 	public String getDept_id_error() {

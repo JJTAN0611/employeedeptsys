@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.servlet.RequestDispatcher;
@@ -111,7 +112,7 @@ public class DepartmentOperationController extends HttpServlet {
 				return;
 
 			}
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 			// send to error page
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
@@ -151,7 +152,7 @@ public class DepartmentOperationController extends HttpServlet {
 					return;
 				}
 
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Normally is database PSQL violation, after validate
 				errorRedirect(e, dub);
 			}
@@ -187,7 +188,7 @@ public class DepartmentOperationController extends HttpServlet {
 						dub.setExpress("department");
 					}
 				}
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Normally is database PSQL violation.
 				errorRedirect(e, dub);
 			}
@@ -223,7 +224,7 @@ public class DepartmentOperationController extends HttpServlet {
 					}
 				}
 
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Normally is database PSQL violation.
 				// Dont use user record for continuing displaying. It have risk to show not updated data
 				dub = new DepartmentJavaBean(deptbean.findDepartment(dub.getId()));
@@ -239,7 +240,7 @@ public class DepartmentOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(Exception e, DepartmentJavaBean dub) {
+	public void errorRedirect(EJBException e, DepartmentJavaBean dub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
@@ -258,7 +259,7 @@ public class DepartmentOperationController extends HttpServlet {
 				else
 					dub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
-		} else { //mostly is concurrency issue
+		} else { //Unexpected error.
 			dub.setOverall_error("Try again on department view. Error occur: " + e.getMessage());
 			dub.setId_error("Try again.");
 			dub.setExpress("department");

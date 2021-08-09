@@ -1,5 +1,6 @@
 package model.javabean;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import model.entity.Employee;
@@ -20,7 +21,7 @@ public class EmployeeJavaBean {
 	private String birth_date_error = "";
 	private String hire_date_error = "";
 	private String overall_error = "";
-	private String express="";
+	private String express = "";
 
 	public EmployeeJavaBean() {
 	}
@@ -38,13 +39,13 @@ public class EmployeeJavaBean {
 	public boolean validate() {
 		boolean allTrue = true;
 
-		allTrue=validateId();
-		
+		allTrue = validateId();
+
 		if (first_name == null || first_name.equals("")) {
 			first_name = "";
 			allTrue = false;
 			first_name_error = "Please enter a first name. First name cannot be null.";
-		}  else if (first_name.trim().length() == 0) {
+		} else if (first_name.trim().length() == 0) {
 			allTrue = false;
 			first_name_error = "First name cannot contain only space.";
 		} else if (first_name.length() < 1 || first_name.length() > 14) {
@@ -59,7 +60,7 @@ public class EmployeeJavaBean {
 		} else if (last_name.trim().length() == 0) {
 			allTrue = false;
 			last_name_error = "First name cannot contain only space.";
-		}  else if (last_name.length() < 1 || last_name.length() > 14) {
+		} else if (last_name.length() < 1 || last_name.length() > 14) {
 			allTrue = false;
 			last_name_error = "Please enter last name within 16 character.";
 		}
@@ -97,7 +98,7 @@ public class EmployeeJavaBean {
 		return allTrue;
 	}
 
-	//for update and delete use
+	// for update and delete use
 	public boolean validateId() {
 		boolean allTrue = true;
 		if (id == null) {
@@ -124,7 +125,7 @@ public class EmployeeJavaBean {
 	public void setId(String id) {
 		try {
 			this.id = Long.valueOf(id);
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 		}
 
 	}
@@ -162,7 +163,9 @@ public class EmployeeJavaBean {
 		try {
 			dob = new SimpleDateFormat("yyyy-MM-dd").parse(birth_date);
 			this.birth_date = new java.sql.Date(dob.getTime());
-		} catch (Exception e) {
+		} catch (ParseException e) {
+		} catch (IllegalArgumentException i) {
+		} catch (NullPointerException n) {
 		}
 
 	}
@@ -176,7 +179,9 @@ public class EmployeeJavaBean {
 		try {
 			hd = new SimpleDateFormat("yyyy-MM-dd").parse(hire_date);
 			this.hire_date = new java.sql.Date(hd.getTime());
-		} catch (Exception e) {
+		} catch (ParseException e) {
+		} catch (IllegalArgumentException i) {
+		} catch (NullPointerException n) {
 		}
 
 	}
@@ -239,11 +244,10 @@ public class EmployeeJavaBean {
 
 	public String getExpress() {
 		if (!express.equals(""))
-			return "<a href='MainServlet?target="+express+"&action=view' target='_blank'> Click me to go.</a>";
+			return "<a href='MainServlet?target=" + express + "&action=view' target='_blank'> Click me to go.</a>";
 		else
 			return "";
 	}
-
 
 	public void setExpress(String express) {
 		this.express = express;

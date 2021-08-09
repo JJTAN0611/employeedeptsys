@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -124,7 +125,7 @@ public class DepartmentEmployeeReportController extends HttpServlet {
 				return;
 
 			}
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
 

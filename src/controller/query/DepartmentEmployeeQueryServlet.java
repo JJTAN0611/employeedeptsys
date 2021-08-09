@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,7 +47,7 @@ public class DepartmentEmployeeQueryServlet extends HttpServlet {
 				try {
 					deptemp = deptempbean.findDepartmentEmployee(request.getParameter("dept_id"),
 							Long.valueOf(request.getParameter("emp_id")));
-				} catch (Exception e) {
+				} catch (EJBException e) {
 					deptemp = null;
 				}
 				List<DepartmentEmployee> h = new ArrayList<DepartmentEmployee>();
@@ -72,7 +73,7 @@ public class DepartmentEmployeeQueryServlet extends HttpServlet {
 				return;
 
 			}
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 
 			LoggingGeneral.setContentPoints(request, "Abnormal process occur: " + ex.getMessage());
 			LoggingGeneral.setExitPoints(request);

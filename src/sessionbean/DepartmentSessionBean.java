@@ -40,7 +40,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		try {
 			List<Object[]> results = q.getResultList();
 			return results;
-		} catch (Exception e) {
+		} catch (NoResultException e) {
 			return null;
 		}
 	}
@@ -86,7 +86,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		try {
 			List<Department> results = q.getResultList();
 			return results;
-		} catch (Exception e) {
+		} catch (NoResultException e) {
 			return null;
 		}
 

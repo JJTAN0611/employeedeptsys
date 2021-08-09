@@ -121,7 +121,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		try {
 			List<DepartmentEmployee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
 			return results;
-		} catch (Exception e) {
+		} catch (NoResultException e) {
 			return null;
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -109,7 +110,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				return;
 
 			}
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
 
@@ -154,7 +155,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 					return;
 				}
 
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Normally is database SQL violation, after validate
 				errorRedirect(e, deub);
 			}
@@ -193,7 +194,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 					}
 				}
 
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Normally is database SQL violation.
 				errorRedirect(e, deub);
 			}
@@ -205,7 +206,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 			LoggingGeneral.setContentPoints(request, "Failed update.");
 
 		} else if (action.compareTo("delete") == 0) {
-
+			
 			// Prepare new use bean
 			DepartmentEmployeeJavaBean deub = new DepartmentEmployeeJavaBean();
 			try {
@@ -232,7 +233,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 					}
 				}
 
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Dont use user record for continuing displaying. It have risk to show not updated data
 				deub = new DepartmentEmployeeJavaBean(
 						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
@@ -248,7 +249,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(Exception e, DepartmentEmployeeJavaBean deub) {
+	public void errorRedirect(EJBException e, DepartmentEmployeeJavaBean deub) {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
@@ -269,7 +270,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				} else
 					deub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
-		} else { //mostly is concurrency issue
+		} else { //Unexpected error.
 			deub.setOverall_error("Try again on department-employee view. Error occur: " + e.toString());
 			deub.setDept_id_error("Try again.");
 			deub.setEmp_id_error("Try again.");

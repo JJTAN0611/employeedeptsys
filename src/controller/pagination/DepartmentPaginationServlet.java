@@ -3,6 +3,7 @@ package controller.pagination;
 import java.io.IOException;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,7 +42,7 @@ public class DepartmentPaginationServlet extends HttpServlet {
 		RequestDispatcher dispatcher = null;
 		try {
 			if (!PaginationValidate.singlePageView(request, response))
-				throw new Exception();
+				throw new EJBException();
 
 			String direction = (String) request.getSession().getAttribute("ddirection");
 			List<Department> list = deptbean.readDepartment(direction); // Ask bean to give list
@@ -53,7 +54,7 @@ public class DepartmentPaginationServlet extends HttpServlet {
 			request.getSession().setAttribute("dverificationToken", String.valueOf(System.currentTimeMillis()));
 			LoggingGeneral.setContentPoints(request, "Success view");
 			
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 			dispatcher = request.getRequestDispatcher("error.jsp");
 			LoggingGeneral.setContentPoints(request, "Unsuccess view" + ex.getMessage());
 		} finally {

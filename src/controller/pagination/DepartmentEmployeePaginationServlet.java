@@ -73,7 +73,7 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 			request.getSession().setAttribute("deverificationToken", String.valueOf(System.currentTimeMillis()));
 			
 			LoggingGeneral.setContentPoints(request, "Success view");
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 			dispatcher = request.getRequestDispatcher("error.jsp");
 			LoggingGeneral.setContentPoints(request, "Unsuccess view" + ex.getMessage());
 		} finally {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -129,7 +130,7 @@ public class EmployeeOperationController extends HttpServlet {
 
 			}
 
-		} catch (Exception ex) {
+		} catch (EJBException ex) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
 
@@ -176,7 +177,7 @@ public class EmployeeOperationController extends HttpServlet {
 
 				// Error in validate
 				eub.setOverall_error("Please fix the error below");
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Normally is database SQL violation, after validate
 				errorRedirect(e, eub);
 			}
@@ -216,7 +217,7 @@ public class EmployeeOperationController extends HttpServlet {
 					}
 				}
 
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Normally is database SQL violation.
 				errorRedirect(e, eub);
 			}
@@ -251,7 +252,7 @@ public class EmployeeOperationController extends HttpServlet {
 						eub.setExpress("employee");
 					}
 				}
-			} catch (Exception e) {
+			} catch (EJBException e) {
 				// Dont use user record for continuing displaying. It have risk to show not updated data
 				eub = new EmployeeJavaBean(empbean.findEmployee(eub.getId()));
 				errorRedirect(e, eub);
@@ -265,7 +266,7 @@ public class EmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(Exception e, EmployeeJavaBean eub) {
+	public void errorRedirect(EJBException e, EmployeeJavaBean eub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
@@ -282,7 +283,7 @@ public class EmployeeOperationController extends HttpServlet {
 				else
 					eub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
-		} else { // mostly is concurrency issue
+		} else { //Unexpected error.
 			eub.setOverall_error("Try again on employee view. Error occur: " + e.getMessage());
 			eub.setId_error("Try again. ");
 			eub.setExpress("employee");
