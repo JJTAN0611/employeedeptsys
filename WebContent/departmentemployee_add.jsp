@@ -20,7 +20,7 @@
 	<h1>
 		<center>Please fill in the following details.</center>
 	</h1>
-	<hr>
+	<hr> <center>Click the view button to see detail.</center>
 	<div class="text-danger text-center"><jsp:getProperty name="deub"
 			property="overall_error" /></div>
 	<br> <br>

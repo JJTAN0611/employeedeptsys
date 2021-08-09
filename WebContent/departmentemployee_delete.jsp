@@ -21,7 +21,7 @@
 		<center>You are deleting following details.</center>
 	</h1>
 	<hr>
-	<center>Click the ID input textbox to see detail.</center>
+	<center>Click the view button to see detail.</center>
 	<div class="text-danger text-center"><jsp:getProperty name="deub"
 			property="overall_error" />
 	</div>
@@ -58,7 +58,7 @@
 								  }
 									$('#checkdept').attr('class', 'btn btn-info');
 								});
-						">Check</button>
+						">View</button>
 					</div>
 
 				</div>
@@ -110,7 +110,7 @@
 								  }
 								  $('#checkemp').attr('class', 'btn btn-info');
 								  });
-						">Check</button>
+						">View</button>
 					</div>
 
 				</div>

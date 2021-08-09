@@ -174,11 +174,15 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	public boolean deleteDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
 		// delete record with given usebean (extract the id)
-		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
-		if (de == null)
+		try {
+			DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
+			em.remove(de);
+			return true;
+		}catch(IllegalArgumentException i) {
 			return false;
-		em.remove(de);
-		return true;
+		}
+
+
 	}
 
 	public void addDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {

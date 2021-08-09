@@ -67,15 +67,14 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 			start = currentPage * recordsPerPage - recordsPerPage;
 			q.setParameter(1, "%" + keyword + "%");
 		}
-		
+
 		try {
 			List<Employee> results = q.setFirstResult(start).setMaxResults(recordsPerPage).getResultList();
 			return results;
 		} catch (NoResultException n) {
 			return null;
 		}
-		
-		
+
 	}
 
 	public int getNumberOfRows(String keyword) throws EJBException {
@@ -92,7 +91,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		try {
 			BigInteger results = (BigInteger) q.getSingleResult();
 			return results.intValue();
-		}catch (NoResultException n) {
+		} catch (NoResultException n) {
 			return 0;
 		}
 	}
@@ -123,7 +122,8 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 	public boolean updateEmployee(EmployeeJavaBean eub) throws EJBException {
 		// update record with given usebean
-		// do find first, avoid directly use the id, sometimes may not exist and will become "add" automatically, if detect return false
+		// do find first, avoid directly use the id, sometimes may not exist and will
+		// become "add" automatically, if detect return false
 		Employee e = findEmployee(eub.getId());
 		if (e == null)
 			return false;
@@ -138,12 +138,13 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException {
 		// delete record with given usebean (extract the id)
-		
-		Employee e = findEmployee(eub.getId());
-		if (e == null)
+		try {
+			Employee e = findEmployee(eub.getId());
+			em.remove(e);
+			return true;
+		} catch (IllegalArgumentException i) {
 			return false;
-		em.remove(e);
-		return true;
+		}
 	}
 
 	public Long addEmployee(EmployeeJavaBean eub) throws EJBException {

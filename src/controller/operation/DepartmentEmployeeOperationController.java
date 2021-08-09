@@ -157,7 +157,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 
 			} catch (EJBException e) {
 				// Normally is database SQL violation, after validate
-				errorRedirect(e, deub);
+				errorSetting(e, deub);
 			}
 			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_add.jsp");
@@ -196,7 +196,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 
 			} catch (EJBException e) {
 				// Normally is database SQL violation.
-				errorRedirect(e, deub);
+				errorSetting(e, deub);
 			}
 
 			request.setAttribute("deub", deub);
@@ -234,10 +234,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				}
 
 			} catch (EJBException e) {
-				// Dont use user record for continuing displaying. It have risk to show not updated data
-				deub = new DepartmentEmployeeJavaBean(
-						deptempbean.findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()));
-				errorRedirect(e, deub);
+				errorSetting(e, deub);
 			}
 			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
@@ -249,7 +246,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(EJBException e, DepartmentEmployeeJavaBean deub) {
+	public void errorSetting(EJBException e, DepartmentEmployeeJavaBean deub) {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {

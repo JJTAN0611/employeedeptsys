@@ -141,11 +141,13 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	public boolean deleteDepartment(DepartmentJavaBean dup) throws EJBException {
 		// delete record with given usebean (extract the id)
-		Department d = findDepartment(dup.getId());
-		if (d == null)
+		try {
+			Department d = findDepartment(dup.getId());
+			em.remove(d);
+			return true;
+		} catch (IllegalArgumentException i) {
 			return false;
-		em.remove(d);
-		return true;
+		}
 	}
 
 	public void addDepartment(DepartmentJavaBean dup) throws EJBException {

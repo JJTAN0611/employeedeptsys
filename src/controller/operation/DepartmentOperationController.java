@@ -154,7 +154,7 @@ public class DepartmentOperationController extends HttpServlet {
 
 			} catch (EJBException e) {
 				// Normally is database PSQL violation, after validate
-				errorRedirect(e, dub);
+				errorSetting(e, dub);
 			}
 
 			request.setAttribute("dub", dub);
@@ -190,7 +190,7 @@ public class DepartmentOperationController extends HttpServlet {
 				}
 			} catch (EJBException e) {
 				// Normally is database PSQL violation.
-				errorRedirect(e, dub);
+				errorSetting(e, dub);
 			}
 
 			request.setAttribute("dub", dub);
@@ -228,7 +228,7 @@ public class DepartmentOperationController extends HttpServlet {
 				// Normally is database PSQL violation.
 				// Dont use user record for continuing displaying. It have risk to show not updated data
 				dub = new DepartmentJavaBean(deptbean.findDepartment(dub.getId()));
-				errorRedirect(e, dub);
+				errorSetting(e, dub);
 			}
 
 			request.setAttribute("dub", dub);
@@ -240,7 +240,7 @@ public class DepartmentOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(EJBException e, DepartmentJavaBean dub) {
+	public void errorSetting(EJBException e, DepartmentJavaBean dub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {

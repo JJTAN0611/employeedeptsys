@@ -179,7 +179,7 @@ public class EmployeeOperationController extends HttpServlet {
 				eub.setOverall_error("Please fix the error below");
 			} catch (EJBException e) {
 				// Normally is database SQL violation, after validate
-				errorRedirect(e, eub);
+				errorSetting(e, eub);
 			}
 			request.setAttribute("eub", eub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_add.jsp");
@@ -219,7 +219,7 @@ public class EmployeeOperationController extends HttpServlet {
 
 			} catch (EJBException e) {
 				// Normally is database SQL violation.
-				errorRedirect(e, eub);
+				errorSetting(e, eub);
 			}
 			request.setAttribute("eub", eub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_update.jsp");
@@ -255,7 +255,7 @@ public class EmployeeOperationController extends HttpServlet {
 			} catch (EJBException e) {
 				// Dont use user record for continuing displaying. It have risk to show not updated data
 				eub = new EmployeeJavaBean(empbean.findEmployee(eub.getId()));
-				errorRedirect(e, eub);
+				errorSetting(e, eub);
 			}
 			request.setAttribute("eub", eub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("employee_delete.jsp");
@@ -266,7 +266,7 @@ public class EmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(EJBException e, EmployeeJavaBean eub) {
+	public void errorSetting(EJBException e, EmployeeJavaBean eub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
