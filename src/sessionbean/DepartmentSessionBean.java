@@ -128,6 +128,33 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		}
 	}
 
+
+	public void addDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
+		// add record with use bean
+		// surround by try catch when calling this function, checking for pk and unique
+		// constraint
+
+		// Check pk constraint
+		Query q1 = em.createNativeQuery(
+				"SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.id = ?");
+		q1.setParameter(1, dub.getId() );
+		if (((BigInteger) q1.getSingleResult()).intValue() > 0) {
+			throw new PSQLException("duplicate key value violates unique constraint, primary", null);
+		}
+
+		// Check unique constraint
+		Query q2 = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = ?");
+		q2.setParameter(1, dub.getDept_name() );
+		if (((BigInteger) q2.getSingleResult()).intValue() > 0) {
+			throw new PSQLException("duplicate key value violates unique constraint, dept_name", null);
+		}
+
+		Department d = new Department();
+		d.setId(dub.getId());
+		d.setDeptName(dub.getDept_name());
+		em.persist(d);
+	}
+	
 	public boolean updateDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
 		// update record with given javabean
 		// do find first, avoid directly use the id, sometimes may not exist and will
@@ -181,30 +208,5 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	}
 
-	public void addDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
-		// add record with use bean
-		// surround by try catch when calling this function, checking for pk and unique
-		// constraint
-
-		// Check pk constraint
-		Query q1 = em.createNativeQuery(
-				"SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.id = ?");
-		q1.setParameter(1, dub.getId() );
-		if (((BigInteger) q1.getSingleResult()).intValue() > 0) {
-			throw new PSQLException("duplicate key value violates unique constraint, primary", null);
-		}
-
-		// Check unique constraint
-		Query q2 = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = ?");
-		q2.setParameter(1, dub.getDept_name() );
-		if (((BigInteger) q2.getSingleResult()).intValue() > 0) {
-			throw new PSQLException("duplicate key value violates unique constraint, dept_name", null);
-		}
-
-		Department d = new Department();
-		d.setId(dub.getId());
-		d.setDeptName(dub.getDept_name());
-		em.persist(d);
-	}
 
 }

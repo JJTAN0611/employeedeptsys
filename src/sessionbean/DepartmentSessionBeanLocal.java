@@ -24,9 +24,10 @@ public interface DepartmentSessionBeanLocal {
 
 	public int getNumberOfRows() throws EJBException;
 
+	public void addDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException;
+	
 	public boolean updateDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException;
 
 	public boolean deleteDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException;
 
-	public void addDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException;
 }

@@ -121,6 +121,23 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		}
 	}
 
+
+	public Long addEmployee(EmployeeJavaBean eub) throws EJBException {
+		// add record with java bean
+		// return the added employee primary key(auto)
+		// No pk constraint
+
+		Employee e = new Employee();
+		e.setFirstName(eub.getFirst_name());
+		e.setLastName(eub.getLast_name());
+		e.setGender(eub.getGender());
+		e.setBirthDate(eub.getBirth_date());
+		e.setHireDate(eub.getHire_date());
+		em.persist(e);
+		return e.getId();
+	}
+
+	
 	public boolean updateEmployee(EmployeeJavaBean eub) throws EJBException {
 		// update record with given javabean
 		// do find first, avoid directly use the id, sometimes may not exist and will
@@ -151,7 +168,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 		// checking for foreign key constraint
 		Query q = em.createNativeQuery(
-				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.department_id = ?");
+				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.employee_id = ?");
 		q.setParameter(1, e.getId() );
 		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("violates foreign key constraint", null);
@@ -160,21 +177,6 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		em.remove(e);
 		return true;
 
-	}
-
-	public Long addEmployee(EmployeeJavaBean eub) throws EJBException {
-		// add record with java bean
-		// return the added employee primary key(auto)
-		// No pk constraint
-
-		Employee e = new Employee();
-		e.setFirstName(eub.getFirst_name());
-		e.setLastName(eub.getLast_name());
-		e.setGender(eub.getGender());
-		e.setBirthDate(eub.getBirth_date());
-		e.setHireDate(eub.getHire_date());
-		em.persist(e);
-		return e.getId();
 	}
 
 }

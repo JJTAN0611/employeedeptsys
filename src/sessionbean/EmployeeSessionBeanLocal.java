@@ -23,9 +23,10 @@ public interface EmployeeSessionBeanLocal {
 
 	public int getNumberOfRows(String keyword) throws EJBException;
 
+	public Long addEmployee(EmployeeJavaBean eub) throws EJBException;
+	
 	public boolean updateEmployee(EmployeeJavaBean eub) throws EJBException;
 
 	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException, PSQLException;
 
-	public Long addEmployee(EmployeeJavaBean eub) throws EJBException;
 }

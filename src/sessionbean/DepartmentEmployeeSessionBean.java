@@ -163,31 +163,6 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	}
 
-	public boolean updateDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
-		// update record with given javabean
-		// do find first, avoid directly use the id, sometimes may not exist and will
-		// become "add" automatically, if detect return false
-		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
-		if (de == null)
-			return false;
-		de.setFromDate(deub.getFrom_date());
-		de.setToDate(deub.getTo_date());
-		em.merge(de);
-		return true;
-	}
-
-	public boolean deleteDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
-		// delete record with given javabean (extract the id)
-
-		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
-		if (de == null)
-			return false;
-
-		em.remove(de);
-		return true;
-
-	}
-
 	public void addDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException, PSQLException {
 		// add record with javabean
 		// a try and catch is surround by calling this action (check foreign key
@@ -220,4 +195,30 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		de.setToDate(deub.getTo_date());
 		em.persist(de);
 	}
+	
+	public boolean updateDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
+		// update record with given javabean
+		// do find first, avoid directly use the id, sometimes may not exist and will
+		// become "add" automatically, if detect return false
+		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
+		if (de == null)
+			return false;
+		de.setFromDate(deub.getFrom_date());
+		de.setToDate(deub.getTo_date());
+		em.merge(de);
+		return true;
+	}
+
+	public boolean deleteDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
+		// delete record with given javabean (extract the id)
+
+		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
+		if (de == null)
+			return false;
+
+		em.remove(de);
+		return true;
+
+	}
+
 }
