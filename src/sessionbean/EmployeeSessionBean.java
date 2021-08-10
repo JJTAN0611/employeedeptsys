@@ -8,7 +8,6 @@ import javax.persistence.Query;
 
 import org.postgresql.util.PSQLException;
 
-import model.entity.DepartmentEmployee;
 import model.entity.Employee;
 import model.javabean.EmployeeJavaBean;
 

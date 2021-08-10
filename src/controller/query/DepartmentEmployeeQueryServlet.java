@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,12 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.postgresql.util.PSQLException;
-
 import model.entity.DepartmentEmployee;
-import model.javabean.DepartmentEmployeeJavaBean;
 import sessionbean.DepartmentEmployeeSessionBeanLocal;
-import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/DepartmentEmployeeQueryServlet")
@@ -59,7 +54,7 @@ public class DepartmentEmployeeQueryServlet extends HttpServlet {
 
 				PrintWriter out = response.getWriter();
 				ObjectMapper mapper = new ObjectMapper();
-				mapper.writeValue(out, h);
+				mapper.writeValue(out, h); //No need if else for null, it will have null in json object
 
 				if (deptemp != null)
 					LoggingGeneral.setContentPoints(request,

@@ -1,11 +1,7 @@
 package controller.main;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,11 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.entity.Department;
-import model.entity.Employee;
 import sessionbean.DepartmentSessionBeanLocal;
-import sessionbean.EmployeeSessionBeanLocal;
-import utilities.ControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/MainServlet")

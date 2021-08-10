@@ -9,11 +9,9 @@ import javax.persistence.Query;
 import org.postgresql.util.PSQLException;
 
 import model.entity.Department;
-import model.entity.DepartmentEmployee;
 import model.javabean.DepartmentJavaBean;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJBException;
 
@@ -185,7 +183,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	public void addDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
 		// add record with use bean
-		// surround by try catch when calling this function, checking for unique
+		// surround by try catch when calling this function, checking for pk and unique
 		// constraint
 
 		// Check pk constraint

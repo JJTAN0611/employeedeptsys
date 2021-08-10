@@ -194,13 +194,14 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		// constraint and duplicate)
 
 		// Check existence in other table(FK)
+		// Check department
 		Query q1 = em.createNativeQuery(
 				"SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.id = ?");
 		q1.setParameter(1,  deub.getDept_id() );
 		if (((BigInteger) q1.getSingleResult()).intValue() == 0) {
 			throw new PSQLException("violates foreign key constraint, \"department\"", null);
 		}
-
+		//Check employee
 		Query q2 = em.createNativeQuery(
 				"SELECT COUNT(*) AS totalrow FROM employees.employee e WHERE e.id = ?");
 		q2.setParameter(1, deub.getEmp_id() );

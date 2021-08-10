@@ -255,7 +255,7 @@ public class EmployeeJavaBean {
 			return "";
 	}
 
-	public void setNavigateExpress(String navigateEpress) {
+	public void setNavigateExpress(String navigateExpress) {
 		this.navigateExpress = navigateExpress;
 	}
 

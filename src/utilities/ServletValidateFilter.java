@@ -1,7 +1,5 @@
 package utilities;
 import java.io.IOException;
-import java.util.logging.Level;
-
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -67,7 +65,8 @@ public class ServletValidateFilter implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		LoggingGeneral.setEntryPoints((HttpServletRequest) request);
-		//Off those handled exception
+		
+		//Off those handled exception, for concurrent issue. Usually PSQL error will catch on application level. 
 		//java.util.logging.Logger.getLogger("org.jboss.as.ejb3.invocation").setLevel(Level.OFF);
 		//java.util.logging.Logger.getLogger("com.arjuna.ats.arjuna").setLevel(Level.OFF);
 		//java.util.logging.Logger.getLogger("org.hibernate.engine.jdbc.spi.SqlExceptionHelper").setLevel(Level.OFF);
