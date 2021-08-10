@@ -177,7 +177,7 @@ public class EmployeeOperationController extends HttpServlet {
 
 				// Error in validate
 				eub.setOverall_error("Please fix the error below");
-			} catch (EJBException e) {
+			} catch (EJBException | PSQLException e) {
 				// Normally is database SQL violation, after validate
 				errorSetting(e, eub);
 			}
@@ -252,7 +252,7 @@ public class EmployeeOperationController extends HttpServlet {
 						eub.setExpress("employee");
 					}
 				}
-			} catch (EJBException e) {
+			} catch (EJBException | PSQLException e) {
 				// Dont use user record for continuing displaying. It have risk to show not updated data
 				eub = new EmployeeJavaBean(empbean.findEmployee(eub.getId()));
 				errorSetting(e, eub);
@@ -266,7 +266,7 @@ public class EmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorSetting(EJBException e, EmployeeJavaBean eub) {
+	public void errorSetting(Exception e, EmployeeJavaBean eub) {
 
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
@@ -275,19 +275,14 @@ public class EmployeeOperationController extends HttpServlet {
 				eub.setOverall_error("You may need to clear the related departmentemployee relation record.");
 				eub.setId_error("This employee is using in relation table and cannot be deleted.");
 				eub.setExpress("departmentemployee");
-			} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
-				// add
-				eub.setOverall_error("Duplicate error. Please change the input as annotated below.");
-				if (psqle.getMessage().contains("primary"))
-					eub.setId_error("Duplicate employee id.");
-				else
-					eub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
+			System.out.println("The PSQL Exception is catched. No problem");
 		} else { //Unexpected error.
 			eub.setOverall_error("Try again on employee view. Error occur: " + e.getMessage());
 			eub.setId_error("Try again. ");
 			eub.setExpress("employee");
 		}
+	
 	}
 
 }

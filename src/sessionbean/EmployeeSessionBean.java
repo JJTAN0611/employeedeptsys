@@ -6,6 +6,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.postgresql.util.PSQLException;
+
 import model.entity.DepartmentEmployee;
 import model.entity.Employee;
 import model.javabean.EmployeeJavaBean;
@@ -121,7 +123,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 	}
 
 	public boolean updateEmployee(EmployeeJavaBean eub) throws EJBException {
-		// update record with given usebean
+		// update record with given javabean
 		// do find first, avoid directly use the id, sometimes may not exist and will
 		// become "add" automatically, if detect return false
 		Employee e = findEmployee(eub.getId());
@@ -136,19 +138,37 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		return true;
 	}
 
-	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException {
-		// delete record with given usebean (extract the id)
-		try {
-			Employee e = findEmployee(eub.getId());
-			em.remove(e);
-			return true;
-		} catch (IllegalArgumentException i) {
+	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException, PSQLException {
+		// delete record with given javabean (extract the id)
+		// if attempt to delete empty record return false
+		// try and catch surround(not the following) when calling this function,
+		// checking for foreign key constraint
+
+		Employee e = findEmployee(eub.getId());
+
+		// checking for not exist department
+		if (e == null)
 			return false;
+
+		// checking for foreign key constraint
+		Query q = em.createNativeQuery(
+				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.department_id = '"
+						+ e.getId() + "'");
+
+		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
+			throw new PSQLException("violates foreign key constraint", null);
 		}
+
+		em.remove(e);
+		return true;
+
 	}
 
-	public Long addEmployee(EmployeeJavaBean eub) throws EJBException {
-		// add record with use bean
+	public Long addEmployee(EmployeeJavaBean eub) throws EJBException, PSQLException {
+		// add record with java bean
+		// return the added employee primary key(auto)
+		// No pk constraint
+
 		Employee e = new Employee();
 		e.setFirstName(eub.getFirst_name());
 		e.setLastName(eub.getLast_name());

@@ -158,7 +158,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				
 				}
 
-			} catch (EJBException e) {
+			} catch (EJBException | PSQLException e) {
 				// Normally is database SQL violation, after validate
 				errorRedirect(e, deub);
 			}
@@ -239,6 +239,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 			} catch (EJBException e) {
 				errorRedirect(e, deub);
 			}
+
 			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_delete.jsp");
 			dispatcher.forward(request, response);
@@ -249,7 +250,8 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(EJBException e, DepartmentEmployeeJavaBean deub) {
+	public void errorRedirect(Exception e, DepartmentEmployeeJavaBean deub) {
+
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
@@ -259,7 +261,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				deub.setEmp_id_error("Duplicate combination of department id and employee id.");
 				return;
 			} else if (psqle.getMessage().contains("violates foreign key constraint")) {
-				// normally occur for operation: delete
+				// normally occur for operation: add
 				deub.setOverall_error("No related records. Please change the input as annotated below.");
 				if (psqle.getMessage().contains("\"department\"")) {
 					deub.setDept_id_error("Department ID not exist in department table.");
@@ -270,12 +272,14 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				} else
 					deub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
+			System.out.println("The PSQL Exception is catched. No problem");
 		} else { //Unexpected error.
 			deub.setOverall_error("Try again on department-employee view. Error occur: " + e.toString());
 			deub.setDept_id_error("Try again.");
 			deub.setEmp_id_error("Try again.");
 			deub.setExpress("departmentemployee");
 		}
+		
 	}
 
 }

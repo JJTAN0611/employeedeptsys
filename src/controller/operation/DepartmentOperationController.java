@@ -1,5 +1,6 @@
 package controller.operation;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -131,6 +132,7 @@ public class DepartmentOperationController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try and catch here
+		// PSQL exception is done by both level - application level and database level. To ensure data.
 		// Input validate done by javabean
 		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
 		// Ensure "delete" is done in session bean, will return false if related record not exist.
@@ -158,7 +160,7 @@ public class DepartmentOperationController extends HttpServlet {
 					return;
 				}
 
-			} catch (EJBException e) {
+			} catch (EJBException | PSQLException e) {
 				// Normally is database PSQL violation, after validate
 				errorSetting(e, dub);
 			}
@@ -194,7 +196,7 @@ public class DepartmentOperationController extends HttpServlet {
 						dub.setExpress("department");
 					}
 				}
-			} catch (EJBException e) {
+			} catch (EJBException | PSQLException e) {
 				// Normally is database PSQL violation.
 				errorSetting(e, dub);
 			}
@@ -230,13 +232,14 @@ public class DepartmentOperationController extends HttpServlet {
 					}
 				}
 
-			} catch (EJBException e) {
+			} catch (EJBException | PSQLException e) {
 				// Normally is database PSQL violation.
 				// Dont use user record for continuing displaying. It have risk to show not updated data
 				dub = new DepartmentJavaBean(deptbean.findDepartment(dub.getId()));
-				errorSetting(e, dub);
+				errorSetting((EJBException) e, dub);
+				
 			}
-
+		
 			request.setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_delete.jsp");
 			dispatcher.forward(request, response);
@@ -246,8 +249,7 @@ public class DepartmentOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorSetting(EJBException e, DepartmentJavaBean dub) {
-
+	public void errorSetting(Exception e, DepartmentJavaBean dub) {
 		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
@@ -265,11 +267,13 @@ public class DepartmentOperationController extends HttpServlet {
 				else
 					dub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
+			System.out.println("This PSQL Exception is catched. No problem");
 		} else { //Unexpected error.
 			dub.setOverall_error("Try again on department view. Error occur: " + e.getMessage());
 			dub.setId_error("Try again.");
 			dub.setExpress("department");
 		}
+		
 	}
 
 }

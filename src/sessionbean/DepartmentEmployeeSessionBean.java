@@ -5,6 +5,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import org.postgresql.util.PSQLException;
+
 import model.entity.DepartmentEmployee;
 import model.entity.DepartmentEmployeePK;
 import model.javabean.DepartmentEmployeeJavaBean;
@@ -38,15 +41,15 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 			q = em.createNativeQuery(
 					"SELECT de.department_id, d.dept_name, de.employee_id, e.first_name, e.last_name, de.from_date, de.to_date "
 							+ "FROM employees.department_employee de, employees.department d, employees.employee e "
-							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
-							+ "ORDER BY department_id " + direction + ", de.employee_id "+ direction);
+							+ "WHERE de.department_id=d.id AND de.employee_id=e.id " + "ORDER BY department_id "
+							+ direction + ", de.employee_id " + direction);
 		} else {
 			q = em.createNativeQuery(
 					"SELECT de.department_id, d.dept_name, de.employee_id, e.first_name, e.last_name, de.from_date, de.to_date "
 							+ "FROM employees.department_employee de, employees.department d, employees.employee e "
 							+ "WHERE de.department_id=d.id AND de.employee_id=e.id "
 							+ "AND lower(concat(de.department_id,' ',d.dept_name,' ', de.employee_id,' ', e.first_name,' ',e.last_name,' ',de.from_date,' ',de.to_date)) "
-							+ "LIKE lower(?) ORDER BY de.department_id " + direction + ", de.employee_id "+ direction);
+							+ "LIKE lower(?) ORDER BY de.department_id " + direction + ", de.employee_id " + direction);
 
 			q.setParameter(1, "%" + keyword + "%");
 		}
@@ -102,8 +105,8 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		Query q = null;
 		int start = 0;
 		if (keyword.isEmpty()) {
-			q = em.createNativeQuery("SELECT * FROM employees.department_employee de order by department_id " + direction + " , de.employee_id "+ direction,
-					DepartmentEmployee.class);
+			q = em.createNativeQuery("SELECT * FROM employees.department_employee de order by department_id "
+					+ direction + " , de.employee_id " + direction, DepartmentEmployee.class);
 
 			start = currentPage * recordsPerPage - recordsPerPage;
 		} else {
@@ -161,8 +164,9 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 	}
 
 	public boolean updateDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
-		// update record with given usebean
-		// do find first, avoid directly use the id, sometimes may not exist and will become "add" automatically, if detect return false
+		// update record with given javabean
+		// do find first, avoid directly use the id, sometimes may not exist and will
+		// become "add" automatically, if detect return false
 		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
 		if (de == null)
 			return false;
@@ -173,20 +177,38 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 	}
 
 	public boolean deleteDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
-		// delete record with given usebean (extract the id)
-		try {
-			DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
-			em.remove(de);
-			return true;
-		}catch(IllegalArgumentException i) {
-			return false;
-		}
+		// delete record with given javabean (extract the id)
 
+		DepartmentEmployee de = findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id());
+		if (de == null)
+			return false;
+
+		em.remove(de);
+		return true;
 
 	}
 
-	public void addDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
-		// add record with use bean
+	public void addDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException, PSQLException {
+		// add record with javabean
+		// a try and catch is surround by calling this action (check foreign key
+		// constraint and duplicate)
+
+		// Check existence in other table(FK)
+		Query q1 = em.createNativeQuery(
+				"SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.id = '" + deub.getDept_id() + "'");
+		if (((BigInteger) q1.getSingleResult()).intValue() == 0) {
+			throw new PSQLException("violates foreign key constraint, \"department\"", null);
+		}
+
+		Query q2 = em.createNativeQuery(
+				"SELECT COUNT(*) AS totalrow FROM employees.employee e WHERE e.id = " + deub.getEmp_id());
+		if (((BigInteger) q2.getSingleResult()).intValue() == 0) {
+			throw new PSQLException("violates foreign key constraint, \"employee\"", null);
+		}
+
+		// Check duplicate
+		if (findDepartmentEmployee(deub.getDept_id(), deub.getEmp_id()) != null)
+			throw new PSQLException("duplicate key value violates unique constraint", null);
 
 		DepartmentEmployeePK depk = new DepartmentEmployeePK(deub.getDept_id(), deub.getEmp_id());
 		DepartmentEmployee de = new DepartmentEmployee();

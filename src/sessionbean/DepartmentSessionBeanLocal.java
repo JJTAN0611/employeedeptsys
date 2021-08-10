@@ -5,6 +5,8 @@ import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Local;
 
+import org.postgresql.util.PSQLException;
+
 import model.entity.Department;
 import model.javabean.DepartmentJavaBean;
 
@@ -22,9 +24,9 @@ public interface DepartmentSessionBeanLocal {
 
 	public int getNumberOfRows() throws EJBException;
 
-	public boolean updateDepartment(DepartmentJavaBean dup) throws EJBException;
+	public boolean updateDepartment(DepartmentJavaBean dup) throws EJBException, PSQLException;
 
-	public boolean deleteDepartment(DepartmentJavaBean dup) throws EJBException;
+	public boolean deleteDepartment(DepartmentJavaBean dup) throws EJBException, PSQLException;
 
-	public void addDepartment(DepartmentJavaBean dup) throws EJBException;
+	public void addDepartment(DepartmentJavaBean dup) throws EJBException, PSQLException;
 }

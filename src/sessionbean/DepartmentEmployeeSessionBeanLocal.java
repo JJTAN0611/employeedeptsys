@@ -5,6 +5,8 @@ import java.util.List;
 import javax.ejb.EJBException;
 import javax.ejb.Local;
 
+import org.postgresql.util.PSQLException;
+
 import model.entity.DepartmentEmployee;
 import model.javabean.DepartmentEmployeeJavaBean;
 
@@ -25,5 +27,5 @@ public interface DepartmentEmployeeSessionBeanLocal {
 
 	public boolean deleteDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException;
 
-	public void addDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException;
+	public void addDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException, PSQLException;
 }
