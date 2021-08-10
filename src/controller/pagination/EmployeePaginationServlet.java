@@ -60,7 +60,7 @@ public class EmployeePaginationServlet extends HttpServlet {
 			if (currentPage > nOfPages && nOfPages != 0) {
 				currentPage = nOfPages; // if larger than total page, set to maximum
 			}
-
+			request.getSession().setAttribute("ecurrentPage",currentPage);//save back
 			List<Employee> list = empbean.readEmployee(currentPage, recordsPerPage, keyword, direction); // Ask bean to
 																											// give list
 			request.setAttribute("employeeList", list);

@@ -166,7 +166,7 @@
 			<div class="col-lg-4 col-sm-6">
 				<div class="item wow bounceInUp justify-content-center"  style="align-content: center" data-wow-duration="1s"
 					data-wow-delay="0.3s">
-					<a href="MainServlet?target=department&action=view&keyword=">
+					<a href="MainServlet?target=department&action=view">
 
 						<div class="hidden-content">
 							<h4>Department Record</h4>
@@ -182,7 +182,7 @@
 				<div class="item wow bounceInUp" data-wow-duration="1s"
 					data-wow-delay="0.4s">
 					<a
-						href="MainServlet?target=departmentemployee&action=view&keyword=">
+						href="MainServlet?target=departmentemployee&action=view&currentPage=1&keyword=">
 
 						<div class="hidden-content">
 							<h4>Department-Employee Record</h4>
@@ -197,7 +197,7 @@
 			<div class="col-lg-4 col-sm-6">
 				<div class="item wow bounceInUp" data-wow-duration="1s"
 					data-wow-delay="0.5s">
-					<a href="MainServlet?target=employee&action=view&keyword=">
+					<a href="MainServlet?target=employee&action=view&currentPage=1&keyword=">
 
 						<div class="hidden-content">
 							<h4>Employee Record</h4>

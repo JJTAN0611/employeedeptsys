@@ -34,8 +34,10 @@ button[aria-expanded=false] .fa-chevron-down {
 				Employee Record
 				<div class="badge bg-light text-info text-wrap">View</div>
 			</div>
-			<div class="text-end col-3 wow bounceIn" data-wow-duration="2s" data-wow-delay="0.2s">
-				<button class="btn btn-success rounded-pill border border-light border-5"
+			<div class="text-end col-3 wow bounceIn" data-wow-duration="2s"
+				data-wow-delay="0.2s">
+				<button
+					class="btn btn-success rounded-pill border border-light border-5"
 					style="font-size: 20px; font-weight: bold;"
 					onclick="document.getElementById('addemployee').click()">+
 					Add Record</button>
@@ -65,9 +67,9 @@ button[aria-expanded=false] .fa-chevron-down {
 			<div id="pane" class="card-body collapse show ">
 				<form class="form-inline md-form mr-auto" action="MainServlet"
 					method="get">
-					<input type="hidden" name=target value="employee" /> <input
-						type="hidden" name=action value="view" />
-
+					<input type="hidden" name="target" value="employee" /> <input
+						type="hidden" name="action" value="view" /> <input type="hidden"
+						name=currentPage value="1" /> 
 					<div class="card text-dark bg-light">
 						<div class="card-body">
 							<div class="row">
@@ -140,8 +142,11 @@ button[aria-expanded=false] .fa-chevron-down {
 							</div>
 						</div>
 						<div class="col-3">
-							<a href="MainServlet?target=employee&action=view&keyword=" class="btn btn-outline-info fw-bold float-start border-5">Reset keyword</a>
-							<button class="btn btn-info btn-lg fw-bold float-end" type="submit">Go !</button>
+							<a href="MainServlet?target=employee&action=view&currentPage=1&keyword="
+								class="btn btn-outline-info fw-bold float-start border-5">Reset
+								keyword</a>
+							<button class="btn btn-info btn-lg fw-bold float-end"
+								type="submit">Go !</button>
 						</div>
 					</div>
 				</form>
@@ -158,8 +163,8 @@ button[aria-expanded=false] .fa-chevron-down {
 				onclick='alert("Report generating. Please hold on."); javascript:window.open("<%=response.encodeURL("MainServlet?target=employee&action=report&verificationToken="
 					+ ((String) request.getSession().getAttribute("everificationToken")))%>", "_blank", "scrollbars=1,resizable=1,height=700,width=600");'
 				class="btn btn-info btn-circle float-end shadow-lg"
-				style="border-radius: 30px"><i class="fas fa-file"></i>  Report for this current search. Click to download.
-			</a>
+				style="border-radius: 30px"><i class="fas fa-file"></i> Report
+				for this current search. Click to download. </a>
 		</div>
 		<br>
 		<table
@@ -187,7 +192,8 @@ button[aria-expanded=false] .fa-chevron-down {
 				<td><%=t.getId()%></td>
 				<td><%=t.getFirstName()%></td>
 				<td><%=t.getLastName()%></td>
-				<td><%=(t.getGender().compareTo("M") == 0 ? "Male" : "Female")%> <i
+				<td><%=(t.getGender().compareTo("M") == 0 ? "Male" : "Female")%>
+					<i
 					class='fas fa-<%=(t.getGender().compareTo("M") == 0 ? "mars" : "venus")%>'></i></td>
 				<td><%=t.getBirthDate()%></td>
 				<td><%=t.getHireDate()%></td>
@@ -256,7 +262,7 @@ button[aria-expanded=false] .fa-chevron-down {
 
 				</ul>
 			</nav>
-			<div class='pageref col-6 text-end'><%=employee.size()==0?0:currentPage%>
+			<div class='pageref col-6 text-end'><%=employee.size() == 0 ? 0 : currentPage%>
 				of
 				<%=nOfPages%></div>
 		</div>

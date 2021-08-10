@@ -62,9 +62,9 @@ button[aria-expanded=false] .fa-chevron-down {
 			<div id="pane" class="card-body collapse show ">
 				<form class="form-inline md-form mr-auto" action="MainServlet"
 					method="get">
-					<input type="hidden" name=target value="departmentemployee" /> <input
-						type="hidden" name=action value="view" />
-
+					<input type="hidden" name="target" value="departmentemployee" /> <input
+						type="hidden" name="action" value="view" />
+					<input type="hidden" name="currentPage" value="1" /> 
 
 					<div class="card text-dark bg-light">
 						<div class="card-body">
@@ -140,7 +140,7 @@ button[aria-expanded=false] .fa-chevron-down {
 							</div>
 						</div>
 						<div class="col-3">
-							<a href="MainServlet?target=departmentemployee&action=view&keyword=" class="btn btn-outline-info fw-bold float-start border-5">Reset keyword</a>
+							<a href="MainServlet?target=departmentemployee&action=view&currentPage=1&keyword=" class="btn btn-outline-info fw-bold float-start border-5">Reset keyword</a>
 							<button class="btn btn-info btn-lg fw-bold float-end" type="submit">Go !</button>
 						</div>
 					</div>
