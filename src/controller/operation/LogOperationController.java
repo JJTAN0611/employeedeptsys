@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import utilities.ControllerManagement;
+import utilities.OperationControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/LogOperationController")
@@ -63,7 +63,7 @@ public class LogOperationController extends HttpServlet {
 				bw.write("");
 				bw.flush();
 				bw.close();
-				ControllerManagement.navigateSuccess(request, response);
+				OperationControllerManagement.navigateSuccess(request, response);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 				LoggingGeneral.setContentPoints(request, "Unsuccess remove log. Failed");

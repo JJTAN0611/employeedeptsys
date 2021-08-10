@@ -15,7 +15,7 @@ import org.postgresql.util.PSQLException;
 import model.entity.Department;
 import model.javabean.DepartmentJavaBean;
 import sessionbean.DepartmentSessionBeanLocal;
-import utilities.ControllerManagement;
+import utilities.OperationControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/DepartmentOperationController")
@@ -146,7 +146,7 @@ public class DepartmentOperationController extends HttpServlet {
 					// When it success validate, write into database
 					deptbean.addDepartment(dub);
 
-					ControllerManagement.navigateSuccess(request, response);
+					OperationControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + dub.getId());
 					LoggingGeneral.setExitPoints(request);
 					return;
@@ -178,7 +178,7 @@ public class DepartmentOperationController extends HttpServlet {
 					if (dub.validate()) {
 						// try to update. sessionbean will return false when id not exist
 						if (deptbean.updateDepartment(dub)) {
-							ControllerManagement.navigateSuccess(request, response);
+							OperationControllerManagement.navigateSuccess(request, response);
 							LoggingGeneral.setContentPoints(request, "Success update --> ID:" + dub.getId());
 							LoggingGeneral.setExitPoints(request);
 							return;
@@ -218,7 +218,7 @@ public class DepartmentOperationController extends HttpServlet {
 				if (dub.validateId()) {
 					// try to delete. session bean will return false when id not exist
 					if (deptbean.deleteDepartment(dub)) {
-						ControllerManagement.navigateSuccess(request, response);
+						OperationControllerManagement.navigateSuccess(request, response);
 						LoggingGeneral.setContentPoints(request, "Success delete --> ID:" + dub.getId());
 						LoggingGeneral.setExitPoints(request);
 						return;
@@ -253,7 +253,7 @@ public class DepartmentOperationController extends HttpServlet {
 	}
 
 	public void errorSetting(Exception e, DepartmentJavaBean dub) {
-		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
+		PSQLException psqle = OperationControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
 				// delete

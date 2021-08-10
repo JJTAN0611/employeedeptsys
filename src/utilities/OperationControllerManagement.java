@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ControllerManagement {
+public class OperationControllerManagement {
 
 	// This method is to get the PSQL error message
 	public static <T> T unwrapCause(Class<T> clazz, Throwable e) {

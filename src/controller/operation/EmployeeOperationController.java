@@ -15,7 +15,7 @@ import org.postgresql.util.PSQLException;
 import model.entity.Employee;
 import model.javabean.EmployeeJavaBean;
 import sessionbean.EmployeeSessionBeanLocal;
-import utilities.ControllerManagement;
+import utilities.OperationControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/EmployeeOperationController")
@@ -167,7 +167,7 @@ public class EmployeeOperationController extends HttpServlet {
 					request.getSession().setAttribute("ekeyword",
 							String.valueOf(addedEmployeeId) + " " + eub.getFirst_name() + " " + eub.getLast_name());
 
-					ControllerManagement.navigateSuccess(request, response);
+					OperationControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + eub.getId() + ". Completed.");
 					LoggingGeneral.setExitPoints(request);
 					return;
@@ -208,7 +208,7 @@ public class EmployeeOperationController extends HttpServlet {
 							request.getSession().setAttribute("ekeyword",
 									String.valueOf(eub.getId()) + " " + eub.getFirst_name() + " " + eub.getLast_name());
 							
-							ControllerManagement.navigateSuccess(request, response);
+							OperationControllerManagement.navigateSuccess(request, response);
 							LoggingGeneral.setContentPoints(request,
 									"Success " + action + " --> ID:" + eub.getFirst_name() + ". Completed");
 							return;
@@ -247,7 +247,7 @@ public class EmployeeOperationController extends HttpServlet {
 				if (eub.validateId()) {
 					// try to delete. sessionbean will return false when id not exist
 					if (empbean.deleteEmployee(eub)) {
-						ControllerManagement.navigateSuccess(request, response);
+						OperationControllerManagement.navigateSuccess(request, response);
 						LoggingGeneral.setContentPoints(request,
 								"Success delete --> ID:" + eub.getId() + ". Completed.");
 						LoggingGeneral.setExitPoints(request);
@@ -280,7 +280,7 @@ public class EmployeeOperationController extends HttpServlet {
 
 	public void errorSetting(Exception e, EmployeeJavaBean eub) {
 
-		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
+		PSQLException psqle = OperationControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
 				// delete

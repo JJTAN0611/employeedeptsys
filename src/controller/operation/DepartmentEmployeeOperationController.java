@@ -15,7 +15,7 @@ import org.postgresql.util.PSQLException;
 import model.entity.DepartmentEmployee;
 import model.javabean.DepartmentEmployeeJavaBean;
 import sessionbean.DepartmentEmployeeSessionBeanLocal;
-import utilities.ControllerManagement;
+import utilities.OperationControllerManagement;
 import utilities.LoggingGeneral;
 
 @WebServlet("/DepartmentEmployeeOperationController")
@@ -147,7 +147,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 					request.getSession().setAttribute("dekeyword", deub.getDept_id() + "%" + deub.getEmp_id() + "%"
 							+ deub.getFrom_date() + " " + deub.getTo_date());
 
-					ControllerManagement.navigateSuccess(request, response);
+					OperationControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request,
 							"Success add --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id() + ". Completed.");
 					LoggingGeneral.setExitPoints(request);
@@ -157,7 +157,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 
 			} catch (EJBException | PSQLException e) {
 				// Normally is database SQL violation, after validate
-				errorRedirect(e, deub);
+				errorSetting(e, deub);
 			}
 			request.setAttribute("deub", deub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("departmentemployee_add.jsp");
@@ -186,7 +186,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 							request.getSession().setAttribute("dekeyword", deub.getDept_id() + "%" + deub.getEmp_id() + "%"
 									+ deub.getFrom_date() + " " + deub.getTo_date());
 							
-							ControllerManagement.navigateSuccess(request, response);
+							OperationControllerManagement.navigateSuccess(request, response);
 							LoggingGeneral.setContentPoints(request, "Success update --> ID:" + deub.getDept_id()
 									+ " | " + deub.getEmp_id() + ". Completed.");
 							LoggingGeneral.setExitPoints(request);
@@ -208,7 +208,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 
 			} catch (EJBException e) {
 				// Normally is database SQL violation.
-				errorRedirect(e, deub);
+				errorSetting(e, deub);
 			}
 
 			request.setAttribute("deub", deub);
@@ -230,7 +230,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				if (deub.validateId()) {
 					// try to delete. sessionbean will return false when id not exist
 					if (deptempbean.deleteDepartmentEmployee(deub)) {
-						ControllerManagement.navigateSuccess(request, response);
+						OperationControllerManagement.navigateSuccess(request, response);
 
 						LoggingGeneral.setContentPoints(request, "Success delete --> ID:" + deub.getDept_id() + " | "
 								+ deub.getEmp_id() + ". Completed.");
@@ -253,7 +253,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				}
 
 			} catch (EJBException e) {
-				errorRedirect(e, deub);
+				errorSetting(e, deub);
 			}
 
 			request.setAttribute("deub", deub);
@@ -266,9 +266,9 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 		LoggingGeneral.setExitPoints(request);
 	}
 
-	public void errorRedirect(Exception e, DepartmentEmployeeJavaBean deub) {
+	public void errorSetting(Exception e, DepartmentEmployeeJavaBean deub) {
 
-		PSQLException psqle = ControllerManagement.unwrapCause(PSQLException.class, e);
+		PSQLException psqle = OperationControllerManagement.unwrapCause(PSQLException.class, e);
 		if (psqle != null) {
 			if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
 				// normally occur for operation: add
