@@ -143,9 +143,9 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 			return false;
 
 		// Check unique constraint
-		Query q2 = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = '"
-				+ dup.getDept_name() + "'");
-		if (((BigInteger) q2.getSingleResult()).intValue() > 0) {
+		Query q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = ?");
+		q.setParameter(1, dup.getDept_name() );
+		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("duplicate key value violates unique constraint, dept_name", null);
 		}
 
@@ -168,9 +168,8 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 		// checking for foreign key constraint
 		Query q = em.createNativeQuery(
-				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.department_id = '"
-						+ d.getId() + "'");
-
+				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.department_id = ?");
+		q.setParameter(1, dup.getId() );
 		// checking for foreign key constraint
 		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("violates foreign key constraint", null);
@@ -189,14 +188,15 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 		// Check pk constraint
 		Query q1 = em.createNativeQuery(
-				"SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.id = '" + dup.getId() + "'");
+				"SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.id = ?");
+		q1.setParameter(1, dup.getId() );
 		if (((BigInteger) q1.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("duplicate key value violates unique constraint, primary", null);
 		}
 
 		// Check unique constraint
-		Query q2 = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = '"
-				+ dup.getDept_name() + "'");
+		Query q2 = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = ?");
+		q2.setParameter(1, dup.getDept_name() );
 		if (((BigInteger) q2.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("duplicate key value violates unique constraint, dept_name", null);
 		}

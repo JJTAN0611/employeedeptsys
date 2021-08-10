@@ -17,7 +17,8 @@
 	<br>
 	<h5 class="text-center">
 		<%
-			if (((String) request.getAttribute("action")).compareTo("add") == 0) {
+		String action=((String) request.getAttribute("action"));
+			if (action.compareTo("add") == 0||action.compareTo("update")==0) {
 		%>
 		Navigating to newly added record on view page.
 		<%

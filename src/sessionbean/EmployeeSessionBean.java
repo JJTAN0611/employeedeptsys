@@ -152,9 +152,8 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 		// checking for foreign key constraint
 		Query q = em.createNativeQuery(
-				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.department_id = '"
-						+ e.getId() + "'");
-
+				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.department_id = ?");
+		q.setParameter(1, e.getId() );
 		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("violates foreign key constraint", null);
 		}

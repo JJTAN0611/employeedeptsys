@@ -208,6 +208,11 @@ public class EmployeeOperationController extends HttpServlet {
 					if (eub.validate()) {
 						// try to update. sessionbean will return false when id not exist
 						if (empbean.updateEmployee(eub) == true) {
+							
+							// pagination set to new employee record
+							request.getSession().setAttribute("ekeyword",
+									String.valueOf(eub.getId()) + " " + eub.getFirst_name() + " " + eub.getLast_name());
+							
 							ControllerManagement.navigateSuccess(request, response);
 							LoggingGeneral.setContentPoints(request,
 									"Success " + action + " --> ID:" + eub.getFirst_name() + ". Completed");
