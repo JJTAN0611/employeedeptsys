@@ -17,7 +17,7 @@ public class ServletValidateFilter implements Filter{
 	 * parameter is target, action. If not have related parameter, it will be filtered
 	 */
 
-	private boolean action(ServletRequest request, ServletResponse response) {
+	private boolean actionValidate(ServletRequest request, ServletResponse response) {
 		//retrieve
 		String action = request.getParameter("action");
 		if(action==null)
@@ -42,7 +42,7 @@ public class ServletValidateFilter implements Filter{
 		}
 	}
 
-	private boolean target(ServletRequest request, ServletResponse response) {
+	private boolean targetValidate(ServletRequest request, ServletResponse response) {
 		
 		//retrieve
 		String target = request.getParameter("target");
@@ -72,7 +72,7 @@ public class ServletValidateFilter implements Filter{
 		//java.util.logging.Logger.getLogger("org.hibernate.engine.jdbc.spi.SqlExceptionHelper").setLevel(Level.OFF);
 		
 		// TODO Auto-generated method stub
-		if(action(request, response) && target(request, response)) {
+		if(actionValidate(request, response) && targetValidate(request, response)) {
 			chain.doFilter(request, response);
 			LoggingGeneral.setContentPoints((HttpServletRequest) request, "No obvious url error. Proceed.");
 		}else {
