@@ -30,6 +30,12 @@ public class PaginationValidate {
 	}
 
 	public static boolean singlePageView(HttpServletRequest request, HttpServletResponse response) {
+		//Validate the parameter
+		//if the parameter is false, this boolean function will return false
+		// if no problem return true, all the paramter will saved to attribute(session)
+		// This can be used back when user leave the view page for update, delete and etc.
+		// this will avoid the url sniffing attach or sql injection (direction)
+		
 		String direction = request.getParameter("direction");
 
 		if (direction == null) {
@@ -45,6 +51,12 @@ public class PaginationValidate {
 	}
 
 	public static boolean multiplePageView(HttpServletRequest request, HttpServletResponse response) {
+		//Validate the parameter
+		//if the parameter is false, this boolean function will return false
+		// if no problem return true, all the paramter will saved to attribute(session)
+		// This can be used back when user leave the view page for update, delete and etc.
+		// this will avoid the url sniffing attach or sql injection (direction)
+		
 		String direction = request.getParameter("direction");
 		String currentPage = request.getParameter("currentPage");
 		String recordsPerPage = request.getParameter("recordsPerPage");

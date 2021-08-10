@@ -10,6 +10,7 @@ public class LoggingGeneral {
 
 	private static Logger logger = LogManager.getRootLogger();
 
+	//servlet context (in loging track)
 	public static void setInit() {
 		logger.info("Initalised");
 	}
@@ -18,6 +19,7 @@ public class LoggingGeneral {
 		logger.info("Destroyed");
 	}
 
+	// record session
 	public static void setSessionInit(String sessionId) {
 		logger.info("Session Initalised: " + sessionId);
 	}
@@ -26,6 +28,7 @@ public class LoggingGeneral {
 		logger.info("Session Destroyed: " + sessionId);
 	}
 
+	//record request
 	public static void setEntryPoints(HttpServletRequest request) {
 		logger.info("Entry Points. SessionID:" + request.getSession().getId());
 	}

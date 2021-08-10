@@ -71,7 +71,11 @@ public class ServletValidateFilter implements Filter{
 		//java.util.logging.Logger.getLogger("com.arjuna.ats.arjuna").setLevel(Level.OFF);
 		//java.util.logging.Logger.getLogger("org.hibernate.engine.jdbc.spi.SqlExceptionHelper").setLevel(Level.OFF);
 		
-		// TODO Auto-generated method stub
+		// verify the action and target
+		// action is update, delete, view etc.
+		// target is to which table. department, employee, department_employee
+		// if no problem, it will save the parameter as attribute, then the attribute will be used as following process.
+		
 		if(actionValidate(request, response) && targetValidate(request, response)) {
 			chain.doFilter(request, response);
 			LoggingGeneral.setContentPoints((HttpServletRequest) request, "No obvious url error. Proceed.");

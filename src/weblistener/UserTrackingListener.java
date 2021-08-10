@@ -13,14 +13,14 @@ public class UserTrackingListener implements HttpSessionListener {
 
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
-		LoggingGeneral.setSessionInit(se.getSession().getId());
+		LoggingGeneral.setSessionInit(se.getSession().getId());//record
 		userId++;
 		users++;
 	}
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
-		LoggingGeneral.setSessionInit(se.getSession().getId());
+		LoggingGeneral.setSessionInit(se.getSession().getId());//record
 		users--;
 	}
 
