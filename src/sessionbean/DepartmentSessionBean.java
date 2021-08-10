@@ -137,10 +137,12 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		// surround by try catch when calling this function, checking for unique
 		// constraint
 		Department d = findDepartment(dup.getId());
+		
+		// checking for not exist department
 		if (d == null)
 			return false;
 
-		// Check pk constraint
+		// Check unique constraint
 		Query q2 = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = '"
 				+ dup.getDept_name() + "'");
 		if (((BigInteger) q2.getSingleResult()).intValue() > 0) {

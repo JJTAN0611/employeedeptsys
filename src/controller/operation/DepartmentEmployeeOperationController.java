@@ -124,10 +124,13 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try and catch here
+		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try
+		// and catch here
 		// Input validate done by javabean
-		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
-		// Ensure "delete" is done in session bean, will return false if related record not exist.
+		// Ensure "update" instead of "add" is done in session bean, will return false
+		// if related record not exist.
+		// Ensure "delete" is done in session bean, will return false if related record
+		// not exist.
 
 		String action = (String) request.getAttribute("action");
 
@@ -146,16 +149,17 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				if (deub.validate()) {
 					// When it success, write into database
 					deptempbean.addDepartmentEmployee(deub);
-					
+
 					// pagination set to new department employee record
-					request.getSession().setAttribute("dekeyword",deub.getDept_id()+"%"+deub.getEmp_id()+"%"+deub.getFrom_date()+" "+deub.getTo_date());
-					
+					request.getSession().setAttribute("dekeyword", deub.getDept_id() + "%" + deub.getEmp_id() + "%"
+							+ deub.getFrom_date() + " " + deub.getTo_date());
+
 					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request,
 							"Success add --> ID:" + deub.getDept_id() + " | " + deub.getEmp_id() + ". Completed.");
 					LoggingGeneral.setExitPoints(request);
 					return;
-				
+
 				}
 
 			} catch (EJBException | PSQLException e) {
@@ -180,21 +184,28 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				deub.setTo_date(request.getParameter("to_date"));
 
 				// Call for validate
-				if (deub.validate()) {
-					// try to update. sessionbean will return false when id not exist
-					if (deptempbean.updateDepartmentEmployee(deub)) {
-						ControllerManagement.navigateSuccess(request, response);
-						LoggingGeneral.setContentPoints(request, "Success update --> ID:" + deub.getDept_id() + " | "
-								+ deub.getEmp_id() + ". Completed.");
-						LoggingGeneral.setExitPoints(request);
-						return;
-					} else {
-						// Not exist
-						deub.setDept_id_error("Department and employee combination not exist");
-						deub.setEmp_id_error("Department and employee combination not exist");
-						deub.setOverall_error("It might be sitmoutaneous use performed the same action. Please try again from department-employee view.");
-						deub.setExpress("departmentemployee");
+				if (deub.validateId()) {
+					if (deub.validate()) {
+						// try to update. sessionbean will return false when id not exist
+						if (deptempbean.updateDepartmentEmployee(deub)) {
+							ControllerManagement.navigateSuccess(request, response);
+							LoggingGeneral.setContentPoints(request, "Success update --> ID:" + deub.getDept_id()
+									+ " | " + deub.getEmp_id() + ". Completed.");
+							LoggingGeneral.setExitPoints(request);
+							return;
+						} else {
+							// Not exist
+							deub.setDept_id_error("Department and employee combination not exist");
+							deub.setEmp_id_error("Department and employee combination not exist");
+							deub.setOverall_error(
+									"It might be sitmoutaneous use performed the same action. Please try again from department-employee view.");
+							deub.setExpress("departmentemployee");
+						}
 					}
+				} else {
+					deub.setDept_id_error("Abnormal process. Try again at departmentemployee view");
+					deub.setEmp_id_error("Abnormal process. Try again at departmentemployee view");
+					deub.setExpress("departmentemployee");
 				}
 
 			} catch (EJBException e) {
@@ -209,7 +220,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 			LoggingGeneral.setContentPoints(request, "Failed update.");
 
 		} else if (action.compareTo("delete") == 0) {
-			
+
 			// Prepare new use bean
 			DepartmentEmployeeJavaBean deub = new DepartmentEmployeeJavaBean();
 			try {
@@ -229,11 +240,18 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 						return;
 					} else {
 						// Not exist
-						deub.setDept_id_error("Department and employee combination not exist. Try again on department-employee view.");
-						deub.setEmp_id_error("Department and employee combination not exist. Try again on department-employee view.");
-						deub.setOverall_error("It might be sitmoutaneous user performed the same action. Try again on department-employee view.");
+						deub.setDept_id_error(
+								"Department and employee combination not exist. Try again on department-employee view.");
+						deub.setEmp_id_error(
+								"Department and employee combination not exist. Try again on department-employee view.");
+						deub.setOverall_error(
+								"It might be sitmoutaneous user performed the same action. Try again on department-employee view.");
 						deub.setExpress("departmentemployee");
 					}
+				} else {
+					deub.setDept_id_error("Abnormal process. Try again at departmentemployee view");
+					deub.setEmp_id_error("Abnormal process. Try again at departmentemployee view");
+					deub.setExpress("departmentemployee");
 				}
 
 			} catch (EJBException e) {
@@ -273,13 +291,13 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 					deub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
 			System.out.println("The PSQL Exception is catched. No problem");
-		} else { //Unexpected error.
+		} else { // Unexpected error.
 			deub.setOverall_error("Try again on department-employee view. Error occur: " + e.toString());
 			deub.setDept_id_error("Try again.");
 			deub.setEmp_id_error("Try again.");
 			deub.setExpress("departmentemployee");
 		}
-		
+
 	}
 
 }

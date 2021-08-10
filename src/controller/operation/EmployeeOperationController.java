@@ -142,11 +142,14 @@ public class EmployeeOperationController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try and catch here
+		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try
+		// and catch here
 		// Input validate done by javabean
-		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
-		// Ensure "delete" is done in session bean, will return false if related record not exist.
-		
+		// Ensure "update" instead of "add" is done in session bean, will return false
+		// if related record not exist.
+		// Ensure "delete" is done in session bean, will return false if related record
+		// not exist.
+
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
@@ -177,7 +180,7 @@ public class EmployeeOperationController extends HttpServlet {
 
 				// Error in validate
 				eub.setOverall_error("Please fix the error below");
-			} catch (EJBException | PSQLException e) {
+			} catch (EJBException e) {
 				// Normally is database SQL violation, after validate
 				errorSetting(e, eub);
 			}
@@ -201,20 +204,25 @@ public class EmployeeOperationController extends HttpServlet {
 				eub.setHire_date(request.getParameter("hire_date"));
 
 				// Call for validate
-				if (eub.validate()) {
-					// try to update. sessionbean will return false when id not exist
-					if (empbean.updateEmployee(eub) == true) {
-						ControllerManagement.navigateSuccess(request, response);
-						LoggingGeneral.setContentPoints(request,
-								"Success " + action + " --> ID:" + eub.getFirst_name() + ". Completed");
-						return;
-					} else {
-						// Not exist
-						eub.setId_error("Employee not exist");
-						eub.setOverall_error(
-								"It might be sitmoutaneous use performed the same action. Please try again in employee view.");
-						eub.setExpress("employee");
+				if (eub.validateId()) {
+					if (eub.validate()) {
+						// try to update. sessionbean will return false when id not exist
+						if (empbean.updateEmployee(eub) == true) {
+							ControllerManagement.navigateSuccess(request, response);
+							LoggingGeneral.setContentPoints(request,
+									"Success " + action + " --> ID:" + eub.getFirst_name() + ". Completed");
+							return;
+						} else {
+							// Not exist
+							eub.setId_error("Employee not exist");
+							eub.setOverall_error(
+									"It might be sitmoutaneous use performed the same action. Please try again in employee view.");
+							eub.setExpress("employee");
+						}
 					}
+				} else {
+					eub.setId_error("Abnormal process. Try again at employee view");
+					eub.setExpress("employee");
 				}
 
 			} catch (EJBException e) {
@@ -251,9 +259,13 @@ public class EmployeeOperationController extends HttpServlet {
 								"It might be sitmoutaneous user performed the same action. Try again on employee view.");
 						eub.setExpress("employee");
 					}
+				} else {
+					eub.setId_error("Abnormal process. Try again at employee view");
+					eub.setExpress("employee");
 				}
 			} catch (EJBException | PSQLException e) {
-				// Dont use user record for continuing displaying. It have risk to show not updated data
+				// Dont use user record for continuing displaying. It have risk to show not
+				// updated data
 				eub = new EmployeeJavaBean(empbean.findEmployee(eub.getId()));
 				errorSetting(e, eub);
 			}
@@ -277,12 +289,12 @@ public class EmployeeOperationController extends HttpServlet {
 				eub.setExpress("departmentemployee");
 			}
 			System.out.println("The PSQL Exception is catched. No problem");
-		} else { //Unexpected error.
+		} else { // Unexpected error.
 			eub.setOverall_error("Try again on employee view. Error occur: " + e.getMessage());
 			eub.setId_error("Try again. ");
 			eub.setExpress("employee");
 		}
-	
+
 	}
 
 }

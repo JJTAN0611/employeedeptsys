@@ -27,5 +27,5 @@ public interface EmployeeSessionBeanLocal {
 
 	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException, PSQLException;
 
-	public Long addEmployee(EmployeeJavaBean eub) throws EJBException, PSQLException;
+	public Long addEmployee(EmployeeJavaBean eub) throws EJBException;
 }

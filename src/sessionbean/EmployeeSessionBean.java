@@ -164,7 +164,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 	}
 
-	public Long addEmployee(EmployeeJavaBean eub) throws EJBException, PSQLException {
+	public Long addEmployee(EmployeeJavaBean eub) throws EJBException {
 		// add record with java bean
 		// return the added employee primary key(auto)
 		// No pk constraint

@@ -50,17 +50,18 @@ public class DepartmentOperationController extends HttpServlet {
 			if (action.compareTo("add") == 0) {
 
 				// Prepare a empty use bean (except with id)
-				String id = deptbean.getAutoId(); // invoke auto id checker. If "d" started id is no longer enough. "allUsed" will be return.
+				String id = deptbean.getAutoId(); // invoke auto id checker. If "d" started id is no longer enough.
+													// "allUsed" will be return.
 				DepartmentJavaBean dub = new DepartmentJavaBean();
 				if (id.compareTo("allUsed") == 0) {
 					dub.setId_error("The id starting from 'd' (dxxx) is used all. Please start with other character.");
-					
+
 				} else {
 					dub.setId(id);
 					dub.setId_error("Please try to use the automate id (start with d) provided.");
 				}
 				request.setAttribute("dub", dub);
-				
+
 				// Forward
 				RequestDispatcher req = request.getRequestDispatcher("department_add.jsp");
 				req.forward(request, response);
@@ -118,7 +119,7 @@ public class DepartmentOperationController extends HttpServlet {
 				return;
 
 			}
-		} catch (EJBException  ex) {
+		} catch (EJBException ex) {
 			// send to error page
 			RequestDispatcher dispatcher = request.getRequestDispatcher("error.jsp");
 			dispatcher.forward(request, response);
@@ -131,13 +132,16 @@ public class DepartmentOperationController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try and catch here
-		// PSQL exception is done by both level - application level and database level. To ensure data.
+		// PSQL exception (Unique Constraint & foreign key constraint, etc) will be try
+		// and catch here
+		// PSQL exception is done by both level - application level and database level.
+		// To ensure data.
 		// Input validate done by javabean
-		// Ensure "update" instead of "add" is done in session bean, will return false if related record not exist.
-		// Ensure "delete" is done in session bean, will return false if related record not exist.
+		// Ensure "update" instead of "add" is done in session bean, will return false
+		// if related record not exist.
+		// Ensure "delete" is done in session bean, will return false if related record
+		// not exist.
 
-		
 		String action = (String) request.getAttribute("action");
 
 		if (action.compareTo("add") == 0) {
@@ -153,7 +157,7 @@ public class DepartmentOperationController extends HttpServlet {
 				if (dub.validate()) {
 					// When it success validate, write into database
 					deptbean.addDepartment(dub);
-					
+
 					ControllerManagement.navigateSuccess(request, response);
 					LoggingGeneral.setContentPoints(request, "Success add --> ID:" + dub.getId());
 					LoggingGeneral.setExitPoints(request);
@@ -182,19 +186,25 @@ public class DepartmentOperationController extends HttpServlet {
 				dub.setDept_name(request.getParameter("dept_name"));
 
 				// Call for validate
-				if (dub.validate()) {
-					// try to update. sessionbean will return false when id not exist
-					if (deptbean.updateDepartment(dub)) {
-						ControllerManagement.navigateSuccess(request, response);
-						LoggingGeneral.setContentPoints(request, "Success update --> ID:" + dub.getId());
-						LoggingGeneral.setExitPoints(request);
-						return;
-					} else {
-						// Not exist
-						dub.setId_error("Department not exist.");
-						dub.setOverall_error("It might be sitmoutaneous use performed the same action. Please try again from department view.");
-						dub.setExpress("department");
+				if (dub.validateId()) {
+					if (dub.validate()) {
+						// try to update. sessionbean will return false when id not exist
+						if (deptbean.updateDepartment(dub)) {
+							ControllerManagement.navigateSuccess(request, response);
+							LoggingGeneral.setContentPoints(request, "Success update --> ID:" + dub.getId());
+							LoggingGeneral.setExitPoints(request);
+							return;
+						} else {
+							// Not exist
+							dub.setId_error("Department not exist.");
+							dub.setOverall_error(
+									"It might be sitmoutaneous use performed the same action. Please try again from department view.");
+							dub.setExpress("department");
+						}
 					}
+				} else {
+					dub.setId_error("Abnormal process. Try again at department view");
+					dub.setExpress("department");
 				}
 			} catch (EJBException | PSQLException e) {
 				// Normally is database PSQL violation.
@@ -227,19 +237,24 @@ public class DepartmentOperationController extends HttpServlet {
 					} else {
 						// Not exist
 						dub.setId_error("Department not exist. Try again on department view.");
-						dub.setOverall_error("It might be sitmoutaneous user performed the same action. Try again on department view.");
+						dub.setOverall_error(
+								"It might be sitmoutaneous user performed the same action. Try again on department view.");
 						dub.setExpress("department");
 					}
+				}else {
+					dub.setId_error("Abnormal process. Try again at department view");
+					dub.setExpress("department");
 				}
 
 			} catch (EJBException | PSQLException e) {
 				// Normally is database PSQL violation.
-				// Dont use user record for continuing displaying. It have risk to show not updated data
+				// Dont use user record for continuing displaying. It have risk to show not
+				// updated data
 				dub = new DepartmentJavaBean(deptbean.findDepartment(dub.getId()));
 				errorSetting((EJBException) e, dub);
-				
+
 			}
-		
+
 			request.setAttribute("dub", dub);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("department_delete.jsp");
 			dispatcher.forward(request, response);
@@ -268,12 +283,12 @@ public class DepartmentOperationController extends HttpServlet {
 					dub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
 			System.out.println("This PSQL Exception is catched. No problem");
-		} else { //Unexpected error.
+		} else { // Unexpected error.
 			dub.setOverall_error("Try again on department view. Error occur: " + e.getMessage());
 			dub.setId_error("Try again.");
 			dub.setExpress("department");
 		}
-		
+
 	}
 
 }

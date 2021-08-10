@@ -38,8 +38,8 @@ public class EmployeeJavaBean {
 	// for add or update use
 	public boolean validate() {
 		boolean allTrue = true;
-
-		allTrue = validateId();
+		
+		//cannot do id validation here, employee add is auto id
 
 		if (first_name == null || first_name.equals("")) {
 			first_name = "";
