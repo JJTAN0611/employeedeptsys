@@ -18,7 +18,7 @@
 							<h2>
 								<em>Invalid </em><span>Request</span><em>...</em>
 							</h2>
-							<b> You are using invalid request. Don't try to do URL sniffing attack!</b>
+							<b> You are using invalid request. The request no longer valid. Don't try to do URL sniffing attack!</b>
 							<hr>
 							<b>Your request <%=request.getAttribute("filtered") %></b><br><br>
 							<%
