@@ -1,4 +1,4 @@
-package utilities;
+package filter;
 import java.io.IOException;
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -9,6 +9,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+
+import utilities.LoggingGeneral;
 
 @WebFilter(filterName="MainFilter",urlPatterns="/MainServlet",dispatcherTypes= {DispatcherType.REQUEST})
 public class ServletValidateFilter implements Filter{
