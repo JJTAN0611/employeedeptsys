@@ -86,15 +86,15 @@ public class EmployeeReportController extends HttpServlet {
 
 					out.println(",Employee ID,First Name,Last Name,Gender,Birth Date,Hire Date");
 					for (int i = 0; i < list.size(); i++)
-						out.println((i + 1) + "," + list.get(i)[0].toString() + ",\"" + list.get(i)[1].toString() + "\",\""
-								+ list.get(i)[2].toString() + "\"," + list.get(i)[3].toString() + ","
-								+ list.get(i)[4].toString() + "," + list.get(i)[5].toString());
+						out.println((i + 1) + "," + list.get(i)[0].toString() + ",\"" + list.get(i)[2].toString() + "\",\""
+								+ list.get(i)[3].toString() + "\"," + list.get(i)[4].toString() + ","
+								+ list.get(i)[1].toString() + "," + list.get(i)[5].toString());
 				} else
 					out.println("No record found");
 
 				out.println("");
 				out.println("");
-				out.println(",Keyword Filter:," + (keyword.equals("") ? "No filter" : keyword));
+				out.println(",Keyword Filter:,\"" + (keyword.equals("") ? "No filter" : keyword)+"\"");
 				out.println(",Order Direction:," + direction);
 				out.println(",Total Records:," + request.getSession().getAttribute("employeeReportSize"));
 
