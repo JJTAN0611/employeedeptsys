@@ -21,7 +21,7 @@ public class EmployeeJavaBean {
 	private String birth_date_error = "";
 	private String hire_date_error = "";
 	private String overall_error = "";
-	private String express = "";
+	private String navigateExpress = "";
 
 	public EmployeeJavaBean() {
 	}
@@ -248,15 +248,15 @@ public class EmployeeJavaBean {
 		this.id_error = id_error;
 	}
 
-	public String getExpress() {
-		if (!express.equals(""))
-			return "<a href='MainServlet?target=" + express + "&action=view' target='_blank'> Click me to go.</a>";
+	public String getNavigateExpress() {
+		if (!navigateExpress.equals(""))
+			return "<a href='MainServlet?target=" + navigateExpress + "&action=view' target='_blank'> Click me to go.</a>";
 		else
 			return "";
 	}
 
-	public void setExpress(String express) {
-		this.express = express;
+	public void setNavigateExpress(String navigateEpress) {
+		this.navigateExpress = navigateExpress;
 	}
 
 }

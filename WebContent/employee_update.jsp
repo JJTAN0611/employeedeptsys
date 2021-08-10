@@ -37,7 +37,7 @@
 				<input type="number" class="form-control" placeholder="Enter id"
 					name="id"  value='<jsp:getProperty name="eub" property="id"/>' readonly="readonly"  required>
 				<div class="text-danger"><jsp:getProperty name="eub"
-						property="id_error" />${eub.getExpress()} </div>
+						property="id_error" />${eub.getNavigateExpress()} </div>
 			</div>
 		</div>
 		<br>

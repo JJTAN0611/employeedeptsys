@@ -64,7 +64,7 @@
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
 						property="dept_id_error" />
-					${deub.getExpress()}
+					${deub.getNavigateExpress()}
 				</div>
 				<div id="deptcontent" class="collapse">
 					<hr>
@@ -116,7 +116,7 @@
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
 						property="emp_id_error" />
-					${deub.getExpress()}
+					${deub.getNavigateExpress()}
 				</div>
 				<div id="empcontent" class="collapse">
 					<hr>

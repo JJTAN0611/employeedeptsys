@@ -203,14 +203,14 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 							deub.setDept_id_error("Department and employee combination not exist");
 							deub.setEmp_id_error("Department and employee combination not exist");
 							deub.setOverall_error(
-									"It might be sitmoutaneous use performed the same action. Please try again from department-employee view.");
-							deub.setExpress("departmentemployee");
+									"It might be sitmoutaneous use performed delete action. Please try again from department-employee view.");
+							deub.setNavigateExpress("departmentemployee");
 						}
 					}
 				} else {
 					deub.setDept_id_error("Abnormal process. Try again at departmentemployee view");
 					deub.setEmp_id_error("Abnormal process. Try again at departmentemployee view");
-					deub.setExpress("departmentemployee");
+					deub.setNavigateExpress("departmentemployee");
 				}
 
 			} catch (EJBException e) {
@@ -250,13 +250,13 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 						deub.setEmp_id_error(
 								"Department and employee combination not exist. Try again on department-employee view.");
 						deub.setOverall_error(
-								"It might be sitmoutaneous user performed the same action. Try again on department-employee view.");
-						deub.setExpress("departmentemployee");
+								"It might be sitmoutaneous user performed delete action. Try again on department-employee view.");
+						deub.setNavigateExpress("departmentemployee");
 					}
 				} else {
 					deub.setDept_id_error("Abnormal process. Try again at departmentemployee view");
 					deub.setEmp_id_error("Abnormal process. Try again at departmentemployee view");
-					deub.setExpress("departmentemployee");
+					deub.setNavigateExpress("departmentemployee");
 				}
 
 			} catch (EJBException e) {
@@ -288,10 +288,10 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				deub.setOverall_error("No related records. Please change the input as annotated below.");
 				if (psqle.getMessage().contains("\"department\"")) {
 					deub.setDept_id_error("Department ID not exist in department table.");
-					deub.setExpress("department");
+					deub.setNavigateExpress("department");
 				} else if (psqle.getMessage().contains("\"employee\"")) {
 					deub.setEmp_id_error("Employee ID not exist in employee table.");
-					deub.setExpress("employee");
+					deub.setNavigateExpress("employee");
 				} else
 					deub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
@@ -300,7 +300,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 			deub.setOverall_error("Try again on department-employee view. Error occur: " + e.toString());
 			deub.setDept_id_error("Try again.");
 			deub.setEmp_id_error("Try again.");
-			deub.setExpress("departmentemployee");
+			deub.setNavigateExpress("departmentemployee");
 		}
 
 	}

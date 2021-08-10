@@ -9,7 +9,7 @@ public class DepartmentJavaBean {
 	private String id_error = "";
 	private String dept_name_error = "";
 	private String overall_error = "";
-	private String express = "";
+	private String navigateExpress = "";
 
 	public DepartmentJavaBean() {
 	}
@@ -108,16 +108,16 @@ public class DepartmentJavaBean {
 		this.overall_error = overall_error;
 	}
 
-	public String getExpress() {
-		if (!express.equals(""))
-			return "<a href='MainServlet?target=" + express
+	public String getNavigateExpress() {
+		if (!navigateExpress.equals(""))
+			return "<a href='MainServlet?target=" + navigateExpress
 					+ "&action=view' target='_blank'> Click me to go.</a>";
 		else
 			return "";
 	}
 
-	public void setExpress(String express) {
-		this.express = express;
+	public void setNavigateExpress(String navigateExpress) {
+		this.navigateExpress = navigateExpress;
 	}
 
 }

@@ -60,7 +60,7 @@
 
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-						property="dept_id_error" /></div>
+						property="dept_id_error" /></div>${deub.getNavigateExpress()}
 				<div id="deptcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
@@ -109,7 +109,7 @@
 					
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-							property="emp_id_error" /></div>
+							property="emp_id_error" /></div>${deub.getNavigateExpress()}
 				<div id="empcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>

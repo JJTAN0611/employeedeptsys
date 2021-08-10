@@ -40,7 +40,7 @@
 					name="id" value="<jsp:getProperty name="dub" property="id"/>"
 					readonly="readonly">
 				<div class="text-danger"><jsp:getProperty name="dub"
-						property="id_error" />  ${dub.getExpress()}  </div>
+						property="id_error" />  ${dub.getNavigateExpress()}  </div>
 			</div>
 
 		</div>

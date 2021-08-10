@@ -38,7 +38,7 @@
 					name="id" value='<jsp:getProperty name="eub" property="id"/>'
 					readonly="readonly">
 				<div class="text-danger"><jsp:getProperty name="eub"
-						property="id_error" /> ${eub.getExpress()} </div>
+						property="id_error" /> ${eub.getNavigateExpress()} </div>
 			</div>
 
 		</div>

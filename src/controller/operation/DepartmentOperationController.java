@@ -58,7 +58,6 @@ public class DepartmentOperationController extends HttpServlet {
 
 				} else {
 					dub.setId(id);
-					dub.setId_error("Please try to use the automate id (start with d) provided.");
 				}
 				request.setAttribute("dub", dub);
 
@@ -198,13 +197,13 @@ public class DepartmentOperationController extends HttpServlet {
 							// Not exist
 							dub.setId_error("Department not exist.");
 							dub.setOverall_error(
-									"It might be sitmoutaneous use performed the delete action. Please try again from department view.");
-							dub.setExpress("department");
+									"It might be sitmoutaneous user performed delete action. Please try again from department view.");
+							dub.setNavigateExpress("department");
 						}
 					}
 				} else {
 					dub.setId_error("Abnormal process. Try again at department view");
-					dub.setExpress("department");
+					dub.setNavigateExpress("department");
 				}
 			} catch (EJBException | PSQLException e) {
 				// Normally is database PSQL violation.
@@ -238,12 +237,12 @@ public class DepartmentOperationController extends HttpServlet {
 						// Not exist
 						dub.setId_error("Department not exist. Try again on department view.");
 						dub.setOverall_error(
-								"It might be sitmoutaneous user performed the same action. Try again on department view.");
-						dub.setExpress("department");
+								"It might be sitmoutaneous user performed delete action. Try again on department view.");
+						dub.setNavigateExpress("department");
 					}
 				}else {
 					dub.setId_error("Abnormal process. Try again at department view");
-					dub.setExpress("department");
+					dub.setNavigateExpress("department");
 				}
 
 			} catch (EJBException | PSQLException e) {
@@ -271,7 +270,7 @@ public class DepartmentOperationController extends HttpServlet {
 				// delete
 				dub.setOverall_error("You may need to clear the related departmentemployee relation record.");
 				dub.setId_error("This department is using in relation table and cannot be deleted.");
-				dub.setExpress("departmentemployee");
+				dub.setNavigateExpress("departmentemployee");
 			} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
 				// add
 				dub.setOverall_error("Duplicate error. Please change the input as annotated below.");
@@ -286,7 +285,7 @@ public class DepartmentOperationController extends HttpServlet {
 		} else { // Unexpected error.
 			dub.setOverall_error("Try again on department view. Error occur: " + e.getMessage());
 			dub.setId_error("Try again.");
-			dub.setExpress("department");
+			dub.setNavigateExpress("department");
 		}
 
 	}

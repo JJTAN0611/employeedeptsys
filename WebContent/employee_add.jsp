@@ -40,7 +40,7 @@
 
 				</div>
 				<div class="text-danger"><jsp:getProperty name="eub"
-						property="id_error" />${eub.getExpress()}
+						property="id_error" />
 				</div>
 			</div>
 		</div>

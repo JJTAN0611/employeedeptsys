@@ -221,13 +221,13 @@ public class EmployeeOperationController extends HttpServlet {
 							// Not exist
 							eub.setId_error("Employee not exist");
 							eub.setOverall_error(
-									"It might be sitmoutaneous use performed the same action. Please try again in employee view.");
-							eub.setExpress("employee");
+									"It might be sitmoutaneous user performed delete action. Please try again in employee view.");
+							eub.setNavigateExpress("employee");
 						}
 					}
 				} else {
 					eub.setId_error("Abnormal process. Try again at employee view");
-					eub.setExpress("employee");
+					eub.setNavigateExpress("employee");
 				}
 
 			} catch (EJBException e) {
@@ -261,12 +261,12 @@ public class EmployeeOperationController extends HttpServlet {
 						// Not exist
 						eub.setId_error("Employee not exist. Try again on employee view.");
 						eub.setOverall_error(
-								"It might be sitmoutaneous user performed the same action. Try again on employee view.");
-						eub.setExpress("employee");
+								"It might be sitmoutaneous user performed delete action. Try again on employee view.");
+						eub.setNavigateExpress("employee");
 					}
 				} else {
 					eub.setId_error("Abnormal process. Try again at employee view");
-					eub.setExpress("employee");
+					eub.setNavigateExpress("employee");
 				}
 			} catch (EJBException | PSQLException e) {
 				// Dont use user record for continuing displaying. It have risk to show not
@@ -291,13 +291,13 @@ public class EmployeeOperationController extends HttpServlet {
 				// delete
 				eub.setOverall_error("You may need to clear the related departmentemployee relation record.");
 				eub.setId_error("This employee is using in relation table and cannot be deleted.");
-				eub.setExpress("departmentemployee");
+				eub.setNavigateExpress("departmentemployee");
 			}
 			System.out.println("The PSQL Exception is catched. No problem");
 		} else { // Unexpected error.
 			eub.setOverall_error("Try again on employee view. Error occur: " + e.getMessage());
 			eub.setId_error("Try again. ");
-			eub.setExpress("employee");
+			eub.setNavigateExpress("employee");
 		}
 
 	}

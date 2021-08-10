@@ -26,6 +26,7 @@
 		<center>Please fill in the following details.</center>
 	</h1>
 	<hr>
+	<div class="text-center">Please try to use the generate automate id (start with d).</div>
 	<div class="text-danger text-center"><jsp:getProperty name="dub"
 			property="overall_error" /></div>
 	<br> <br>
@@ -54,7 +55,7 @@
 							  			alert('The usual department id (dxxx) is all used. Please manually key in');
 							  		}else{
 							  		
-							  		alert('The generated ID is [' + aid.autoId +']. It may not applicable during submit. (Used by sitmoutaneous user)');
+							  		alert('The generated ID is [' + aid.autoId +']. It may not applicable during submit. (Useds by sitmoutaneous user)');
 							  		$('#dept_id').val(aid.autoId);}});
 						">Auto
 							ID</button>
