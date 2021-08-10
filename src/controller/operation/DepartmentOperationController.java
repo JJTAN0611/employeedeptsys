@@ -251,7 +251,7 @@ public class DepartmentOperationController extends HttpServlet {
 				// Dont use user record for continuing displaying. It have risk to show not
 				// updated data
 				dub = new DepartmentJavaBean(deptbean.findDepartment(dub.getId()));
-				errorSetting((EJBException) e, dub);
+				errorSetting( e, dub);
 
 			}
 
