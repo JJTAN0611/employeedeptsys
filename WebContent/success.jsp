@@ -20,7 +20,7 @@
 		String action=((String) request.getAttribute("action"));
 			if (action.compareTo("add") == 0||action.compareTo("update")==0) {
 		%>
-		Navigating to newly added record on view page.
+		Navigating to the record on view page.
 		<%
 			} else {
 		%>
