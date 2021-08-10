@@ -16,8 +16,8 @@
 							</h2>
 							<h5>
 								<strong><u>O</u></strong>nline <strong><u>E</u></strong>mployee<strong>
-									<u>D</u>
-								</strong>epartment<strong> <u>R</u></strong>egistration <strong><u>S</u></strong>ystem</em>
+									<u>D</u></strong>epartment<strong> <u>R</u></strong>egistration <strong>
+									<u>S</u></strong>ystem</em>
 							</h5>
 							<br>
 							<div class="main-red-button">
