@@ -50,7 +50,7 @@
 			<div class="col-4">
 				<input type="text" class="form-control" placeholder="First name"
 					name="first_name"
-					value='<jsp:getProperty name="eub" property="first_name"/>'
+					value="<jsp:getProperty name="eub" property="first_name"/>"
 					required />
 				<div class="text-danger"><jsp:getProperty name="eub"
 						property="first_name_error" /></div>
@@ -58,7 +58,7 @@
 			<div class="col-4">
 				<input type="text" class="form-control" placeholder="Last name"
 					name="last_name"
-					value='<jsp:getProperty name="eub" property="last_name"/>'>
+					value="<jsp:getProperty name="eub" property="last_name"/>">
 				<div class="text-danger"><jsp:getProperty name="eub"
 						property="last_name_error" /></div>
 			</div>

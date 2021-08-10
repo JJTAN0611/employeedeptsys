@@ -71,7 +71,7 @@
 			<div class="col-8">
 				<input type="text" class="form-control" placeholder="Enter name"
 					name="dept_name"
-					value='<jsp:getProperty name="dub" property="dept_name"/>' required>
+					value="<jsp:getProperty name="dub" property="dept_name"/>" required>
 				<div class="text-danger"><jsp:getProperty name="dub"
 						property="dept_name_error" /></div>
 			</div>

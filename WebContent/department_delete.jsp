@@ -37,7 +37,7 @@
 			<label class="control-label col-3 text-end">Department ID:</label>
 			<div class="col-8">
 				<input type="text" class="form-control" placeholder="Enter name"
-					name="id" value='<jsp:getProperty name="dub" property="id"/>'
+					name="id" value="<jsp:getProperty name="dub" property="id"/>"
 					readonly="readonly">
 				<div class="text-danger"><jsp:getProperty name="dub"
 						property="id_error" />  ${dub.getExpress()}  </div>
@@ -50,7 +50,7 @@
 			<div class="col-8">
 				<input type="text" class="form-control" placeholder="Enter name"
 					name="dept_name"
-					value='<jsp:getProperty name="dub" property="dept_name"/>'
+					value="<jsp:getProperty name="dub" property="dept_name"/>"
 					readonly="readonly">
 				<div class="text-danger"><jsp:getProperty name="dub"
 						property="dept_name_error" /></div>

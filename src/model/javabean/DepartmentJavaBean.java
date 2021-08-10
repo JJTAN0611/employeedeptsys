@@ -40,6 +40,9 @@ public class DepartmentJavaBean {
 		} else if (dept_name.length() < 1 || dept_name.length() > 40) {
 			allTrue = false;
 			dept_name_error = "Please enter department name within 40 character";
+		} else if (dept_name.contains("\"")) {
+			allTrue = false;
+			dept_name_error = "Department name cannot contain double quote";
 		}
 
 		if (!allTrue)

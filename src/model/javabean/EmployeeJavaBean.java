@@ -51,6 +51,9 @@ public class EmployeeJavaBean {
 		} else if (first_name.length() < 1 || first_name.length() > 14) {
 			allTrue = false;
 			first_name_error = "Please enter a first name within 14 character.";
+		}else if (first_name.contains("\"")) {
+			allTrue = false;
+			first_name_error = "Last name cannot contain double quote";
 		}
 
 		if (last_name == null || last_name.equals("")) {
@@ -63,6 +66,9 @@ public class EmployeeJavaBean {
 		} else if (last_name.length() < 1 || last_name.length() > 14) {
 			allTrue = false;
 			last_name_error = "Please enter last name within 16 character.";
+		}else if (last_name.contains("\"")) {
+			allTrue = false;
+			last_name_error = "Last name cannot contain double quote";
 		}
 
 		if (gender == null || gender.equals("")) {
