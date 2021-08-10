@@ -32,7 +32,7 @@
 		<a id="download" type="button"
 			href='<%=response.encodeURL("MainServlet?target=departmentemployee&action=download&verificationToken="
 						+ ((String) request.getSession().getAttribute("deverificationToken")))%>'
-			class="btn btn-dark btn-circle float-end" style="border-radius: 30px">Download
+			class="btn btn-dark btn-circle float-end" style="border-radius: 30px">Download Excel
 			<i class="fas fa-file-download"></i>
 		</a>
 	</div>

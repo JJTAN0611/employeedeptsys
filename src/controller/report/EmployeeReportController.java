@@ -83,19 +83,19 @@ public class EmployeeReportController extends HttpServlet {
 				}
 
 				PrintWriter out = response.getWriter();
-				response.setContentType("application/vnd.ms-excel");
-				response.setHeader("Content-Disposition", "attachment; filename=EmployeeReport.xls; charset=UTF-8");
+				response.setContentType("text/csv");
+				response.setHeader("Content-Disposition", "attachment; filename=EmployeeReport.csv; charset=UTF-8");
 
 				String keyword = (String) request.getSession().getAttribute("ekeyword");
 				String direction = (String) request.getSession().getAttribute("edirection");
 				List<Object[]> list = empbean.getEmployeeReport(keyword, direction);
 				if (list != null && list.size() != 0) {
 
-					out.println("\tEmployee ID\tFirst Name\tLast Name\tGender\tBirth Date\tHire Date");
+					out.println(",Employee ID,First Name,Last Name,Gender,Birth Date,Hire Date");
 					for (int i = 0; i < list.size(); i++)
-						out.println((i + 1) + "\t" + list.get(i)[0].toString() + "\t" + list.get(i)[1].toString() + "\t"
-								+ list.get(i)[2].toString() + "\t" + list.get(i)[3].toString() + "\t"
-								+ list.get(i)[4].toString() + "\t" + list.get(i)[5].toString());
+						out.println((i + 1) + "," + list.get(i)[0].toString() + ",\"" + list.get(i)[1].toString() + "\",\""
+								+ list.get(i)[2].toString() + "\"," + list.get(i)[3].toString() + ","
+								+ list.get(i)[4].toString() + "," + list.get(i)[5].toString());
 				} else
 					out.println("No record found");
 
