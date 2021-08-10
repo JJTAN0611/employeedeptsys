@@ -130,37 +130,39 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		}
 	}
 
-	public boolean updateDepartment(DepartmentJavaBean dup) throws EJBException, PSQLException {
+	public boolean updateDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
 		// update record with given javabean
 		// do find first, avoid directly use the id, sometimes may not exist and will
 		// become "add" automatically, if detect return false
 		// surround by try catch when calling this function, checking for unique
 		// constraint
-		Department d = findDepartment(dup.getId());
+		Department d = findDepartment(dub.getId());
 		
 		// checking for not exist department
 		if (d == null)
 			return false;
-
+		
 		// Check unique constraint
-		Query q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = ?");
-		q.setParameter(1, dup.getDept_name() );
+		//if it is it self no need worry
+		Query q = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.id != ? AND d.dept_name =?");
+		q.setParameter(1, dub.getId() );
+		q.setParameter(2, dub.getDept_name() );
 		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("duplicate key value violates unique constraint, dept_name", null);
 		}
 
-		d.setDeptName(dup.getDept_name());
+		d.setDeptName(dub.getDept_name());
 		em.merge(d);
 		return true;
 	}
 
-	public boolean deleteDepartment(DepartmentJavaBean dup) throws EJBException, PSQLException {
+	public boolean deleteDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
 		// delete record with given javabean (extract the id)
 		// if detect delete null record, return false
 		// try and catch surround(not the following) when calling this function,
 		// checking for foreign key constraint
 
-		Department d = findDepartment(dup.getId());
+		Department d = findDepartment(dub.getId());
 
 		// checking for not exist department
 		if (d == null)
@@ -169,7 +171,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		// checking for foreign key constraint
 		Query q = em.createNativeQuery(
 				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.department_id = ?");
-		q.setParameter(1, dup.getId() );
+		q.setParameter(1, dub.getId() );
 		// checking for foreign key constraint
 		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("violates foreign key constraint", null);
@@ -181,7 +183,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	}
 
-	public void addDepartment(DepartmentJavaBean dup) throws EJBException, PSQLException {
+	public void addDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
 		// add record with use bean
 		// surround by try catch when calling this function, checking for unique
 		// constraint
@@ -189,21 +191,21 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		// Check pk constraint
 		Query q1 = em.createNativeQuery(
 				"SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.id = ?");
-		q1.setParameter(1, dup.getId() );
+		q1.setParameter(1, dub.getId() );
 		if (((BigInteger) q1.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("duplicate key value violates unique constraint, primary", null);
 		}
 
 		// Check unique constraint
 		Query q2 = em.createNativeQuery("SELECT COUNT(*) AS totalrow FROM employees.department d WHERE d.dept_name = ?");
-		q2.setParameter(1, dup.getDept_name() );
+		q2.setParameter(1, dub.getDept_name() );
 		if (((BigInteger) q2.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("duplicate key value violates unique constraint, dept_name", null);
 		}
 
 		Department d = new Department();
-		d.setId(dup.getId());
-		d.setDeptName(dup.getDept_name());
+		d.setId(dub.getId());
+		d.setDeptName(dub.getDept_name());
 		em.persist(d);
 	}
 

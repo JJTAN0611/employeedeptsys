@@ -54,7 +54,7 @@
 							  			alert('The usual department id (dxxx) is all used. Please manually key in');
 							  		}else{
 							  		
-							  		alert('The generated ID is [' + aid.autoId +'] which may not applicable during submit. (Use by sitmoutaneous user)');
+							  		alert('The generated ID is [' + aid.autoId +']. It may not applicable during submit. (Used by sitmoutaneous user)');
 							  		$('#dept_id').val(aid.autoId);}});
 						">Auto
 							ID</button>
