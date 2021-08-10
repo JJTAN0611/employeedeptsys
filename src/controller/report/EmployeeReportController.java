@@ -101,9 +101,9 @@ public class EmployeeReportController extends HttpServlet {
 
 				out.println("");
 				out.println("");
-				out.println("\tKeyword Filter:\t" + (keyword.equals("") ? "No filter" : keyword));
-				out.println("\tOrder Direction:\t" + direction);
-				out.println("\tTotal Records:\t" + request.getSession().getAttribute("employeeReportSize"));
+				out.println(",Keyword Filter:," + (keyword.equals("") ? "No filter" : keyword));
+				out.println(",Order Direction:," + direction);
+				out.println(",Total Records:," + request.getSession().getAttribute("employeeReportSize"));
 
 				LoggingGeneral.setContentPoints(request, "Verification result: true. Report generated. Completed.");
 				LoggingGeneral.setExitPoints(request);

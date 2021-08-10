@@ -22,7 +22,7 @@
 	</h1>
 	<hr> <center>Click the view button to see detail.</center>
 	<div class="text-danger text-center"><jsp:getProperty name="deub"
-			property="overall_error" /></div>
+			property="overall_error" />${deub.getNavigateExpress()}</div></div>
 	<br> <br>
 </div>
 
@@ -55,12 +55,12 @@
 									  }
 										$('#checkdept').attr('class', 'btn btn-info');
 									});
-						">Check</button>
+						">View</button>
 					</div>
 
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-						property="dept_id_error" /></div>${deub.getNavigateExpress()}
+						property="dept_id_error" /></div>
 				<div id="deptcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
@@ -104,12 +104,12 @@
 							  }
 							  $('#checkemp').attr('class', 'btn btn-info');
 							  });
-						">Check</button>
+						">View</button>
 					</div>
 					
 				</div>
 				<div class="text-danger"><jsp:getProperty name="deub"
-							property="emp_id_error" /></div>${deub.getNavigateExpress()}
+							property="emp_id_error" /></div>
 				<div id="empcontent" class="collapse">
 					<hr>
 					<ul class='list-group'>
