@@ -196,7 +196,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 							deub.setDept_id_error("Department and employee combination not exist");
 							deub.setEmp_id_error("Department and employee combination not exist");
 							deub.setOverall_error(
-									"It might be sitmoutaneous use performed delete action. Please try again from department-employee view.");
+									"It might be sitmoutaneous user performed delete action. Please try again from department-employee view.");
 							deub.setNavigateExpress("departmentemployee");
 						}
 					}
