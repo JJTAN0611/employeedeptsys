@@ -171,7 +171,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.employee_id = ?");
 		q.setParameter(1, e.getId() );
 		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
-			throw new PSQLException("violates foreign key constraint", null);
+			throw new PSQLException("violates foreign key constraint, \"department_employee\"", null);
 		}
 
 		em.remove(e);

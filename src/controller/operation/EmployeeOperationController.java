@@ -203,11 +203,11 @@ public class EmployeeOperationController extends HttpServlet {
 					if (eub.validate()) {
 						// try to update. sessionbean will return false when id not exist
 						if (empbean.updateEmployee(eub) == true) {
-							
+
 							// pagination set to new employee record
 							request.getSession().setAttribute("ekeyword",
 									String.valueOf(eub.getId()) + " " + eub.getFirst_name() + " " + eub.getLast_name());
-							
+
 							OperationControllerManagement.navigateSuccess(request, response);
 							LoggingGeneral.setContentPoints(request,
 									"Success " + action + " --> ID:" + eub.getFirst_name() + ". Completed");
@@ -284,9 +284,13 @@ public class EmployeeOperationController extends HttpServlet {
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
 				// delete
-				eub.setOverall_error("You may need to clear the related departmentemployee relation record.");
-				eub.setId_error("This employee is using in relation table and cannot be deleted.");
-				eub.setNavigateExpress("departmentemployee");
+				if (psqle.getMessage().contains("department_employee")) {
+					eub.setOverall_error("You may need to clear the related departmentemployee relation record.");
+					eub.setId_error("This employee is using in relation table and cannot be deleted.");
+					eub.setNavigateExpress("departmentemployee");
+				}else {
+					eub.setOverall_error("You unable to delete now. The other table, salary etc is not supported in this system");
+				}
 			}
 			System.out.println("The PSQL Exception is catched. No problem");
 		} else { // Unexpected error.
