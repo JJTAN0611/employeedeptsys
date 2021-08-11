@@ -62,6 +62,7 @@ public class DepartmentReportController extends HttpServlet {
 				 * report page show error. if found user do two things in once set error
 				 */
 
+				//verify, if false, return error message
 				String verificationToken = (String) request.getSession().getAttribute("dverificationToken");
 				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
 					request.getSession().setAttribute("dreportVerify", "false");
@@ -75,10 +76,12 @@ public class DepartmentReportController extends HttpServlet {
 					return;
 				}
 
+				//response
 				PrintWriter out = response.getWriter();
 				response.setContentType("application/vnd.ms-excel");
 				response.setHeader("Content-Disposition", "attachment; filename=DepartmentReport.xls; charset=UTF-8");
 
+				//prepare result
 				List<Object[]> list = deptbean
 						.getDepartmentReport((String) request.getSession().getAttribute("ddirection"));
 				if (list != null && list.size() != 0) {

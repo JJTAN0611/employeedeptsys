@@ -63,9 +63,9 @@ public class EmployeePaginationServlet extends HttpServlet {
 			request.getSession().setAttribute("ecurrentPage",currentPage);//save back
 			List<Employee> list = empbean.readEmployee(currentPage, recordsPerPage, keyword, direction); // Ask bean to
 																											// give list
+			//save for view
 			request.setAttribute("employeeList", list);
 			request.setAttribute("nOfPages", nOfPages);
-
 			dispatcher = request.getRequestDispatcher("employee_view.jsp");
 
 			// set checker for report

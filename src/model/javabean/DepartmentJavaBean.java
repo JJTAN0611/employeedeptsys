@@ -6,9 +6,12 @@ public class DepartmentJavaBean {
 	private String id = "";
 	private String dept_name = "";
 
+	//this error is used for display
 	private String id_error = "";
 	private String dept_name_error = "";
 	private String overall_error = "";
+	
+	//when there is a link to resolve the error for user
 	private String navigateExpress = "";
 
 	public DepartmentJavaBean() {

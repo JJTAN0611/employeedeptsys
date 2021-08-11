@@ -46,8 +46,9 @@ public class DepartmentPaginationServlet extends HttpServlet {
 
 			String direction = (String) request.getSession().getAttribute("ddirection");
 			List<Department> list = deptbean.readDepartment(direction); // Ask bean to give list
-			request.setAttribute("departmentList",list);		
 			
+			//save for view
+			request.setAttribute("departmentList",list);		
 			dispatcher = request.getRequestDispatcher("department_view.jsp");
 			
 			//set checker for report

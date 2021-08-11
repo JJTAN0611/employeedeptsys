@@ -31,6 +31,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public List<Object[]> getEmployeeReport(String keyword, String direction) throws EJBException {
 		Query q = null;
 		// For report use. Using object instead of entity class is to minimize the
@@ -52,6 +53,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		}
 	}
 
+	@Override
 	public List<Employee> readEmployee(int currentPage, int recordsPerPage, String keyword, String direction)
 			throws EJBException {
 		// Get the list of employee for pagination
@@ -78,6 +80,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 
 	}
 
+	@Override
 	public int getNumberOfRows(String keyword) throws EJBException {
 		// Get the number of row for a search key
 		Query q = null;
@@ -97,6 +100,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		}
 	}
 
+	@Override
 	public Employee findEmployee(Long id) throws EJBException {
 		// Find a record based on ids
 		Query q = em.createNamedQuery("Employee.findbyId");
@@ -109,6 +113,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		}
 	}
 
+	@Override
 	public Employee getEmployeeByName(String name) throws EJBException {
 		// Find a record based on name for quick search use
 		Query q = em.createNamedQuery("Employee.findbyName");
@@ -121,7 +126,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		}
 	}
 
-
+	@Override
 	public Long addEmployee(EmployeeJavaBean eub) throws EJBException {
 		// add record with java bean
 		// return the added employee primary key(auto)
@@ -137,7 +142,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		return e.getId();
 	}
 
-	
+	@Override
 	public boolean updateEmployee(EmployeeJavaBean eub) throws EJBException {
 		// update record with given javabean
 		// do find first, avoid directly use the id, sometimes may not exist and will
@@ -154,6 +159,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 		return true;
 	}
 
+	@Override
 	public boolean deleteEmployee(EmployeeJavaBean eub) throws EJBException, PSQLException {
 		// delete record with given javabean (extract the id)
 		// if attempt to delete empty record return false

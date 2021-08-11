@@ -30,7 +30,8 @@ public class EmployeeQueryServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		//AJAX request process
+		
 		String action = (String) request.getAttribute("action");
 
 		try {

@@ -14,6 +14,7 @@ public class EmployeeJavaBean {
 	private Date birth_date = null;
 	private Date hire_date = null;
 
+	//this error is used for display
 	private String id_error = "";
 	private String first_name_error = "";
 	private String last_name_error = "";
@@ -21,6 +22,8 @@ public class EmployeeJavaBean {
 	private String birth_date_error = "";
 	private String hire_date_error = "";
 	private String overall_error = "";
+	
+	//when there is a link to resolve the error for user
 	private String navigateExpress = "";
 
 	public EmployeeJavaBean() {

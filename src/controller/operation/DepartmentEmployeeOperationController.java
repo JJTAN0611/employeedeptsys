@@ -288,7 +288,7 @@ public class DepartmentEmployeeOperationController extends HttpServlet {
 				} else
 					deub.setOverall_error("Error occur: " + psqle.getMessage());
 			}
-			System.out.println("The PSQL Exception is catched. No problem");
+			System.out.println("This PSQL Exception is catched. No problem");
 		} else { // Unexpected error.
 			deub.setOverall_error("Try again on department-employee view. Error occur: " + e.toString());
 			deub.setDept_id_error("Try again.");

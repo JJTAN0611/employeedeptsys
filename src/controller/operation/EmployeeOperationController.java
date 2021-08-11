@@ -292,7 +292,7 @@ public class EmployeeOperationController extends HttpServlet {
 					eub.setOverall_error("You unable to delete now. The other tables, salary, title, department_manager is not supported in this system");
 				}
 			}
-			System.out.println("The PSQL Exception is catched. No problem");
+			System.out.println("This PSQL Exception is catched. No problem");
 		} else { // Unexpected error.
 			eub.setOverall_error("Try again on employee view. Error occur: " + e.getMessage());
 			eub.setId_error("Try again. ");

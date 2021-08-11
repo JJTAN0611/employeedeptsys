@@ -68,6 +68,7 @@ public class DepartmentEmployeeReportController extends HttpServlet {
 				 * report page show error. if found user do two things in once set error
 				 */
 
+				//verify, if false, return error message
 				String verificationToken = (String) request.getSession().getAttribute("deverificationToken");
 				if (verificationToken == null || !verificationToken.equals(request.getParameter("verificationToken"))) {
 					request.getSession().setAttribute("dereportVerify", "false");
@@ -81,16 +82,19 @@ public class DepartmentEmployeeReportController extends HttpServlet {
 					return;
 				}
 
+				//set response
 				PrintWriter out = response.getWriter();
 				response.setContentType("application/vnd.ms-excel");
 				response.setHeader("Content-Disposition",
 						"attachment; filename=DepartmentEmployeeRelationReport.xls; charset=UTF-8");
 
+				//get parameter and get some summary
 				String keyword = (String) request.getSession().getAttribute("dekeyword");
 				String direction = (String) request.getSession().getAttribute("dedirection");
 				Integer[] summary = (Integer[]) request.getSession().getAttribute("dereportSummary");// Brief summary
 																										// (The involved
 																										// foreign key)
+				// prepare result
 				List<Object[]> list = deptempbean.getDepartmentEmployeeReport(keyword, direction); // Get the list
 
 				if (list != null && list.size() != 0) {

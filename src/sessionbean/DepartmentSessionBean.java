@@ -31,7 +31,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		// TODO Auto-generated constructor stub
 	}
 
-	//
+	@Override
 	public List<Object[]> getDepartmentReport(String direction) throws EJBException {
 		// For report use. Using object instead of entity class is to minimize the
 		// heaviness of computing
@@ -78,6 +78,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		return "allUsed";
 	}
 
+	@Override
 	public List<Department> readDepartment(String direction) throws EJBException {
 		// Get the list of department for pagination
 		Query q = null;
@@ -92,6 +93,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 
 	}
 
+	@Override
 	public int getNumberOfRows() throws EJBException {
 		// Get the number of row for a search key
 		Query q = null;
@@ -105,6 +107,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		}
 	}
 
+	@Override
 	public Department findDepartment(String id) throws EJBException {
 		// Find a record based on id
 		Query q = em.createNamedQuery("Department.findbyId");
@@ -117,6 +120,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		}
 	}
 
+	@Override
 	public Department getDepartmentByName(String name) throws EJBException {
 		// get department by name, for quick search use
 		Query q = em.createNamedQuery("Department.findbyName");
@@ -128,6 +132,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		}
 	}
 
+	@Override
 	public void addDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
 		// add record with use bean
 		// surround by try catch when calling this function, checking for pk and unique
@@ -154,6 +159,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		em.persist(d);
 	}
 
+	@Override
 	public boolean updateDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
 		// update record with given javabean
 		// do find first, avoid directly use the id, sometimes may not exist and will
@@ -181,6 +187,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 		return true;
 	}
 
+	@Override
 	public boolean deleteDepartment(DepartmentJavaBean dub) throws EJBException, PSQLException {
 		// delete record with given javabean (extract the id)
 		// if detect delete null record, return false

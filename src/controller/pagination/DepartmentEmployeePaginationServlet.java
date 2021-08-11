@@ -62,9 +62,11 @@ public class DepartmentEmployeePaginationServlet extends HttpServlet {
 				currentPage = nOfPages; //if larger than total page, set to maximum
 			}
 			request.getSession().setAttribute("decurrentPage",currentPage);//save back
+			
 			List<DepartmentEmployee> list = deptembbean.readDepartmentEmployee(currentPage, recordsPerPage, keyword,
 					direction); // Ask bean to give list
 			
+			//save for view
 			request.setAttribute("departmentEmployeeList", list);
 			request.setAttribute("nOfPages", nOfPages);
 			dispatcher = request.getRequestDispatcher("departmentemployee_view.jsp");

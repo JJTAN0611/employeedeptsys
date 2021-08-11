@@ -13,11 +13,14 @@ public class DepartmentEmployeeJavaBean {
 	private Date from_date = null;
 	private Date to_date = null;
 
+	//this error is used for display
 	private String dept_id_error = "";
 	private String emp_id_error = "";
 	private String from_date_error = "";
 	private String to_date_error = "";
 	private String overall_error = "";
+	
+	//when there is a link to resolve the error for user
 	private String navigateExpress = "";
 
 	public DepartmentEmployeeJavaBean() {

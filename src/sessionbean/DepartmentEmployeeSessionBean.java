@@ -33,6 +33,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public List<Object[]> getDepartmentEmployeeReport(String keyword, String direction) throws EJBException {
 		// For report use. Using object instead of entity class is to minimize the
 		// heaviness of computing
@@ -62,6 +63,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	}
 
+	@Override
 	public Integer[] getDepartmentEmployeeInvolvedSummary(String keyword) throws EJBException {
 		// For report use. Using object instead of entity class is to minimize the
 		// heaviness of computing
@@ -99,6 +101,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		return result;
 	}
 
+	@Override
 	public List<DepartmentEmployee> readDepartmentEmployee(int currentPage, int recordsPerPage, String keyword,
 			String direction) throws EJBException {
 		// Get the list of departmentemployee for pagination
@@ -128,6 +131,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		}
 	}
 
+	@Override
 	public int getNumberOfRows(String keyword) throws EJBException {
 		// Get the number of row for a search key
 		Query q = null;
@@ -151,6 +155,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	}
 
+	@Override
 	public DepartmentEmployee findDepartmentEmployee(String dept_id, Long emp_id) throws EJBException {
 		// Find a record based on ids
 		Query q = em.createNamedQuery("DepartmentEmployee.findbyId");
@@ -163,6 +168,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 
 	}
 
+	@Override
 	public void addDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException, PSQLException {
 		// add record with javabean
 		// a try and catch is surround by calling this action (check foreign key
@@ -196,6 +202,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		em.persist(de);
 	}
 	
+	@Override
 	public boolean updateDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
 		// update record with given javabean
 		// do find first, avoid directly use the id, sometimes may not exist and will
@@ -209,6 +216,7 @@ public class DepartmentEmployeeSessionBean implements DepartmentEmployeeSessionB
 		return true;
 	}
 
+	@Override
 	public boolean deleteDepartmentEmployee(DepartmentEmployeeJavaBean deub) throws EJBException {
 		// delete record with given javabean (extract the id)
 

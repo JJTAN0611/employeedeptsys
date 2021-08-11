@@ -75,12 +75,16 @@ public class EmployeeReportController extends HttpServlet {
 					return;
 				}
 
+				//set response
 				PrintWriter out = response.getWriter();
 				response.setContentType("text/csv");
 				response.setHeader("Content-Disposition", "attachment; filename=EmployeeReport.csv; charset=UTF-8");
 
+				//get some parameter and summary
 				String keyword = (String) request.getSession().getAttribute("ekeyword");
 				String direction = (String) request.getSession().getAttribute("edirection");
+				
+				//prepare result
 				List<Object[]> list = empbean.getEmployeeReport(keyword, direction);
 				if (list != null && list.size() != 0) {
 
