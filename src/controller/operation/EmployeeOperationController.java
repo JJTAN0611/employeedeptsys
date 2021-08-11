@@ -289,7 +289,7 @@ public class EmployeeOperationController extends HttpServlet {
 					eub.setId_error("This employee is using in relation table and cannot be deleted.");
 					eub.setNavigateExpress("departmentemployee");
 				}else {
-					eub.setOverall_error("You unable to delete now. The other table, salary etc is not supported in this system");
+					eub.setOverall_error("You unable to delete now. The other tables, salary, title, department_manager is not supported in this system");
 				}
 			}
 			System.out.println("The PSQL Exception is catched. No problem");

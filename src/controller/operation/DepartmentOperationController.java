@@ -263,7 +263,7 @@ public class DepartmentOperationController extends HttpServlet {
 					dub.setNavigateExpress("departmentemployee");
 				} else {
 					dub.setOverall_error(
-							"You unable to delete now. The other table, salary etc is not supported in this system");
+							"You unable to delete now. The other table, department_manager is not supported in this system");
 				}
 			} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
 				// add
