@@ -6,8 +6,8 @@ import java.util.Date;
 import model.entity.Employee;
 
 public class EmployeeJavaBean {
+	
 	private Long id = null;
-
 	private String first_name = "";
 	private String last_name = "";
 	private String gender = "";
