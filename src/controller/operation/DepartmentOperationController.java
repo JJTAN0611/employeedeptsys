@@ -184,7 +184,7 @@ public class DepartmentOperationController extends HttpServlet {
 							return;
 						} else {
 							// Not exist
-							dub.setId_error("Department not exist.");
+							dub.setId_error("Department not exist. Try again on department view.");
 							dub.setOverall_error(
 									"It might be sitmoutaneous user performed delete action. Please try again from department view.");
 							dub.setNavigateExpress("department");
