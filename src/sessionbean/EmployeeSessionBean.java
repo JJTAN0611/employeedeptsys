@@ -116,6 +116,7 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 	@Override
 	public Employee getEmployeeByName(String name) throws EJBException {
 		// Find a record based on name for quick search use
+		// only first result will be shown
 		Query q = em.createNamedQuery("Employee.findbyName");
 
 		try {

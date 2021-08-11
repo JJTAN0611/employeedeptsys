@@ -123,6 +123,7 @@ public class DepartmentSessionBean implements DepartmentSessionBeanLocal {
 	@Override
 	public Department getDepartmentByName(String name) throws EJBException {
 		// get department by name, for quick search use
+		// only first result will be shown
 		Query q = em.createNamedQuery("Department.findbyName");
 		try {
 			q.setParameter("name", "%" + name + "%");
