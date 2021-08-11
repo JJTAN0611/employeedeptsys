@@ -229,7 +229,7 @@ public class DepartmentOperationController extends HttpServlet {
 								"It might be sitmoutaneous user performed delete action. Try again on department view.");
 						dub.setNavigateExpress("department");
 					}
-				}else {
+				} else {
 					dub.setId_error("Abnormal process. Try again at department view");
 					dub.setNavigateExpress("department");
 				}
@@ -239,7 +239,7 @@ public class DepartmentOperationController extends HttpServlet {
 				// Dont use user record for continuing displaying. It have risk to show not
 				// updated data
 				dub = new DepartmentJavaBean(deptbean.findDepartment(dub.getId()));
-				errorSetting( e, dub);
+				errorSetting(e, dub);
 
 			}
 
@@ -257,9 +257,14 @@ public class DepartmentOperationController extends HttpServlet {
 		if (psqle != null) {
 			if (psqle.getMessage().contains("violates foreign key constraint")) {
 				// delete
-				dub.setOverall_error("You may need to clear the related departmentemployee relation record.");
-				dub.setId_error("This department is using in relation table and cannot be deleted.");
-				dub.setNavigateExpress("departmentemployee");
+				if (psqle.getMessage().contains("department_employee")) {
+					dub.setOverall_error("You may need to clear the related departmentemployee relation record.");
+					dub.setId_error("This department is using in relation table and cannot be deleted.");
+					dub.setNavigateExpress("departmentemployee");
+				} else {
+					dub.setOverall_error(
+							"You unable to delete now. The other table, salary etc is not supported in this system");
+				}
 			} else if (psqle.getMessage().contains("duplicate key value violates unique constraint")) {
 				// add
 				dub.setOverall_error("Duplicate error. Please change the input as annotated below.");

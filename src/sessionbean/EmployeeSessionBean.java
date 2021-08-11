@@ -167,13 +167,37 @@ public class EmployeeSessionBean implements EmployeeSessionBeanLocal {
 			return false;
 
 		// checking for foreign key constraint
+		// department_employee table check, is the most important
 		Query q = em.createNativeQuery(
 				"SELECT COUNT(*) AS totalrow FROM employees.department_employee de WHERE de.employee_id = ?");
 		q.setParameter(1, e.getId() );
 		if (((BigInteger) q.getSingleResult()).intValue() > 0) {
 			throw new PSQLException("violates foreign key constraint, \"department_employee\"", null);
 		}
-
+		
+		//Other table (Not in this system)
+		//salary table
+		Query q1 = em.createNativeQuery(
+				"SELECT COUNT(*) AS totalrow FROM employees.salary s WHERE s.employee_id = ?");
+		q1.setParameter(1, e.getId() );
+		if (((BigInteger) q1.getSingleResult()).intValue() > 0) {
+			throw new PSQLException("violates foreign key constraint, \"salary\"", null);
+		}
+		// title table
+		Query q2 = em.createNativeQuery(
+				"SELECT COUNT(*) AS totalrow FROM employees.title t WHERE t.employee_id = ?");
+		q2.setParameter(1, e.getId() );
+		if (((BigInteger) q2.getSingleResult()).intValue() > 0) {
+			throw new PSQLException("violates foreign key constraint, \"title\"", null);
+		}
+		//manager
+		Query q3 = em.createNativeQuery(
+				"SELECT COUNT(*) AS totalrow FROM employees.department_manager dm WHERE dm.employee_id = ?");
+		q3.setParameter(1, e.getId() );
+		if (((BigInteger) q3.getSingleResult()).intValue() > 0) {
+			throw new PSQLException("violates foreign key constraint, \"department_manager\"", null);
+		}
+		
 		em.remove(e);
 		return true;
 
